@@ -1,0 +1,12 @@
+{
+  "name": "school",
+  "scripts": {
+    "test": "grunt test-js --verbose"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.1"
+  },
+  "dependencies": {
+    "grunt-contrib-jasmine": "^1.1.0"
+  }
+}

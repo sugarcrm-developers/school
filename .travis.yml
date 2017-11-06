@@ -1,4 +1,8 @@
-language: php
+matrix:
+  include:
+    - language: php
+      php: '7.1'
 
-php:
-  - '7.1'
+    - language: node_js
+      node_js: '5'
+      before_install: npm install -g grunt-cli
