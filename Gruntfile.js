@@ -9,7 +9,7 @@ module.exports = function(grunt) {
                 ],
                 options: {
                     specs: 'tests/jasmine/*Spec.js',
-                    keepRunner: true
+                    keepRunner: false
                 }
             }
         }
