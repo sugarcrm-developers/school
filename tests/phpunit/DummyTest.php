@@ -7,7 +7,7 @@ final class DummyTest extends TestCase
 {
     public function testNothing(): void
     {
-        $this->assertEquals(0, 1);
+        $this->assertEquals(0, 0);
     }
 
 }

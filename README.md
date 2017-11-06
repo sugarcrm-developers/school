@@ -119,7 +119,7 @@ In order to create the Professor M sample data, you'll use Postman to run a coll
    Hint:  If you see many failures, you may have forgotten to install the modules and customizations using ProfM.zip.  See instructions in previous section for how to do the install.
 
 ## Automated tests
-This repository contains automated tests the can be executed manually or as part of a [Travis CI](travis-ci.com) build.
+This repository contains automated tests the can be executed manually or as part of a [Travis CI](http://travis-ci.com) build.
 
 ### PHPUnit tests ###
 [PHPUnit](https://phpunit.de/) is a testing framework for PHP.  We have included a very simple PHPUnit test in this 
@@ -133,7 +133,7 @@ multiple test files, and each test file can contain multiple tests.
 To manually execute the tests, you will need to install PHPUnit on your machine.  See 
 [Getting Started with PHPUnit](https://phpunit.de/getting-started.html) for details.
 
-The PHPUnit tests can be executed by running the following command from your school directory:
+The PHPUnit tests can be executed by running the following command from your `school` directory:
 ```
 phpunit --bootstrap package tests/phpunit/
 ```
@@ -160,6 +160,7 @@ If the build failed, a variety of things could have caused the failure including
 
 If a PHPUnit test fails, you'll see something like the following in the job log.
 
+![PHPUnit failed](images/phpunitfailed.png)
 
 ## How to fix your Sugar instance without starting completely over
 
