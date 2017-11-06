@@ -119,7 +119,8 @@ In order to create the Professor M sample data, you'll use Postman to run a coll
    Hint:  If you see many failures, you may have forgotten to install the modules and customizations using ProfM.zip.  See instructions in previous section for how to do the install.
 
 ## Automated tests
-This repository contains automated tests the can be executed manually or as part of a [Travis CI](http://travis-ci.com) build.
+This repository contains automated PHPUnit and Jasmine tests the can be executed manually or as part of a
+ [Travis CI](http://travis-ci.com) build.
 
 ### PHPUnit tests ###
 [PHPUnit](https://phpunit.de/) is a testing framework for PHP.  We have included a very simple PHPUnit test in this 
@@ -150,6 +151,9 @@ passed, you know all of the tests passed.
 
 ![Green build](images/greenbuild.png)
 
+To see the detailed test results, click the PHP build job to expand it:
+![PHP build job](images/phpbuildjob.png)
+
 You can scroll through the job log to see the results of the PHPUnit tests.
 
 ![PHPUnit passed](images/phpunitpassed.png)
@@ -159,6 +163,81 @@ If the build failed, a variety of things could have caused the failure including
 ![Red build](images/redbuild.png)
 
 If a PHPUnit test fails, you'll see something like the following in the job log.
+
+![PHPUnit failed](images/phpunitfailed.png)
+
+
+### Jasmine tests ###
+[Jasmine](https://jasmine.github.io/) is a testing framework for JavaScript.  We have included a very simple Jasmine 
+test in this repository as an example.
+
+The tests are located in [/tests/jasmine](tests/jasmine).  Currently, there is one test inside of the 
+[DummySpec.php](tests/jasmine/DummySpec.php) test file.  The [/tests/jasmine](tests/jasmine) directory can contain 
+multiple test files, and each test file can contain multiple tests.
+
+### Manual execution ###
+To manually execute the tests, you will need to install a few different things on your machine before you can run the 
+tests. 
+
+#### Setup ####
+
+Begin by navigating to your school directory and then execute the following commands. 
+
+Install phantomJS.  See [PhantomJS's Downloads Page](http://phantomjs.org/download.html) for other ways to download
+and install.
+```
+brew install phantomjs
+```
+
+Install the Grunt command line interface.  See [Grunt's Getting Started Guide](https://gruntjs.com/getting-started) 
+for more details.
+```
+npm install -g grunt-cli
+```
+
+Install Grunt in your local school project.
+```
+npm install grunt
+```
+
+Install Jasmine.
+```
+npm install grunt-contrib-jasmine
+```
+
+#### Execution ####
+Execute the following command to run the Jasmine tests:
+```
+grunt test-js
+```
+
+See 
+[Grunt's Getting Started Guide](https://gruntjs.com/getting-started) 
+for more details.
+
+### Automatic execution ###
+The Jasmine tests are automatically run as part of the Travis CI build process.  Travis CI will automatically look
+for a script named "test" inside of [package.json](package.json).  In our case, the test script calls the "test-js" task
+defined in [Gruntfile.js](Gruntfile.js).  The "test-js" task only has one task:  jasmine.
+
+#### Interpreting the results ####
+To see the results of the tests that are run as part of the Travis CI build, open the build in Travis CI.  If the build 
+passed, you know all of the tests passed.
+
+![Green build](images/greenbuild.png)
+
+To see the detailed test results, click the Node.js build job to expand it:
+![Node build job](images/nodebuildjob.png)
+
+You can scroll through the job log to see the results of the Jasmine tests.
+
+![Jasmine passed](images/jasminepassed.png)
+
+If the build failed, a variety of things could have caused the failure including a failing Jasmine test.
+
+![Red build](images/redbuild.png)
+
+If a Jasmine test fails, you'll see something like the following in the job log.
 
 ![PHPUnit failed](images/phpunitfailed.png)
 
