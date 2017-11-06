@@ -22,14 +22,14 @@ For those familiar with Sugar, you'll notice that some of the standard modules h
 | Funding Line Items | Revenue Line Items|
 
 Get all of the details on the Professor M scenario in the video below.
-[![The Professor M Scenario Part 1 - What is it and why should you care?](profmvideo1.png)](https://youtu.be/aKBTKcaney4 "The Professor M Scenario Part 1 - What is it and why should you care?")
+[![The Professor M Scenario Part 1 - What is it and why should you care?](images/profmvideo1.png)](https://youtu.be/aKBTKcaney4 "The Professor M Scenario Part 1 - What is it and why should you care?")
 
 ## Installation instructions
 
 Before beginning any of the tutorials associated with UnCon 2017, you'll want to setup a Sugar instance that has the Professor M scenario installed.
 
 Watch the video below for instructions on how to install the scenario.  Text-based instructions follow.
-[![The Professor M Scenario Part 2 - How do you install it?](profmvideo2.png)](https://youtu.be/SO-Rav35X5U "The Professor M Scenario Part 2 - How do you install it?")
+[![The Professor M Scenario Part 2 - How do you install it?](images/profmvideo2.png)](https://youtu.be/SO-Rav35X5U "The Professor M Scenario Part 2 - How do you install it?")
 
 ### Prerequisites
 - Sugar 7.9.1.0 installed with NO sample data.  See [Getting Started with Sugar Development](https://developer.sugarcrm.com/getting-started) for help.
@@ -117,6 +117,49 @@ In order to create the Professor M sample data, you'll use Postman to run a coll
 1. Click **Run ProfessorM S...**
 1. Wait for the collection to finish running. All tests should pass.
    Hint:  If you see many failures, you may have forgotten to install the modules and customizations using ProfM.zip.  See instructions in previous section for how to do the install.
+
+## Automated tests
+This repository contains automated tests the can be executed manually or as part of a Travis CI build.
+
+### PHPUnit tests ###
+[PHPUnit](https://phpunit.de/) is a testing framework for PHP.  We have included a very simple PHPUnit test in this 
+repository as an example.
+
+The tests are located in [/tests/phpunit](tests/phpunit).  Currently, there is one test inside of the 
+[DummyTest.php](tests/phpunit/DummyTest.php) test file.  The phpunit directory can contain multiple test files, and each 
+test file can contain multiple tests.
+
+### Manual execution ###
+To manually execute the tests, you will need to install PHPUnit on your machine.  See 
+[Getting Started with PHPUnit](https://phpunit.de/getting-started.html) for details.
+
+The PHPUnit tests can be executed by running the following command from your school directory:
+```
+phpunit --bootstrap package tests/phpunit/
+```
+
+### Automatic execution ###
+The PHPUnit tests are automatically run as part of the Travis CI build process.  Travis CI's default build script
+for PHP is PHPUnit, so we don't have to include anything special in [.travis.yml](.travis.yml) in order for the tests 
+to run.  Travis CI looks in [phpunit.xml](phpunit.xml) for the PHPUnit config.  Our config indicates that the PHPUnit
+tests are stored in [tests/phpunit](tests/phpunit).
+
+#### Interpreting the results ####
+To see the results of the tests run as part of the Travis CI build, open the build in Travis CI.  If the build 
+results are green, you know all of the tests passed.
+
+![Green build](images/greenbuild.png)
+
+You can scroll through the job log to see the results of the PHPUnit tests.
+
+![PHPUnit passed](images/phpunitpassed.png)
+
+If the build results are red, a variety of things could have caused the build to fail including a failing PHPUnit test.
+
+![Red build](images/redbuild.png)
+
+If a PHPUnit test fails, you'll see something like the following in the job log.
+
 
 ## How to fix your Sugar instance without starting completely over
 
