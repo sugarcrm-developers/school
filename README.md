@@ -119,15 +119,15 @@ In order to create the Professor M sample data, you'll use Postman to run a coll
    Hint:  If you see many failures, you may have forgotten to install the modules and customizations using ProfM.zip.  See instructions in previous section for how to do the install.
 
 ## Automated tests
-This repository contains automated tests the can be executed manually or as part of a Travis CI build.
+This repository contains automated tests the can be executed manually or as part of a [Travis CI](travis-ci.com) build.
 
 ### PHPUnit tests ###
 [PHPUnit](https://phpunit.de/) is a testing framework for PHP.  We have included a very simple PHPUnit test in this 
 repository as an example.
 
 The tests are located in [/tests/phpunit](tests/phpunit).  Currently, there is one test inside of the 
-[DummyTest.php](tests/phpunit/DummyTest.php) test file.  The phpunit directory can contain multiple test files, and each 
-test file can contain multiple tests.
+[DummyTest.php](tests/phpunit/DummyTest.php) test file.  The [/tests/phpunit](tests/phpunit) directory can contain 
+multiple test files, and each test file can contain multiple tests.
 
 ### Manual execution ###
 To manually execute the tests, you will need to install PHPUnit on your machine.  See 
@@ -145,8 +145,8 @@ to run.  Travis CI looks in [phpunit.xml](phpunit.xml) for the PHPUnit config.  
 tests are stored in [tests/phpunit](tests/phpunit).
 
 #### Interpreting the results ####
-To see the results of the tests run as part of the Travis CI build, open the build in Travis CI.  If the build 
-results are green, you know all of the tests passed.
+To see the results of the tests that are run as part of the Travis CI build, open the build in Travis CI.  If the build 
+passed, you know all of the tests passed.
 
 ![Green build](images/greenbuild.png)
 
@@ -154,7 +154,7 @@ You can scroll through the job log to see the results of the PHPUnit tests.
 
 ![PHPUnit passed](images/phpunitpassed.png)
 
-If the build results are red, a variety of things could have caused the build to fail including a failing PHPUnit test.
+If the build failed, a variety of things could have caused the failure including a failing PHPUnit test.
 
 ![Red build](images/redbuild.png)
 
@@ -163,7 +163,7 @@ If a PHPUnit test fails, you'll see something like the following in the job log.
 
 ## How to fix your Sugar instance without starting completely over
 
-As you work through the tutorials, you may do something like accidentally write broken code that seems to break your Sugar instance.  Try running **Quick Repair and Rebuild**:
+As you customize this instance, you may do something like accidentally write broken code that seems to break your Sugar instance.  Try running **Quick Repair and Rebuild**:
 1. Log in as an administrator.
 1. Click your profile picture in the upper-right corner and select **Administration**.
 1. In the **System** section, click **Repair**.
