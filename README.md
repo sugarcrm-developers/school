@@ -172,7 +172,7 @@ If a PHPUnit test fails, you'll see something like the following in the job log.
 test in this repository as an example.
 
 The tests are located in [/tests/jasmine](tests/jasmine).  Currently, there is one test inside of the 
-[DummySpec.php](tests/jasmine/DummySpec.php) test file.  The [/tests/jasmine](tests/jasmine) directory can contain 
+[DummySpec.js](tests/jasmine/DummySpec.js) test file.  The [/tests/jasmine](tests/jasmine) directory can contain 
 multiple test files, and each test file can contain multiple tests.
 
 ### Manual execution ###
@@ -206,7 +206,7 @@ npm install grunt-contrib-jasmine
 ```
 
 #### Execution ####
-Execute the following command to run the Jasmine tests:
+Inside of your `school` directory, execute the following command to run the Jasmine tests:
 ```
 grunt test-js
 ```
@@ -239,7 +239,7 @@ If the build failed, a variety of things could have caused the failure including
 
 If a Jasmine test fails, you'll see something like the following in the job log.
 
-![PHPUnit failed](images/phpunitfailed.png)
+![Jasmine failed](images/jasminefailed.png)
 
 ## How to fix your Sugar instance without starting completely over
 
