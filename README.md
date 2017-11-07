@@ -11,7 +11,7 @@ All of the tutorials at UnCon 2017 will be based on Professor M's School for Gif
 
 [Automated tests](#automated-tests)
 
-[How to fix your Sugar instance without starting completely over](#how-to-fix-your-sugar-instance-without-starting completely-over)
+[How to fix your Sugar instance without starting completely over](#how-to-fix-your-sugar-instance-without-starting-completely-over)
 
 ## About the scenario
 Professor M aka Professor Marum has created an exclusive not-for-profit school for gifted coders.  
@@ -129,7 +129,7 @@ In order to create the Professor M sample data, you'll use Postman to run a coll
 1. Wait for the collection to finish running. All tests should pass.
    Hint:  If you see many failures, you may have forgotten to install the modules and customizations using ProfM.zip.  See instructions in previous section for how to do the install.
 
-## Continuous integration with Travis CI [![Build Status](https://travis-ci.com/sugarcrm/school.svg?token=bZhBry2RZxzLssWLLqgs&branch=master)](https://travis-ci.com/sugarcrm/school)
+## Continuous integration with Travis CI
 This repository is configured to work with [Travis CI](https://docs.travis-ci.com/user/for-beginners/).  Whenever a commit
 is pushed to the repository or a Pull Request is made, Travis CI will automatically kick off a build.
 
