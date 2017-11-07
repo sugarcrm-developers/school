@@ -2,6 +2,17 @@
 
 All of the tutorials at UnCon 2017 will be based on Professor M's School for Gifted Coders.  The following sections will explain more about the scenario and how to install the required modules and sample data.
 
+## Contents
+[About the scenario](#about-the-scenario) 
+
+[Installation instructions](#installation-instructions) 
+
+[Continuous integration with Travis CI](#continuous-integration-with-travis-ci) 
+
+[Automated tests](#automated-tests)
+
+[How to fix your Sugar instance without starting completely over](#how-to-fix-your-sugar-instance-without-starting completely-over)
+
 ## About the scenario
 Professor M aka Professor Marum has created an exclusive not-for-profit school for gifted coders.  
 
