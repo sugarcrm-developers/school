@@ -122,11 +122,11 @@ In order to create the Professor M sample data, you'll use Postman to run a coll
 This repository is configured to work with [Travis CI](https://docs.travis-ci.com/user/for-beginners/).  Whenever a commit
 is pushed to the repository or a Pull Request is made, Travis CI will automatically kick off a build.
 
-### Viewing results in Travis CI ###
+### Viewing results in Travis CI
 
 You can view the Travis CI build results at [https://travis-ci.com/sugarcrm/school](https://travis-ci.com/sugarcrm/school).
 
-### Viewing results in GitHub ###
+### Viewing results in GitHub
 
 You can view the latest build status at the top of this README ([![Build Status](https://travis-ci.com/sugarcrm/school.svg?token=bZhBry2RZxzLssWLLqgs&branch=master)](https://travis-ci.com/sugarcrm/school)).  
 Clicking on the build status will open the detailed results in Travis CI.
@@ -140,11 +140,11 @@ You can then click Details to open the build results in Travis CI.
 
 ![Details](images/pr2.png)
 
-### About the build ###
+### About the build
 
 The build is configured in [.travis.yml](.travis.yml). Currently, the build runs two jobs:
-- Execute the PHPUnit tests (see [PHPUnit tests](PHPUnit-tests) for details)
-- Execute the Jasmine tests (see [Jasmine tests](Jasmine-tests) for details)
+- Execute the PHPUnit tests (see [PHPUnit tests](phpunit-tests) for details)
+- Execute the Jasmine tests (see [Jasmine tests](jasmine-tests) for details)
 
 We hope to expand the build to do more (like deploy Sugar) in the future.
 
@@ -152,7 +152,7 @@ We hope to expand the build to do more (like deploy Sugar) in the future.
 This repository contains automated PHPUnit and Jasmine tests the can be executed manually or as part of a
  [Travis CI](http://travis-ci.com) build.
 
-### PHPUnit tests ###
+### PHPUnit tests
 [PHPUnit](https://phpunit.de/) is a testing framework for PHP.  We have included a very simple PHPUnit test in this 
 repository as an example.
 
@@ -160,7 +160,7 @@ The tests are located in [/tests/phpunit](tests/phpunit).  Currently, there is o
 [DummyTest.php](tests/phpunit/DummyTest.php) test file.  The [/tests/phpunit](tests/phpunit) directory can contain 
 multiple test files, and each test file can contain multiple tests.
 
-### Manual execution ###
+### Manual execution
 To manually execute the tests, you will need to install PHPUnit on your machine.  See 
 [Getting Started with PHPUnit](https://phpunit.de/getting-started.html) for details.
 
@@ -169,13 +169,13 @@ The PHPUnit tests can be executed by running the following command from your `sc
 phpunit --bootstrap package tests/phpunit/
 ```
 
-### Automatic execution ###
+### Automatic execution
 The PHPUnit tests are automatically run as part of the Travis CI build process.  Travis CI's default build script
 for PHP is PHPUnit, so we don't have to include anything special in [.travis.yml](.travis.yml) in order for the tests 
 to run.  Travis CI looks in [phpunit.xml](phpunit.xml) for the PHPUnit config.  Our config indicates that the PHPUnit
 tests are stored in [tests/phpunit](tests/phpunit).
 
-#### Interpreting the results ####
+#### Interpreting the results
 To see the results of the tests that are run as part of the Travis CI build, open the build in Travis CI.  If the build 
 passed, you know all of the tests passed.
 
@@ -197,7 +197,7 @@ If a PHPUnit test fails, you'll see something like the following in the job log.
 ![PHPUnit failed](images/phpunitfailed.png)
 
 
-### Jasmine tests ###
+### Jasmine tests
 [Jasmine](https://jasmine.github.io/) is a testing framework for JavaScript.  We have included a very simple Jasmine 
 test in this repository as an example.
 
@@ -205,11 +205,11 @@ The tests are located in [/tests/jasmine](tests/jasmine).  Currently, there is o
 [DummySpec.js](tests/jasmine/DummySpec.js) test file.  The [/tests/jasmine](tests/jasmine) directory can contain 
 multiple test files, and each test file can contain multiple tests.
 
-### Manual execution ###
+### Manual execution
 To manually execute the tests, you will need to install a few different things on your machine before you can run the 
 tests. 
 
-#### Setup ####
+#### Setup
 
 Begin by navigating to your school directory and then execute the following commands. 
 
@@ -235,7 +235,7 @@ Install Jasmine.
 npm install grunt-contrib-jasmine
 ```
 
-#### Execution ####
+#### Execution
 Inside of your `school` directory, execute the following command to run the Jasmine tests:
 ```
 grunt test-js
@@ -245,12 +245,12 @@ See
 [Grunt's Getting Started Guide](https://gruntjs.com/getting-started) 
 for more details.
 
-### Automatic execution ###
+### Automatic execution
 The Jasmine tests are automatically run as part of the Travis CI build process.  Travis CI will automatically look
 for a script named "test" inside of [package.json](package.json).  In our case, the test script calls the "test-js" task
 defined in [Gruntfile.js](Gruntfile.js).  The "test-js" task only has one task:  jasmine.
 
-#### Interpreting the results ####
+#### Interpreting the results
 To see the results of the tests that are run as part of the Travis CI build, open the build in Travis CI.  If the build 
 passed, you know all of the tests passed.
 
