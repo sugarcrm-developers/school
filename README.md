@@ -118,6 +118,36 @@ In order to create the Professor M sample data, you'll use Postman to run a coll
 1. Wait for the collection to finish running. All tests should pass.
    Hint:  If you see many failures, you may have forgotten to install the modules and customizations using ProfM.zip.  See instructions in previous section for how to do the install.
 
+## Continuous integration with Travis CI [![Build Status](https://travis-ci.com/sugarcrm/school.svg?token=bZhBry2RZxzLssWLLqgs&branch=master)](https://travis-ci.com/sugarcrm/school)
+This repository is configured to work with [Travis CI](https://docs.travis-ci.com/user/for-beginners/).  Whenever a commit
+is pushed to the repository or a Pull Request is made, Travis CI will automatically kick off a build.
+
+### Viewing results in Travis CI ###
+
+You can view the Travis CI build results at [https://travis-ci.com/sugarcrm/school](https://travis-ci.com/sugarcrm/school).
+
+### Viewing results in GitHub ###
+
+You can view the latest build status at the top of this README ([![Build Status](https://travis-ci.com/sugarcrm/school.svg?token=bZhBry2RZxzLssWLLqgs&branch=master)](https://travis-ci.com/sugarcrm/school)).  
+Clicking on the build status will open the detailed results in Travis CI.
+
+You can also view build results in Pull Requests.  Toward the bottom of each Pull Request, you can click "Show all 
+checks" to see the Travis CI build results for that Pull Request.  
+
+![Show all checks](images/pr1.png)
+
+You can then click Details to open the build results in Travis CI.
+
+![Details](images/pr2.png)
+
+### About the build ###
+
+The build is configured in [.travis.yml](.travis.yml). Currently, the build runs two jobs:
+- Execute the PHPUnit tests (see [PHPUnit tests](PHPUnit-tests) for details)
+- Execute the Jasmine tests (see [Jasmine tests](Jasmine-tests) for details)
+
+We hope to expand the build to do more (like deploy Sugar) in the future.
+
 ## Automated tests
 This repository contains automated PHPUnit and Jasmine tests the can be executed manually or as part of a
  [Travis CI](http://travis-ci.com) build.
