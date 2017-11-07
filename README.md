@@ -143,8 +143,8 @@ You can then click Details to open the build results in Travis CI.
 ### About the build
 
 The build is configured in [.travis.yml](.travis.yml). Currently, the build runs two jobs:
-- Execute the PHPUnit tests (see [PHPUnit tests](phpunit-tests) for details)
-- Execute the Jasmine tests (see [Jasmine tests](jasmine-tests) for details)
+- Execute the PHPUnit tests (see [PHPUnit tests](#phpunit-tests) for details)
+- Execute the Jasmine tests (see [Jasmine tests](#jasmine-tests) for details)
 
 We hope to expand the build to do more (like deploy Sugar) in the future.
 
