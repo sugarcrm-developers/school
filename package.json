@@ -1,0 +1,17 @@
+{
+  "name": "school",
+  "license": "Apache-2.0",
+  "scripts": {
+    "test": "grunt test-js --verbose"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.1"
+  },
+  "dependencies": {
+    "grunt-contrib-jasmine": "^1.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sugarcrm/school.git"
+  }
+}
