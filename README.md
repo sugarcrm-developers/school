@@ -1,4 +1,4 @@
-# Professor M's School for Gifted Coders
+# Professor M's School for Gifted Coders [![Build Status](https://travis-ci.com/sugarcrm/school.svg?token=bZhBry2RZxzLssWLLqgs&branch=master)](https://travis-ci.com/sugarcrm/school)
 
 All of the tutorials at UnCon 2017 will be based on Professor M's School for Gifted Coders.  The following sections will explain more about the scenario and how to install the required modules and sample data.
 
