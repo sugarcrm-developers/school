@@ -225,10 +225,19 @@ $files = new RecursiveIteratorIterator(
     new RecursiveDirectoryIterator($basePath, RecursiveDirectoryIterator::SKIP_DOTS),
     RecursiveIteratorIterator::LEAVES_ONLY
 );
+$excludedFiles = "";
 foreach ($files as $name => $file) {
     if ($file->isFile()) {
         $fileReal = $file->getRealPath();
         $fileRelative = 'src' . str_replace($basePath, '', $fileReal);
+
+        if(preg_match('/.*custom\/application\/Ext\/.*/', $fileRelative) or
+            //preg_match('/.*custom\/modules\/.+\/Ext\/.*', $fileRelative)){
+            preg_match('/.*custom\/modules\/.+\/Ext\/.*/', $fileRelative)){
+            $excludedFiles .= "[*] $fileRelative \n";
+            continue;
+        }
+
         echo " [*] $fileRelative \n";
         $zip->addFile($fileReal, $fileRelative);
         $installdefs['copy'][] = array(
@@ -245,4 +254,8 @@ $manifestContent = sprintf(
 $zip->addFromString('manifest.php', $manifestContent);
 $zip->close();
 echo "Done creating {$zipFile}\n\n";
+
+if (!empty($excludedFiles)){
+    echo "The following files were excluded from the zip: \n$excludedFiles\n";
+}
 exit(0);
