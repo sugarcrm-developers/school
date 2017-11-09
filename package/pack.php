@@ -81,9 +81,18 @@ $installdefs = array(
             ),
         ),
     'id' => $packageID,
-    'post_execute' => array(
-        'scripts/cleanup.php',
-    ),
+    'relationships' =>
+        array (
+            array (
+                'meta_data' => 'metadata/pr_professors_accountsMetaData.php',
+            ),
+            array (
+                'meta_data' => 'metadata/pr_professors_leadsMetaData.php',
+            ),
+            array (
+                'meta_data' => 'metadata/pr_professors_contactsMetaData.php',
+            ),
+        ),
     'custom_fields' =>
         array (
             'Accountsratesg_c' =>
