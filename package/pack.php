@@ -231,9 +231,9 @@ foreach ($files as $name => $file) {
         $fileReal = $file->getRealPath();
         $fileRelative = 'src' . str_replace($basePath, '', $fileReal);
 
-        if(preg_match('/.*custom\/application\/Ext\/.*/', $fileRelative) or
+        if(preg_match('/.*custom[\/\\\]{1,1}application[\/\\\]{1,1}Ext[\/\\\]{1,1}.*/', $fileRelative) or
             //preg_match('/.*custom\/modules\/.+\/Ext\/.*', $fileRelative)){
-            preg_match('/.*custom\/modules\/.+\/Ext\/.*/', $fileRelative)){
+            preg_match('/.*custom[\/\\\]{1,1}modules[\/\\\]{1,1}.+[\/\\\]{1,1}Ext[\/\\\]{1,1}.*/', $fileRelative)){
             $excludedFiles .= "[*] $fileRelative \n";
             continue;
         }
