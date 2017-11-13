@@ -173,13 +173,13 @@ To manually execute the tests, you will need to install PHPUnit on your machine.
 [Getting Started with PHPUnit](https://phpunit.de/getting-started.html) for details.
 
 You'll also need to install [Composer](https://getcomposer.org/) to manage your dependencies.  See 
-(Download Composer)[https://getcomposer.org/download/] for instructions on how to download Composer to your machine.  
+[Download Composer](https://getcomposer.org/download/) for instructions on how to download Composer to your machine.  
 Then execute the following command from your `school` directory in order to install the test dependencies:
 ```
 composer install
 ```
 
-If you need to update the namespaces, update (composer.json)[composer.json] and then run the following command from
+If you need to update the namespaces, manually update [composer.json](composer.json) and then run the following command from
 your `school` directory:
 ```
 ./composer.phar update
