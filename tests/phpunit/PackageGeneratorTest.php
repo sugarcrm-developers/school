@@ -66,4 +66,43 @@ class PackageGeneratorTest extends TestCase
         $this -> assertEquals("1.5", $pg -> getVersion("1.5"));
     }
 
+    public function testGetZipFilePathValidParamsReleasesDirectoryDoesNotExist(){
+        $root = vfsStream::setup();
+
+        $pg = new PackageGenerator();
+        $pg -> setCwd($root -> url());
+
+        $this -> assertFalse($root -> hasChild("releases"));
+
+        $this -> assertEquals("releases/sugarcrm-ProfessorM-1.5.zip",
+            $pg -> getZipFilePath("1.5", "ProfessorM", "./pack.php"));
+
+        $this -> assertTrue($root -> hasChild("releases"));
+
+    }
+
+    public function testGetZipFilePathValidParamsReleasesDirectoryAlreadyExists(){
+        $root = vfsStream::setup();
+        vfsStream::newDirectory("releases") -> at($root);
+
+        $pg = new PackageGenerator();
+        $pg -> setCwd($root -> url());
+
+        $this -> assertTrue($root -> hasChild("releases"));
+
+        $this -> assertEquals("releases/sugarcrm-ProfessorM-1.5.zip",
+            $pg -> getZipFilePath("1.5", "ProfessorM", "./pack.php"));
+
+        $this -> assertTrue($root -> hasChild("releases"));
+
+    }
+
+    public function testGetZipFilePathEmptyVersion(){
+        $pg = new PackageGenerator();
+        $this -> expectException(Exception::class);
+
+        $pg -> getZipFilePath("", "ProfessorM", "./pack.php");
+
+    }
+
 }

@@ -15,19 +15,11 @@ $pg = new PackageGenerator;
 
 $version = $pg -> getVersion($argv[1]);
 
-if (empty($version)){
-    die("Use $argv[0] [version]\n");
+try {
+    $zipFile = $pg -> getZipFilePath($version, $packageID, $argv[0]);
+} catch (Exception $e) {
+    die($e->getMessage());
 }
-
-$id = "{$packageID}-{$version}";
-
-$directory = "releases";
-if(!is_dir($directory)){
-    mkdir($directory);
-}
-
-$zipFile = $directory . "/sugarcrm-{$id}.zip";
-
 
 if (file_exists($zipFile)) {
     die("Error:  Release $zipFile already exists, so a new zip was not created. To generate a new zip, either delete the"

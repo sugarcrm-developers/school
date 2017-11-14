@@ -48,4 +48,25 @@ class PackageGenerator
         }
         return $versionPassedToScript;
     }
+
+    /*
+     * Returns the relative file path for the zip file that will be created.
+     * @throws \Exception if $version is empty.
+     * Will make a releases directory if one does not already exists.
+     */
+    public function getZipFilePath($version, $packageID, $command){
+        if (empty($version)){
+            throw new \Exception("Use $command [version]\n");
+        }
+
+        $id = "{$packageID}-{$version}";
+
+        $directory = "releases";
+        if(!is_dir($this -> cwd . "/" . $directory)){
+            mkdir($this -> cwd . "/" . $directory);
+        }
+
+        $zipFile = $directory . "/sugarcrm-{$id}.zip";
+        return $zipFile;
+    }
 }
