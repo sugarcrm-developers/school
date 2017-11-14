@@ -7,9 +7,14 @@ class PackageGenerator
 
     public function shouldIncludeFileInZip($fileRelative)
     {
-        if(preg_match('/.*custom[\/\\\]{1,1}application[\/\\\]{1,1}Ext[\/\\\]{1,1}.*/', $fileRelative) or
-            //preg_match('/.*custom\/modules\/.+\/Ext\/.*', $fileRelative)){
-            preg_match('/.*custom[\/\\\]{1,1}modules[\/\\\]{1,1}.+[\/\\\]{1,1}Ext[\/\\\]{1,1}.*/', $fileRelative)){
+        /*
+         * We want to exclude files in the following directories:
+         *    custom/application/Ext
+         *    custom/modules/.../Ext
+         * The regular expressions allow for file paths with forward or backward slashes */
+
+        if(preg_match('/.*custom[\/\\\]application[\/\\\]Ext[\/\\\].*/', $fileRelative) or
+            preg_match('/.*custom[\/\\\]modules[\/\\\].+[\/\\\]Ext[\/\\\].*/', $fileRelative)){
             return false;
         }
         return true;
