@@ -13,13 +13,7 @@ $supportedVersionRegex = '7\\..*$';
 
 $pg = new PackageGenerator;
 
-if (empty($argv[1])) {
-    if (file_exists("version")) {
-        $version = file_get_contents("version");
-    }
-} else {
-    $version = $argv[1];
-}
+$version = $pg -> getVersion($argv[1]);
 
 if (empty($version)){
     die("Use $argv[0] [version]\n");
