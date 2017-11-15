@@ -2,6 +2,10 @@ matrix:
   include:
     - language: php
       php: '7.1'
+      os:
+      - linux
+      - osx
+      - windows
       before_script: composer install
     - language: node_js
       node_js: '5'
