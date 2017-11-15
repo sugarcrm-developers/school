@@ -6,26 +6,18 @@ use Sugarcrm\ProfessorM\PackageGenerator;
 
 require('PackageGenerator.php');
 
+/*
+ * Set these variables!
+ */
+
 $packageID = "ProfessorM";
 $packageLabel = "Professor M School for Gifted Coders";
 $supportedVersionRegex = '7\\..*$';
-/******************************/
 
-$pg = new PackageGenerator;
 
-$version = $pg -> getVersion($argv[1]);
-
-try {
-    $zipFile = $pg -> getZipFilePath($version, $packageID, $argv[0]);
-} catch (Exception $e) {
-    die($e->getMessage());
-}
-
-if (file_exists($zipFile)) {
-    die("Error:  Release $zipFile already exists, so a new zip was not created. To generate a new zip, either delete the"
-        . " existing zip file or update the version number in the version file AND then run the script to build the"
-        . " module again. \n");
-}
+/*
+ * Prepare the manifest and installdefs
+ */
 
 $manifest = array(
     'id' => $packageID,
@@ -208,33 +200,45 @@ $installdefs = array(
                 ),
         ),
 );
-echo "Creating {$zipFile} ... \n";
+
+/*
+ * Make the zip
+ */
+
+$pg = new PackageGenerator;
+
+$version = $pg -> getVersion($argv[1]);
+
+try {
+    $zipFile = $pg -> getZipFilePath($version, $packageID, $argv[0]);
+} catch (Exception $e) {
+    die($e->getMessage());
+}
+
+if (file_exists($zipFile)) {
+    die("Error:  Release $zipFile already exists, so a new zip was not created. To generate a new zip, either delete the"
+        . " existing zip file or update the version number in the version file AND then run the script to build the"
+        . " module again. \n");
+}
+
+
 $zip = new ZipArchive();
 $zip->open($zipFile, ZipArchive::CREATE);
-$basePath = realpath('src/');
-$files = new RecursiveIteratorIterator(
-    new RecursiveDirectoryIterator($basePath, RecursiveDirectoryIterator::SKIP_DOTS),
-    RecursiveIteratorIterator::LEAVES_ONLY
-);
-$excludedFiles = "";
-foreach ($files as $name => $file) {
-    if ($file->isFile()) {
-        $fileReal = $file->getRealPath();
-        $fileRelative = 'src' . str_replace($basePath, '', $fileReal);
 
-        if($pg -> shouldIncludeFileInZip($fileRelative)) {
-            echo " [*] $fileRelative \n";
-            $zip->addFile($fileReal, $fileRelative);
-            $installdefs['copy'][] = array(
-                'from' => '<basepath>/' . $fileRelative,
-                'to' => preg_replace('/^src\/(.*)/', '$1', $fileRelative),
-            );
-        } else {
-            $excludedFiles .= "[*] $fileRelative \n";
-        }
+$srcDirectory = "src";
+$arrayOfFiles = $pg -> getFileArraysForZip($srcDirectory );
+$filesToInclude = $arrayOfFiles["filesToInclude"];
+$filesToExclude = $arrayOfFiles["filesToExclude"];
 
-    }
+foreach($filesToInclude as $file) {
+    echo " [*] " . $file['fileRelative'] . "\n";
+    $zip->addFile($file['fileReal'], $file['fileRelative']);
+    $installdefs['copy'][] = array(
+        'from' => '<basepath>/' . $file['fileRelative'],
+        'to' => preg_replace('/^' . $srcDirectory .'\/(.*)/', '$1', $file['fileRelative']),
+    );
 }
+
 $manifestContent = sprintf(
     "<?php\n\$manifest = %s;\n\$installdefs = %s;\n",
     var_export($manifest, true),
@@ -244,7 +248,10 @@ $zip->addFromString('manifest.php', $manifestContent);
 $zip->close();
 echo "Done creating {$zipFile}\n\n";
 
-if (!empty($excludedFiles)){
-    echo "The following files were excluded from the zip: \n$excludedFiles\n";
+if (!empty($filesToExclude)){
+    echo "The following files were excluded from the zip: \n";
+    foreach($filesToExclude as $file) {
+        echo " [*] " . $file["fileRelative"] . "\n";
+    }
 }
 exit(0);
