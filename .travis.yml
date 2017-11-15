@@ -2,9 +2,11 @@ matrix:
   include:
     - language: php
       php: '7.1'
-      os:
-      - linux
-      - osx
+      os: linux
+      before_script: composer install
+    - language: php
+      php: '7.1'
+      os: osx
       before_script: composer install
     - language: node_js
       node_js: '5'
