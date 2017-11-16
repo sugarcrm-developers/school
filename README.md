@@ -160,7 +160,7 @@ The build is configured in [.travis.yml](.travis.yml). Currently, the build runs
 We hope to expand the build to do more (like deploy Sugar) in the future.
 
 ## Automated tests
-This repository contains automated PHPUnit and Jasmine tests the can be executed manually or as part of a
+This repository contains automated PHPUnit and Jasmine tests that can be executed manually or as part of a
  [Travis CI](http://travis-ci.com) build.
 
 ### PHPUnit tests
@@ -185,9 +185,13 @@ your `school` directory:
 ./composer.phar update
 ```
 
-The PHPUnit tests can be executed by running the following command from your `school` directory:
+The PHPUnit tests can be executed by running the following command from your `school` directory on macOS:
 ```
 vendor/bin/phpunit
+```
+or on Windows:
+```
+vendor\bin\phpunit
 ```
 
 ### Automatic execution

@@ -118,7 +118,7 @@ class PackageGeneratorTest extends TestCase
         $filesToExclude = $fileArrays["filesToExclude"];
         $this -> assertEquals(1, count($filesToInclude));
         $this -> assertEquals("src" . DIRECTORY_SEPARATOR . "myfile.php", $filesToInclude[0]["fileRelative"]);
-        $this -> assertEquals("vfs:" . DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR . "root" . DIRECTORY_SEPARATOR
+        $this -> assertEquals("vfs://root" . DIRECTORY_SEPARATOR
             . "src" . DIRECTORY_SEPARATOR . "myfile.php", $filesToInclude[0]["fileReal"]);
         $this -> assertEquals(0, count($filesToExclude));
     }
@@ -141,7 +141,7 @@ class PackageGeneratorTest extends TestCase
         $this -> assertEquals(1, count($filesToExclude));
         $this -> assertEquals("src" . DIRECTORY_SEPARATOR . "custom" . DIRECTORY_SEPARATOR . "application"
             . DIRECTORY_SEPARATOR . "Ext" . DIRECTORY_SEPARATOR . "myfile.php", $filesToExclude[0]["fileRelative"]);
-        $this -> assertEquals("vfs:" . DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR . "root" . DIRECTORY_SEPARATOR
+        $this -> assertEquals("vfs://root" . DIRECTORY_SEPARATOR
             . "src" . DIRECTORY_SEPARATOR . "custom" . DIRECTORY_SEPARATOR . "application" . DIRECTORY_SEPARATOR .
             "Ext" . DIRECTORY_SEPARATOR . "myfile.php", $filesToExclude[0]["fileReal"]);
     }
@@ -188,30 +188,30 @@ class PackageGeneratorTest extends TestCase
         $this -> assertEquals(3, count($filesToInclude));
         $this -> assertEquals("src" . DIRECTORY_SEPARATOR . "language" . DIRECTORY_SEPARATOR . "application"
             . DIRECTORY_SEPARATOR . "en_us.lang.php", $filesToInclude[0]["fileRelative"]);
-        $this -> assertEquals("vfs:" . DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR . "root" . DIRECTORY_SEPARATOR
+        $this -> assertEquals("vfs://root" . DIRECTORY_SEPARATOR
             . "src" . DIRECTORY_SEPARATOR . "language" . DIRECTORY_SEPARATOR . "application" . DIRECTORY_SEPARATOR .
             "en_us.lang.php", $filesToInclude[0]["fileReal"]);
         $this -> assertEquals("src" . DIRECTORY_SEPARATOR . "icons" . DIRECTORY_SEPARATOR . "default" .
             DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . "PR_Professors.gif", $filesToInclude[1]["fileRelative"]);
-        $this -> assertEquals("vfs:" . DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR . "root" . DIRECTORY_SEPARATOR
+        $this -> assertEquals("vfs://root" . DIRECTORY_SEPARATOR
             . "src" . DIRECTORY_SEPARATOR . "icons" . DIRECTORY_SEPARATOR . "default" . DIRECTORY_SEPARATOR . "images"
             . DIRECTORY_SEPARATOR . "PR_Professors.gif", $filesToInclude[1]["fileReal"]);
         $this -> assertEquals("src" . DIRECTORY_SEPARATOR . "icons" . DIRECTORY_SEPARATOR . "default"
             . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . "CreatePR_Professors.gif", $filesToInclude[2]["fileRelative"]);
-        $this -> assertEquals("vfs:" . DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR . "root" . DIRECTORY_SEPARATOR
+        $this -> assertEquals("vfs://root" . DIRECTORY_SEPARATOR
             . "src" . DIRECTORY_SEPARATOR . "icons" . DIRECTORY_SEPARATOR . "default" . DIRECTORY_SEPARATOR . "images"
             . DIRECTORY_SEPARATOR . "CreatePR_Professors.gif", $filesToInclude[2]["fileReal"]);
 
         $this -> assertEquals(2, count($filesToExclude));
         $this -> assertEquals("src" . DIRECTORY_SEPARATOR . "custom" . DIRECTORY_SEPARATOR . "application"
             . DIRECTORY_SEPARATOR . "Ext" . DIRECTORY_SEPARATOR . "test.php", $filesToExclude[0]["fileRelative"]);
-        $this -> assertEquals("vfs:" . DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR . "root" . DIRECTORY_SEPARATOR
+        $this -> assertEquals("vfs://root" . DIRECTORY_SEPARATOR
             . "src" . DIRECTORY_SEPARATOR . "custom" . DIRECTORY_SEPARATOR . "application" . DIRECTORY_SEPARATOR . "Ext"
             . DIRECTORY_SEPARATOR . "test.php", $filesToExclude[0]["fileReal"]);
         $this -> assertEquals("src" . DIRECTORY_SEPARATOR . "custom" . DIRECTORY_SEPARATOR . "modules" .
             DIRECTORY_SEPARATOR . "test" . DIRECTORY_SEPARATOR . "Ext" . DIRECTORY_SEPARATOR . "excludeme.php",
             $filesToExclude[1]["fileRelative"]);
-        $this -> assertEquals("vfs:" . DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR . "root" . DIRECTORY_SEPARATOR
+        $this -> assertEquals("vfs://root" . DIRECTORY_SEPARATOR
             . "src" . DIRECTORY_SEPARATOR . "custom"
             . DIRECTORY_SEPARATOR . "modules" . DIRECTORY_SEPARATOR . "test" . DIRECTORY_SEPARATOR . "Ext"
             . DIRECTORY_SEPARATOR . "excludeme.php", $filesToExclude[1]["fileReal"]);
