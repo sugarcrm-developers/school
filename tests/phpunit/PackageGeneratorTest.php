@@ -217,4 +217,24 @@ class PackageGeneratorTest extends TestCase
             . DIRECTORY_SEPARATOR . "excludeme.php", $filesToExclude[1]["fileReal"]);
     }
 
+    public function testOpenZipValidParams(){
+        $pg = new PackageGenerator();
+
+        $zip = $pg -> openZip("1", "profM", "pack.php");
+        $this -> assertContains('Creating releases/sugarcrm-profM-1.zip', $this -> getActualOutput());
+        $this -> assertEquals(0, $zip -> numFiles);
+    }
+
+    public function testOpenZipFileAlreadyExists(){
+        $root = vfsStream::setup();
+        $releasesDirectory = vfsStream::newDirectory("releases") -> at($root);
+        vfsStream::newFile("sugarcrm-profM-1.zip") -> at($releasesDirectory);
+
+        $pg = new PackageGenerator();
+        $pg -> setCwd($root -> url());
+
+        $this -> expectException(Exception::class);
+        $pg -> openZip("1", "profM", "pack.php");
+    }
+
 }

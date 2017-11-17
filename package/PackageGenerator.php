@@ -105,4 +105,24 @@ class PackageGenerator
         return array("filesToInclude" => $filesToInclude, "filesToExclude" => $filesToExclude);
 
     }
+
+    /*
+     * Creates and opens a new zip archive
+     * @throws Exception if a zip file with the same name already exists
+     */
+    public function openZip($version, $packageID, $command){
+        $zipFile = $this -> getZipFilePath($version, $packageID, $command);
+
+        if (file_exists($this -> cwd . "/" . $zipFile)) {
+            throw new \Exception("Error:  Release $zipFile already exists, so a new zip was not created. To generate a"
+                . " new zip, either delete the"
+                . " existing zip file or update the version number in the version file AND then run the script to build the"
+                . " module again. \n");
+        }
+
+        echo "Creating {$zipFile} ... \n";
+        $zip = new \ZipArchive();
+        $zip->open($zipFile, \ZipArchive::CREATE);
+        return $zip;
+    }
 }

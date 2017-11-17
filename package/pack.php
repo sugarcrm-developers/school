@@ -14,6 +14,12 @@ $packageID = "ProfessorM";
 $packageLabel = "Professor M School for Gifted Coders";
 $supportedVersionRegex = '7\\..*$';
 
+/*
+ * Determine the version of the zip
+ */
+$pg = new PackageGenerator;
+
+$version = $pg -> getVersion($argv[1]);
 
 /*
  * Prepare the manifest and installdefs
@@ -205,25 +211,12 @@ $installdefs = array(
  * Make the zip
  */
 
-$pg = new PackageGenerator;
-
-$version = $pg -> getVersion($argv[1]);
 
 try {
-    $zipFile = $pg -> getZipFilePath($version, $packageID, $argv[0]);
+    $zip = $pg -> openZip($version, $packageID, $argv[0]);
 } catch (Exception $e) {
     die($e->getMessage());
 }
-
-if (file_exists($zipFile)) {
-    die("Error:  Release $zipFile already exists, so a new zip was not created. To generate a new zip, either delete the"
-        . " existing zip file or update the version number in the version file AND then run the script to build the"
-        . " module again. \n");
-}
-
-
-$zip = new ZipArchive();
-$zip->open($zipFile, ZipArchive::CREATE);
 
 $srcDirectory = "src";
 $arrayOfFiles = $pg -> getFileArraysForZip($srcDirectory );
