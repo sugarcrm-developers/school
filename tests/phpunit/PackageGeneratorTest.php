@@ -159,7 +159,7 @@ class PackageGeneratorTest extends TestCase
         return array(
             'root' => $root,
             'filesToInclude' => array(),
-            'filesToExclude' => array()
+            'filesToExclude' => $filesToExclude
         );
     }
 
@@ -518,6 +518,45 @@ class PackageGeneratorTest extends TestCase
 
         $pg -> closeZip($zip);
         $this -> assertContains('Done creating sugarcrm-profM-1.zip', $this -> getActualOutput());
+    }
+
+    public function testEchoExcludedFilesWithSingleFileToExclude(){
+        $testVariables = $this->getTestVariablesForSingleFileToExclude();
+        $filesToExclude = $testVariables['filesToExclude'];
+
+        $pg = new PackageGenerator();
+
+        $pg -> echoExcludedFiles($filesToExclude);
+        $output = $this->getActualOutput();
+        $this -> assertContains('The following files were excluded from the zip:',
+            $output);
+        $this -> assertContains('[*] src/custom/application/Ext/test.php',
+            $output);
+    }
+
+    public function testEchoExcludedFilesWithNoFilesToExclude(){
+        $filesToExclude = array();
+
+        $pg = new PackageGenerator();
+
+        $pg -> echoExcludedFiles($filesToExclude);
+        $this -> assertEquals("", $this -> getActualOutput());
+    }
+
+    public function testEchoExcludedFilesWithMultipleFilesToExclude(){
+        $testVariables = $this->getTestVariablesForMultipleFiles();
+        $filesToExclude = $testVariables['filesToExclude'];
+
+        $pg = new PackageGenerator();
+
+        $pg -> echoExcludedFiles($filesToExclude);
+        $output = $this->getActualOutput();
+        $this -> assertContains('The following files were excluded from the zip:',
+            $output);
+        $this -> assertContains('[*] src/custom/application/Ext/test.php',
+            $output);
+        $this -> assertContains('[*] src/custom/modules/test/Ext/excludeme.php',
+            $output);
     }
 
 }

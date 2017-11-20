@@ -152,4 +152,16 @@ class PackageGenerator
         }
         return $installdefs;
     }
+
+    /*
+     * Outputs a list of files that were excluded from the zip
+     */
+    public function echoExcludedFiles($filesToExclude){
+        if (!empty($filesToExclude)){
+            echo "The following files were excluded from the zip: \n";
+            foreach($filesToExclude as $file) {
+                echo " [*] " . $file["fileRelative"] . "\n";
+            }
+        }
+    }
 }

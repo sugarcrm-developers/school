@@ -233,10 +233,5 @@ $manifestContent = sprintf(
 $zip->addFromString('manifest.php', $manifestContent);
 $pg -> closeZip($zip);
 
-if (!empty($filesToExclude)){
-    echo "The following files were excluded from the zip: \n";
-    foreach($filesToExclude as $file) {
-        echo " [*] " . $file["fileRelative"] . "\n";
-    }
-}
+$pg -> echoExcludedFiles($filesToExclude);
 exit(0);
