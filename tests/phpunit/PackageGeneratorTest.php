@@ -237,4 +237,117 @@ class PackageGeneratorTest extends TestCase
         $pg -> openZip("1", "profM", "pack.php");
     }
 
+    /*
+     * addFile does not work with the urls beginning with "vfs://" so this test does NOT
+     * actually test that files were added to the zip.  Instead it tests the output of the
+     * function is correct
+     */
+    public function testAddFilesToZipOneFile(){
+        $root = vfsStream::setup();
+        $srcDirectory = vfsStream::newDirectory("src") -> at($root);
+        vfsStream::newFile("myfile.php") -> at($srcDirectory);
+
+        $pg = new PackageGenerator();
+        $pg -> setCwd($root -> url());
+
+        $zip = $pg -> openZip("1", "profM", "pack.php");
+
+        $filesToInclude = array();
+        $file = array(
+            "fileRelative" => "src" . DIRECTORY_SEPARATOR . "myfile.php",
+            "fileReal" =>  "vfs://root" . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "myfile.php"
+        );
+        array_push($filesToInclude, $file);
+
+        $zip = $pg -> addFilesToZip($zip, $filesToInclude);
+
+        $this -> assertContains("[*] src" . DIRECTORY_SEPARATOR . "myfile.php", $this -> getActualOutput());
+    }
+
+    /*
+     * addFile does not work with the urls beginning with "vfs://" so this test does NOT
+     * actually test that files were added to the zip.  Instead it tests the output of the
+     * function is correct
+     */
+    public function testAddFilesToZipNoFiles(){
+        $root = vfsStream::setup();
+
+        $pg = new PackageGenerator();
+        $pg -> setCwd($root -> url());
+
+        $zip = $pg -> openZip("1", "profM", "pack.php");
+
+        $filesToInclude = array();
+        $outputBeforeAddingFiles = $this -> getActualOutput();
+
+        $zip = $pg -> addFilesToZip($zip, $filesToInclude);
+
+        $outputAfterAddingFiles = $this -> getActualOutput();
+
+        $this -> assertEquals($outputBeforeAddingFiles, $outputAfterAddingFiles);
+    }
+
+    /*
+     * addFile does not work with the urls beginning with "vfs://" so this test does NOT
+     * actually test that files were added to the zip.  Instead it tests the output of the
+     * function is correct
+     */
+    public function testAddFilesToZipMultipleFiles(){
+        /*
+         * Files to be included:
+         *  [*] src/language/application/en_us.lang.php
+         *  [*] src/icons/default/images/PR_Professors.gif
+         *  [*] src/icons/default/images/CreatePR_Professors.gif
+         */
+
+        $root = vfsStream::setup();
+        $srcDirectory = vfsStream::newDirectory("src") -> at($root);
+        $languageDirectory = vfsStream::newDirectory("language") -> at($srcDirectory);
+        $applicationUnderLanguageDirectory = vfsStream::newDirectory("application") -> at($languageDirectory);
+        $iconsDirectory = vfsStream::newDirectory("icons") -> at($srcDirectory);
+        $defaultDirectory = vfsStream::newDirectory("default") -> at($iconsDirectory);
+        $imagesDirectory = vfsStream::newDirectory("images") -> at($defaultDirectory);
+
+        vfsStream::newFile("en_us.lang.php") -> at($applicationUnderLanguageDirectory);
+        vfsStream::newFile("PR_Professors.gif") -> at($imagesDirectory);
+        vfsStream::newFile("CreatePR_Professors.gif") -> at($imagesDirectory);
+
+        $pg = new PackageGenerator();
+        $pg -> setCwd($root -> url());
+
+        $zip = $pg -> openZip("1", "profM", "pack.php");
+
+        $filesToInclude = array();
+        $fileEnUs = array(
+            "fileRelative" => "src" . DIRECTORY_SEPARATOR . "language" . DIRECTORY_SEPARATOR . "application"
+                . DIRECTORY_SEPARATOR . "en_us.lang.php",
+            "fileReal" =>  "vfs://root" . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "language"
+                . DIRECTORY_SEPARATOR . "application" . DIRECTORY_SEPARATOR . "en_us.lang.php"
+        );
+        $filePRProfessors = array(
+            "fileRelative" => "src" . DIRECTORY_SEPARATOR . "icons" . DIRECTORY_SEPARATOR . "default"
+                . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . "PR_Professors.gif",
+            "fileReal" =>  "vfs://root" . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "icons"
+                . DIRECTORY_SEPARATOR . "default" . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . "PR_Professors.gif"
+        );
+        $fileCreatePRProfessors = array(
+            "fileRelative" => "src" . DIRECTORY_SEPARATOR . "icons" . DIRECTORY_SEPARATOR . "default"
+                . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . "CreatePR_Professors.gif",
+            "fileReal" =>  "vfs://root" . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "icons"
+                . DIRECTORY_SEPARATOR . "default" . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . "CreatePR_Professors.gif"
+        );
+        array_push($filesToInclude, $fileEnUs);
+        array_push($filesToInclude, $filePRProfessors);
+        array_push($filesToInclude, $fileCreatePRProfessors);
+
+        $zip = $pg -> addFilesToZip($zip, $filesToInclude);
+
+        $this -> assertContains("[*] src" . DIRECTORY_SEPARATOR . "language" . DIRECTORY_SEPARATOR . "application"
+            . DIRECTORY_SEPARATOR . "en_us.lang.php", $this -> getActualOutput());
+        $this -> assertContains("[*] src" . DIRECTORY_SEPARATOR . "icons" . DIRECTORY_SEPARATOR . "default"
+            . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . "PR_Professors.gif", $this -> getActualOutput());
+        $this -> assertContains("[*] src" . DIRECTORY_SEPARATOR . "icons" . DIRECTORY_SEPARATOR . "default"
+            . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . "CreatePR_Professors.gif", $this -> getActualOutput());
+    }
+
 }

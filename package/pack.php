@@ -223,9 +223,9 @@ $arrayOfFiles = $pg -> getFileArraysForZip($srcDirectory );
 $filesToInclude = $arrayOfFiles["filesToInclude"];
 $filesToExclude = $arrayOfFiles["filesToExclude"];
 
+$zip = $pg -> addFilesToZip($zip, $filesToInclude);
+
 foreach($filesToInclude as $file) {
-    echo " [*] " . $file['fileRelative'] . "\n";
-    $zip->addFile($file['fileReal'], $file['fileRelative']);
     $installdefs['copy'][] = array(
         'from' => '<basepath>/' . $file['fileRelative'],
         'to' => preg_replace('/^' . $srcDirectory .'\/(.*)/', '$1', $file['fileRelative']),

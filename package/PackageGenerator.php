@@ -125,4 +125,15 @@ class PackageGenerator
         $zip->open($zipFile, \ZipArchive::CREATE);
         return $zip;
     }
+
+    /*
+     * Adds the files listed in $filesToInclude to the $zip
+     */
+    public function addFilesToZip($zip, $filesToInclude){
+        foreach($filesToInclude as $file) {
+            echo " [*] " . $file['fileRelative'] . "\n";
+            $zip->addFile($file['fileReal'], $file['fileRelative']);
+        }
+        return $zip;
+    }
 }
