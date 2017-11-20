@@ -211,7 +211,6 @@ $installdefs = array(
  * Make the zip
  */
 
-
 try {
     $zip = $pg -> openZip($version, $packageID, $argv[0]);
 } catch (Exception $e) {
@@ -232,8 +231,7 @@ $manifestContent = sprintf(
     var_export($installdefs, true)
 );
 $zip->addFromString('manifest.php', $manifestContent);
-$zip->close();
-echo "Done creating {$zipFile}\n\n";
+$pg -> closeZip($zip);
 
 if (!empty($filesToExclude)){
     echo "The following files were excluded from the zip: \n";

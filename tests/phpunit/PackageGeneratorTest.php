@@ -8,6 +8,16 @@ use org\bovigo\vfs\vfsStream;
 class PackageGeneratorTest extends TestCase
 {
 
+    protected function tearDown()
+    {
+        //delete the releases directory if it exists
+        if(is_dir('releases')){
+            array_map('unlink', glob ('releases/*.*'));
+            rmdir ('releases');
+        }
+
+    }
+
     /*
      * Creates the virtual file system and associated arrays (filesToInclude and filesToExclude)
      * for multiple files.
@@ -494,5 +504,20 @@ class PackageGeneratorTest extends TestCase
         $this -> assertEquals('icons/default/images/CreatePR_Professors.gif', $installdefs['copy'][2]['to']);
     }
 
+    /*
+     * There is not a good way to test if a zip file is closed so this just checks
+     * that the output of the function is correct.
+     */
+    public function testCloseZip(){
+        $root = vfsStream::setup();
+
+        $pg = new PackageGenerator();
+        $pg -> setCwd($root -> url());
+
+        $zip = $pg -> openZip("1", "profM", "pack.php");
+
+        $pg -> closeZip($zip);
+        $this -> assertContains('Done creating sugarcrm-profM-1.zip', $this -> getActualOutput());
+    }
 
 }

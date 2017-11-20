@@ -126,6 +126,12 @@ class PackageGenerator
         return $zip;
     }
 
+    public function closeZip($zip){
+        $filename = basename($zip -> filename);
+        $zip->close();
+        echo "Done creating $filename\n\n";
+    }
+
     /*
      * Adds the files listed in $filesToInclude to the $zip
      */
