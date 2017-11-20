@@ -8,6 +8,175 @@ use org\bovigo\vfs\vfsStream;
 class PackageGeneratorTest extends TestCase
 {
 
+    /*
+     * Creates the virtual file system and associated arrays (filesToInclude and filesToExclude)
+     * for multiple files.
+     *
+     * Files to be included:
+     *  [*] src/language/application/en_us.lang.php
+     *  [*] src/icons/default/images/PR_Professors.gif
+     *  [*] src/icons/default/images/CreatePR_Professors.gif
+     *
+     * Files to be excluded:
+     * [*] src/custom/application/Ext/test.php
+     * [*] src/custom/modules/test/Ext/excludeme.php
+     */
+    private function getTestVariablesForMultipleFiles(){
+
+        $root = vfsStream::setup();
+        $srcDirectory = vfsStream::newDirectory("src") -> at($root);
+        $languageDirectory = vfsStream::newDirectory("language") -> at($srcDirectory);
+        $applicationUnderLanguageDirectory = vfsStream::newDirectory("application") -> at($languageDirectory);
+        $iconsDirectory = vfsStream::newDirectory("icons") -> at($srcDirectory);
+        $defaultDirectory = vfsStream::newDirectory("default") -> at($iconsDirectory);
+        $imagesDirectory = vfsStream::newDirectory("images") -> at($defaultDirectory);
+        $customDirectory = vfsStream::newDirectory("custom") -> at($srcDirectory);
+        $applicationDirectory = vfsStream::newDirectory("application") -> at($customDirectory);
+        $ExtDirectory = vfsStream::newDirectory("Ext") -> at($applicationDirectory);
+        $modulesDirectory = vfsStream::newDirectory("modules") -> at($customDirectory);
+        $testDirectory = vfsStream::newDirectory("test") -> at($modulesDirectory);
+        $ExtUnderTestDirectory = vfsStream::newDirectory("Ext") -> at($testDirectory);
+
+        vfsStream::newFile("en_us.lang.php") -> at($applicationUnderLanguageDirectory);
+        vfsStream::newFile("PR_Professors.gif") -> at($imagesDirectory);
+        vfsStream::newFile("CreatePR_Professors.gif") -> at($imagesDirectory);
+        vfsStream::newFile("test.php") -> at($ExtDirectory);
+        vfsStream::newFile("excludeme.php") -> at($ExtUnderTestDirectory);
+
+        $filesToInclude = array();
+        $fileEnUs = array(
+            "fileRelative" => "src" . DIRECTORY_SEPARATOR . "language" . DIRECTORY_SEPARATOR . "application"
+                . DIRECTORY_SEPARATOR . "en_us.lang.php",
+            "fileReal" =>  "vfs://root" . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "language"
+                . DIRECTORY_SEPARATOR . "application" . DIRECTORY_SEPARATOR . "en_us.lang.php"
+        );
+        $filePRProfessors = array(
+            "fileRelative" => "src" . DIRECTORY_SEPARATOR . "icons" . DIRECTORY_SEPARATOR . "default"
+                . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . "PR_Professors.gif",
+            "fileReal" =>  "vfs://root" . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "icons"
+                . DIRECTORY_SEPARATOR . "default" . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . "PR_Professors.gif"
+        );
+        $fileCreatePRProfessors = array(
+            "fileRelative" => "src" . DIRECTORY_SEPARATOR . "icons" . DIRECTORY_SEPARATOR . "default"
+                . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . "CreatePR_Professors.gif",
+            "fileReal" =>  "vfs://root" . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "icons"
+                . DIRECTORY_SEPARATOR . "default" . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . "CreatePR_Professors.gif"
+        );
+        array_push($filesToInclude, $fileEnUs);
+        array_push($filesToInclude, $filePRProfessors);
+        array_push($filesToInclude, $fileCreatePRProfessors);
+
+        $filesToExclude = array();
+        $fileTest = array(
+            "fileRelative" => "src" . DIRECTORY_SEPARATOR . "custom" . DIRECTORY_SEPARATOR . "application"
+                . DIRECTORY_SEPARATOR . "Ext" . DIRECTORY_SEPARATOR . "test.php",
+            "fileReal" =>  "vfs://root" . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "custom"
+                . DIRECTORY_SEPARATOR . "application" . DIRECTORY_SEPARATOR . "Ext" . DIRECTORY_SEPARATOR . "test.php"
+        );
+        $fileExcludeme = array(
+            "fileRelative" => "src" . DIRECTORY_SEPARATOR . "custom" . DIRECTORY_SEPARATOR . "modules"
+                . DIRECTORY_SEPARATOR . "test" . DIRECTORY_SEPARATOR . "Ext" . DIRECTORY_SEPARATOR . "excludeme.php",
+            "fileReal" =>  "vfs://root" . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "custom"
+                . DIRECTORY_SEPARATOR . "modules" . DIRECTORY_SEPARATOR . "test" . DIRECTORY_SEPARATOR . "Ext" . DIRECTORY_SEPARATOR . "excludeme.php"
+        );
+        array_push($filesToExclude, $fileTest);
+        array_push($filesToExclude, $fileExcludeme);
+
+        return array(
+            'root' => $root,
+            'filesToInclude' => $filesToInclude,
+            'filesToExclude' => $filesToExclude
+        );
+    }
+
+    /*
+     * Creates the virtual file system and associated arrays (filesToInclude and filesToExclude)
+     * for a single file that should be included in the zip.
+     *
+     * Files to be included:
+     *  [*] src/myfile.php
+     *
+     * Files to be excluded:
+     * [none]
+     */
+    private function getTestVariablesForSingleFileToInclude(){
+        $root = vfsStream::setup();
+        $srcDirectory = vfsStream::newDirectory("src") -> at($root);
+        vfsStream::newFile("myfile.php") -> at($srcDirectory);
+
+        $filesToInclude = array();
+        $file = array(
+            "fileRelative" => "src" . DIRECTORY_SEPARATOR . "myfile.php",
+            "fileReal" =>  "vfs://root" . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "myfile.php"
+        );
+        array_push($filesToInclude, $file);
+
+        return array(
+            'root' => $root,
+            'filesToInclude' => $filesToInclude,
+            'filesToExclude' => array()
+        );
+    }
+
+    /*
+     * Creates the virtual file system and associated arrays (filesToInclude and filesToExclude)
+     * for a single file that should NOT be included in the zip.
+     *
+     * Files to be included:
+     *  [none]
+     *
+     * Files to be excluded:
+     * [*] src/custom/application/Ext/test.php
+     */
+    private function getTestVariablesForSingleFileToExclude(){
+        $root = vfsStream::setup();
+        $srcDirectory = vfsStream::newDirectory("src") -> at($root);
+        $customDirectory = vfsStream::newDirectory("custom") -> at($srcDirectory);
+        $applicationDirectory = vfsStream::newDirectory("application") -> at($customDirectory);
+        $ExtDirectory = vfsStream::newDirectory("Ext") -> at($applicationDirectory);
+        vfsStream::newFile("test.php") -> at($ExtDirectory);
+
+
+        $filesToExclude = array();
+        $fileTest = array(
+            "fileRelative" => "src" . DIRECTORY_SEPARATOR . "custom" . DIRECTORY_SEPARATOR . "application"
+                . DIRECTORY_SEPARATOR . "Ext" . DIRECTORY_SEPARATOR . "test.php",
+            "fileReal" =>  "vfs://root" . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "custom"
+                . DIRECTORY_SEPARATOR . "application" . DIRECTORY_SEPARATOR . "Ext" . DIRECTORY_SEPARATOR . "test.php"
+        );
+        array_push($filesToExclude, $fileTest);
+
+        return array(
+            'root' => $root,
+            'filesToInclude' => array(),
+            'filesToExclude' => array()
+        );
+    }
+
+    /*
+     * Returns sample installdefs that have beans and language
+     */
+    private function getSampleInstalldefs(){
+        return array(
+            'beans' =>
+                array (
+                    array (
+                        'module' => 'PR_Professors',
+                        'class' => 'PR_Professors',
+                        'path' => 'modules/PR_Professors/PR_Professors.php',
+                        'tab' => true,
+                    ),
+                ),
+            'language' => array (
+                array (
+                    'from' => 'language/application/en_us.lang.php',
+                    'to_module' => 'application',
+                    'language' => 'en_us',
+                ),
+            )
+        );
+    }
+
     public function testShouldIncludeFileInZipValidFileMac(){
         $pg = new PackageGenerator();
         $this->assertTrue($pg->shouldIncludeFileInZip("src/custom/Extension/modules/Accounts/Ext/WirelessLayoutdefs/pr_professors_accounts_Accounts.php"));
@@ -106,9 +275,8 @@ class PackageGeneratorTest extends TestCase
     }
 
     public function testGetFileArraysForZipSingleFileToInclude(){
-        $root = vfsStream::setup();
-        $srcDirectory = vfsStream::newDirectory("src") -> at($root);
-        vfsStream::newFile("myfile.php") -> at($srcDirectory);
+        $testVariables = $this -> getTestVariablesForSingleFileToInclude();
+        $root = $testVariables['root'];
 
         $pg = new PackageGenerator();
         $pg -> setCwd($root -> url());
@@ -124,12 +292,8 @@ class PackageGeneratorTest extends TestCase
     }
 
     public function testGetFileArraysForZipSingleFileToExclude(){
-        $root = vfsStream::setup();
-        $srcDirectory = vfsStream::newDirectory("src") -> at($root);
-        $customDirectory = vfsStream::newDirectory("custom") -> at($srcDirectory);
-        $applicationDirectory = vfsStream::newDirectory("application") -> at($customDirectory);
-        $ExtDirectory = vfsStream::newDirectory("Ext") -> at($applicationDirectory);
-        vfsStream::newFile("myfile.php") -> at($ExtDirectory);
+        $testVariables = $this -> getTestVariablesForSingleFileToExclude();
+        $root = $testVariables['root'];
 
         $pg = new PackageGenerator();
         $pg -> setCwd($root -> url());
@@ -140,43 +304,15 @@ class PackageGeneratorTest extends TestCase
         $this -> assertEquals(0, count($filesToInclude));
         $this -> assertEquals(1, count($filesToExclude));
         $this -> assertEquals("src" . DIRECTORY_SEPARATOR . "custom" . DIRECTORY_SEPARATOR . "application"
-            . DIRECTORY_SEPARATOR . "Ext" . DIRECTORY_SEPARATOR . "myfile.php", $filesToExclude[0]["fileRelative"]);
+            . DIRECTORY_SEPARATOR . "Ext" . DIRECTORY_SEPARATOR . "test.php", $filesToExclude[0]["fileRelative"]);
         $this -> assertEquals("vfs://root" . DIRECTORY_SEPARATOR
             . "src" . DIRECTORY_SEPARATOR . "custom" . DIRECTORY_SEPARATOR . "application" . DIRECTORY_SEPARATOR .
-            "Ext" . DIRECTORY_SEPARATOR . "myfile.php", $filesToExclude[0]["fileReal"]);
+            "Ext" . DIRECTORY_SEPARATOR . "test.php", $filesToExclude[0]["fileReal"]);
     }
 
-    public function testGetFileArrayForZipMultipleFiles(){
-        /*
-         * Files to be included:
-         *  [*] src/language/application/en_us.lang.php
-         *  [*] src/icons/default/images/PR_Professors.gif
-         *  [*] src/icons/default/images/CreatePR_Professors.gif
-         *
-         * Files to be excluded:
-         * [*] src/custom/application/Ext/test.php
-         * [*] src/custom/modules/test/Ext/excludeme.php
-         */
-
-        $root = vfsStream::setup();
-        $srcDirectory = vfsStream::newDirectory("src") -> at($root);
-        $languageDirectory = vfsStream::newDirectory("language") -> at($srcDirectory);
-        $applicationUnderLanguageDirectory = vfsStream::newDirectory("application") -> at($languageDirectory);
-        $iconsDirectory = vfsStream::newDirectory("icons") -> at($srcDirectory);
-        $defaultDirectory = vfsStream::newDirectory("default") -> at($iconsDirectory);
-        $imagesDirectory = vfsStream::newDirectory("images") -> at($defaultDirectory);
-        $customDirectory = vfsStream::newDirectory("custom") -> at($srcDirectory);
-        $applicationDirectory = vfsStream::newDirectory("application") -> at($customDirectory);
-        $ExtDirectory = vfsStream::newDirectory("Ext") -> at($applicationDirectory);
-        $modulesDirectory = vfsStream::newDirectory("modules") -> at($customDirectory);
-        $testDirectory = vfsStream::newDirectory("test") -> at($modulesDirectory);
-        $ExtUnderTestDirectory = vfsStream::newDirectory("Ext") -> at($testDirectory);
-
-        vfsStream::newFile("en_us.lang.php") -> at($applicationUnderLanguageDirectory);
-        vfsStream::newFile("PR_Professors.gif") -> at($imagesDirectory);
-        vfsStream::newFile("CreatePR_Professors.gif") -> at($imagesDirectory);
-        vfsStream::newFile("test.php") -> at($ExtDirectory);
-        vfsStream::newFile("excludeme.php") -> at($ExtUnderTestDirectory);
+    public function testGetFileArraysForZipMultipleFiles(){
+        $testVariables = $this -> getTestVariablesForMultipleFiles();
+        $root = $testVariables['root'];
 
         $pg = new PackageGenerator();
         $pg -> setCwd($root -> url());
@@ -243,21 +379,14 @@ class PackageGeneratorTest extends TestCase
      * function is correct
      */
     public function testAddFilesToZipOneFile(){
-        $root = vfsStream::setup();
-        $srcDirectory = vfsStream::newDirectory("src") -> at($root);
-        vfsStream::newFile("myfile.php") -> at($srcDirectory);
+        $testVariables = $this -> getTestVariablesForSingleFileToInclude();
+        $root = $testVariables['root'];
+        $filesToInclude = $testVariables['filesToInclude'];
 
         $pg = new PackageGenerator();
         $pg -> setCwd($root -> url());
 
         $zip = $pg -> openZip("1", "profM", "pack.php");
-
-        $filesToInclude = array();
-        $file = array(
-            "fileRelative" => "src" . DIRECTORY_SEPARATOR . "myfile.php",
-            "fileReal" =>  "vfs://root" . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "myfile.php"
-        );
-        array_push($filesToInclude, $file);
 
         $zip = $pg -> addFilesToZip($zip, $filesToInclude);
 
@@ -293,52 +422,14 @@ class PackageGeneratorTest extends TestCase
      * function is correct
      */
     public function testAddFilesToZipMultipleFiles(){
-        /*
-         * Files to be included:
-         *  [*] src/language/application/en_us.lang.php
-         *  [*] src/icons/default/images/PR_Professors.gif
-         *  [*] src/icons/default/images/CreatePR_Professors.gif
-         */
-
-        $root = vfsStream::setup();
-        $srcDirectory = vfsStream::newDirectory("src") -> at($root);
-        $languageDirectory = vfsStream::newDirectory("language") -> at($srcDirectory);
-        $applicationUnderLanguageDirectory = vfsStream::newDirectory("application") -> at($languageDirectory);
-        $iconsDirectory = vfsStream::newDirectory("icons") -> at($srcDirectory);
-        $defaultDirectory = vfsStream::newDirectory("default") -> at($iconsDirectory);
-        $imagesDirectory = vfsStream::newDirectory("images") -> at($defaultDirectory);
-
-        vfsStream::newFile("en_us.lang.php") -> at($applicationUnderLanguageDirectory);
-        vfsStream::newFile("PR_Professors.gif") -> at($imagesDirectory);
-        vfsStream::newFile("CreatePR_Professors.gif") -> at($imagesDirectory);
+        $testVariables = $this -> getTestVariablesForMultipleFiles();
+        $root = $testVariables['root'];
+        $filesToInclude = $testVariables['filesToInclude'];
 
         $pg = new PackageGenerator();
         $pg -> setCwd($root -> url());
 
         $zip = $pg -> openZip("1", "profM", "pack.php");
-
-        $filesToInclude = array();
-        $fileEnUs = array(
-            "fileRelative" => "src" . DIRECTORY_SEPARATOR . "language" . DIRECTORY_SEPARATOR . "application"
-                . DIRECTORY_SEPARATOR . "en_us.lang.php",
-            "fileReal" =>  "vfs://root" . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "language"
-                . DIRECTORY_SEPARATOR . "application" . DIRECTORY_SEPARATOR . "en_us.lang.php"
-        );
-        $filePRProfessors = array(
-            "fileRelative" => "src" . DIRECTORY_SEPARATOR . "icons" . DIRECTORY_SEPARATOR . "default"
-                . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . "PR_Professors.gif",
-            "fileReal" =>  "vfs://root" . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "icons"
-                . DIRECTORY_SEPARATOR . "default" . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . "PR_Professors.gif"
-        );
-        $fileCreatePRProfessors = array(
-            "fileRelative" => "src" . DIRECTORY_SEPARATOR . "icons" . DIRECTORY_SEPARATOR . "default"
-                . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . "CreatePR_Professors.gif",
-            "fileReal" =>  "vfs://root" . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "icons"
-                . DIRECTORY_SEPARATOR . "default" . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . "CreatePR_Professors.gif"
-        );
-        array_push($filesToInclude, $fileEnUs);
-        array_push($filesToInclude, $filePRProfessors);
-        array_push($filesToInclude, $fileCreatePRProfessors);
 
         $zip = $pg -> addFilesToZip($zip, $filesToInclude);
 
@@ -351,35 +442,11 @@ class PackageGeneratorTest extends TestCase
     }
 
     public function testAddFilesToInstallDefsOneFile(){
-        $installdefs = array(
-            'beans' =>
-                array (
-                    array (
-                        'module' => 'PR_Professors',
-                        'class' => 'PR_Professors',
-                        'path' => 'modules/PR_Professors/PR_Professors.php',
-                        'tab' => true,
-                    ),
-                ),
-            'language' => array (
-                array (
-                    'from' => 'language/application/en_us.lang.php',
-                    'to_module' => 'application',
-                    'language' => 'en_us',
-                ),
-            )
-        );
+        $installdefs = $this->getSampleInstalldefs();
 
-        $root = vfsStream::setup();
-        $srcDirectory = vfsStream::newDirectory("src") -> at($root);
-        vfsStream::newFile("myfile.php") -> at($srcDirectory);
-
-        $filesToInclude = array();
-        $file = array(
-            "fileRelative" => "src" . DIRECTORY_SEPARATOR . "myfile.php",
-            "fileReal" =>  "vfs://root" . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "myfile.php"
-        );
-        array_push($filesToInclude, $file);
+        $testVariables = $this -> getTestVariablesForSingleFileToInclude();
+        $root = $testVariables['root'];
+        $filesToInclude = $testVariables['filesToInclude'];
 
         $pg = new PackageGenerator();
         $pg -> setCwd($root -> url());
@@ -392,24 +459,7 @@ class PackageGeneratorTest extends TestCase
     }
 
     public function testAddFilesToInstallDefsNoFiles(){
-        $installdefs = array(
-            'beans' =>
-                array (
-                    array (
-                        'module' => 'PR_Professors',
-                        'class' => 'PR_Professors',
-                        'path' => 'modules/PR_Professors/PR_Professors.php',
-                        'tab' => true,
-                    ),
-                ),
-            'language' => array (
-                array (
-                    'from' => 'language/application/en_us.lang.php',
-                    'to_module' => 'application',
-                    'language' => 'en_us',
-                ),
-            )
-        );
+        $installdefs = $this->getSampleInstalldefs();
 
         $root = vfsStream::setup();
 
@@ -424,78 +474,11 @@ class PackageGeneratorTest extends TestCase
     }
 
     public function testAddFilesToInstallDefsMultipleFiles(){
-        $installdefs = array(
-            'beans' =>
-                array (
-                    array (
-                        'module' => 'PR_Professors',
-                        'class' => 'PR_Professors',
-                        'path' => 'modules/PR_Professors/PR_Professors.php',
-                        'tab' => true,
-                    ),
-                ),
-            'language' => array (
-                array (
-                    'from' => 'language/application/en_us.lang.php',
-                    'to_module' => 'application',
-                    'language' => 'en_us',
-                ),
-            )
-        );
+        $installdefs = $this->getSampleInstalldefs();
 
-        /*
-         * Files to be included:
-         *  [*] src/language/application/en_us.lang.php
-         *  [*] src/icons/default/images/PR_Professors.gif
-         *  [*] src/icons/default/images/CreatePR_Professors.gif
-         *
-         * Files to be excluded:
-         * [*] src/custom/application/Ext/test.php
-         * [*] src/custom/modules/test/Ext/excludeme.php
-         */
-
-        $root = vfsStream::setup();
-        $srcDirectory = vfsStream::newDirectory("src") -> at($root);
-        $languageDirectory = vfsStream::newDirectory("language") -> at($srcDirectory);
-        $applicationUnderLanguageDirectory = vfsStream::newDirectory("application") -> at($languageDirectory);
-        $iconsDirectory = vfsStream::newDirectory("icons") -> at($srcDirectory);
-        $defaultDirectory = vfsStream::newDirectory("default") -> at($iconsDirectory);
-        $imagesDirectory = vfsStream::newDirectory("images") -> at($defaultDirectory);
-        $customDirectory = vfsStream::newDirectory("custom") -> at($srcDirectory);
-        $applicationDirectory = vfsStream::newDirectory("application") -> at($customDirectory);
-        $ExtDirectory = vfsStream::newDirectory("Ext") -> at($applicationDirectory);
-        $modulesDirectory = vfsStream::newDirectory("modules") -> at($customDirectory);
-        $testDirectory = vfsStream::newDirectory("test") -> at($modulesDirectory);
-        $ExtUnderTestDirectory = vfsStream::newDirectory("Ext") -> at($testDirectory);
-
-        vfsStream::newFile("en_us.lang.php") -> at($applicationUnderLanguageDirectory);
-        vfsStream::newFile("PR_Professors.gif") -> at($imagesDirectory);
-        vfsStream::newFile("CreatePR_Professors.gif") -> at($imagesDirectory);
-        vfsStream::newFile("test.php") -> at($ExtDirectory);
-        vfsStream::newFile("excludeme.php") -> at($ExtUnderTestDirectory);
-
-        $filesToInclude = array();
-        $fileEnUs = array(
-            "fileRelative" => "src" . DIRECTORY_SEPARATOR . "language" . DIRECTORY_SEPARATOR . "application"
-                . DIRECTORY_SEPARATOR . "en_us.lang.php",
-            "fileReal" =>  "vfs://root" . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "language"
-                . DIRECTORY_SEPARATOR . "application" . DIRECTORY_SEPARATOR . "en_us.lang.php"
-        );
-        $filePRProfessors = array(
-            "fileRelative" => "src" . DIRECTORY_SEPARATOR . "icons" . DIRECTORY_SEPARATOR . "default"
-                . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . "PR_Professors.gif",
-            "fileReal" =>  "vfs://root" . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "icons"
-                . DIRECTORY_SEPARATOR . "default" . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . "PR_Professors.gif"
-        );
-        $fileCreatePRProfessors = array(
-            "fileRelative" => "src" . DIRECTORY_SEPARATOR . "icons" . DIRECTORY_SEPARATOR . "default"
-                . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . "CreatePR_Professors.gif",
-            "fileReal" =>  "vfs://root" . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "icons"
-                . DIRECTORY_SEPARATOR . "default" . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . "CreatePR_Professors.gif"
-        );
-        array_push($filesToInclude, $fileEnUs);
-        array_push($filesToInclude, $filePRProfessors);
-        array_push($filesToInclude, $fileCreatePRProfessors);
+        $testVariables = $this->getTestVariablesForMultipleFiles();
+        $root = $testVariables['root'];
+        $filesToInclude = $testVariables['filesToInclude'];
 
         $pg = new PackageGenerator();
         $pg -> setCwd($root -> url());
@@ -510,5 +493,6 @@ class PackageGeneratorTest extends TestCase
         $this -> assertEquals('<basepath>/src/icons/default/images/CreatePR_Professors.gif', $installdefs['copy'][2]['from']);
         $this -> assertEquals('icons/default/images/CreatePR_Professors.gif', $installdefs['copy'][2]['to']);
     }
+
 
 }
