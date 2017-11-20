@@ -350,4 +350,165 @@ class PackageGeneratorTest extends TestCase
             . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . "CreatePR_Professors.gif", $this -> getActualOutput());
     }
 
+    public function testAddFilesToInstallDefsOneFile(){
+        $installdefs = array(
+            'beans' =>
+                array (
+                    array (
+                        'module' => 'PR_Professors',
+                        'class' => 'PR_Professors',
+                        'path' => 'modules/PR_Professors/PR_Professors.php',
+                        'tab' => true,
+                    ),
+                ),
+            'language' => array (
+                array (
+                    'from' => 'language/application/en_us.lang.php',
+                    'to_module' => 'application',
+                    'language' => 'en_us',
+                ),
+            )
+        );
+
+        $root = vfsStream::setup();
+        $srcDirectory = vfsStream::newDirectory("src") -> at($root);
+        vfsStream::newFile("myfile.php") -> at($srcDirectory);
+
+        $filesToInclude = array();
+        $file = array(
+            "fileRelative" => "src" . DIRECTORY_SEPARATOR . "myfile.php",
+            "fileReal" =>  "vfs://root" . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "myfile.php"
+        );
+        array_push($filesToInclude, $file);
+
+        $pg = new PackageGenerator();
+        $pg -> setCwd($root -> url());
+
+        $installdefs = $pg -> addFilesToInstalldefs($filesToInclude, $installdefs, "src");
+
+        $this -> assertEquals(1, count($installdefs['copy']));
+        $this -> assertEquals('<basepath>/src/myfile.php', $installdefs['copy'][0]['from']);
+        $this -> assertEquals('myfile.php', $installdefs['copy'][0]['to']);
+    }
+
+    public function testAddFilesToInstallDefsNoFiles(){
+        $installdefs = array(
+            'beans' =>
+                array (
+                    array (
+                        'module' => 'PR_Professors',
+                        'class' => 'PR_Professors',
+                        'path' => 'modules/PR_Professors/PR_Professors.php',
+                        'tab' => true,
+                    ),
+                ),
+            'language' => array (
+                array (
+                    'from' => 'language/application/en_us.lang.php',
+                    'to_module' => 'application',
+                    'language' => 'en_us',
+                ),
+            )
+        );
+
+        $root = vfsStream::setup();
+
+        $filesToInclude = array();
+
+        $pg = new PackageGenerator();
+        $pg -> setCwd($root -> url());
+
+        $installdefs = $pg -> addFilesToInstalldefs($filesToInclude, $installdefs, "src");
+
+        $this -> assertArrayNotHasKey('copy', $installdefs);
+    }
+
+    public function testAddFilesToInstallDefsMultipleFiles(){
+        $installdefs = array(
+            'beans' =>
+                array (
+                    array (
+                        'module' => 'PR_Professors',
+                        'class' => 'PR_Professors',
+                        'path' => 'modules/PR_Professors/PR_Professors.php',
+                        'tab' => true,
+                    ),
+                ),
+            'language' => array (
+                array (
+                    'from' => 'language/application/en_us.lang.php',
+                    'to_module' => 'application',
+                    'language' => 'en_us',
+                ),
+            )
+        );
+
+        /*
+         * Files to be included:
+         *  [*] src/language/application/en_us.lang.php
+         *  [*] src/icons/default/images/PR_Professors.gif
+         *  [*] src/icons/default/images/CreatePR_Professors.gif
+         *
+         * Files to be excluded:
+         * [*] src/custom/application/Ext/test.php
+         * [*] src/custom/modules/test/Ext/excludeme.php
+         */
+
+        $root = vfsStream::setup();
+        $srcDirectory = vfsStream::newDirectory("src") -> at($root);
+        $languageDirectory = vfsStream::newDirectory("language") -> at($srcDirectory);
+        $applicationUnderLanguageDirectory = vfsStream::newDirectory("application") -> at($languageDirectory);
+        $iconsDirectory = vfsStream::newDirectory("icons") -> at($srcDirectory);
+        $defaultDirectory = vfsStream::newDirectory("default") -> at($iconsDirectory);
+        $imagesDirectory = vfsStream::newDirectory("images") -> at($defaultDirectory);
+        $customDirectory = vfsStream::newDirectory("custom") -> at($srcDirectory);
+        $applicationDirectory = vfsStream::newDirectory("application") -> at($customDirectory);
+        $ExtDirectory = vfsStream::newDirectory("Ext") -> at($applicationDirectory);
+        $modulesDirectory = vfsStream::newDirectory("modules") -> at($customDirectory);
+        $testDirectory = vfsStream::newDirectory("test") -> at($modulesDirectory);
+        $ExtUnderTestDirectory = vfsStream::newDirectory("Ext") -> at($testDirectory);
+
+        vfsStream::newFile("en_us.lang.php") -> at($applicationUnderLanguageDirectory);
+        vfsStream::newFile("PR_Professors.gif") -> at($imagesDirectory);
+        vfsStream::newFile("CreatePR_Professors.gif") -> at($imagesDirectory);
+        vfsStream::newFile("test.php") -> at($ExtDirectory);
+        vfsStream::newFile("excludeme.php") -> at($ExtUnderTestDirectory);
+
+        $filesToInclude = array();
+        $fileEnUs = array(
+            "fileRelative" => "src" . DIRECTORY_SEPARATOR . "language" . DIRECTORY_SEPARATOR . "application"
+                . DIRECTORY_SEPARATOR . "en_us.lang.php",
+            "fileReal" =>  "vfs://root" . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "language"
+                . DIRECTORY_SEPARATOR . "application" . DIRECTORY_SEPARATOR . "en_us.lang.php"
+        );
+        $filePRProfessors = array(
+            "fileRelative" => "src" . DIRECTORY_SEPARATOR . "icons" . DIRECTORY_SEPARATOR . "default"
+                . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . "PR_Professors.gif",
+            "fileReal" =>  "vfs://root" . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "icons"
+                . DIRECTORY_SEPARATOR . "default" . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . "PR_Professors.gif"
+        );
+        $fileCreatePRProfessors = array(
+            "fileRelative" => "src" . DIRECTORY_SEPARATOR . "icons" . DIRECTORY_SEPARATOR . "default"
+                . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . "CreatePR_Professors.gif",
+            "fileReal" =>  "vfs://root" . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "icons"
+                . DIRECTORY_SEPARATOR . "default" . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . "CreatePR_Professors.gif"
+        );
+        array_push($filesToInclude, $fileEnUs);
+        array_push($filesToInclude, $filePRProfessors);
+        array_push($filesToInclude, $fileCreatePRProfessors);
+
+        $pg = new PackageGenerator();
+        $pg -> setCwd($root -> url());
+
+        $installdefs = $pg -> addFilesToInstalldefs($filesToInclude, $installdefs, "src");
+
+        $this -> assertEquals(3, count($installdefs['copy']));
+        $this -> assertEquals('<basepath>/src/language/application/en_us.lang.php', $installdefs['copy'][0]['from']);
+        $this -> assertEquals('language/application/en_us.lang.php', $installdefs['copy'][0]['to']);
+        $this -> assertEquals('<basepath>/src/icons/default/images/PR_Professors.gif', $installdefs['copy'][1]['from']);
+        $this -> assertEquals('icons/default/images/PR_Professors.gif', $installdefs['copy'][1]['to']);
+        $this -> assertEquals('<basepath>/src/icons/default/images/CreatePR_Professors.gif', $installdefs['copy'][2]['from']);
+        $this -> assertEquals('icons/default/images/CreatePR_Professors.gif', $installdefs['copy'][2]['to']);
+    }
+
 }

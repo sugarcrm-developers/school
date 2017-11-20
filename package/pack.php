@@ -224,13 +224,7 @@ $filesToInclude = $arrayOfFiles["filesToInclude"];
 $filesToExclude = $arrayOfFiles["filesToExclude"];
 
 $zip = $pg -> addFilesToZip($zip, $filesToInclude);
-
-foreach($filesToInclude as $file) {
-    $installdefs['copy'][] = array(
-        'from' => '<basepath>/' . $file['fileRelative'],
-        'to' => preg_replace('/^' . $srcDirectory .'\/(.*)/', '$1', $file['fileRelative']),
-    );
-}
+$installdefs = $pg -> addFilesToInstalldefs($filesToInclude, $installdefs, $srcDirectory);
 
 $manifestContent = sprintf(
     "<?php\n\$manifest = %s;\n\$installdefs = %s;\n",

@@ -136,4 +136,14 @@ class PackageGenerator
         }
         return $zip;
     }
+
+    public function addFilesToInstalldefs($filesToInclude, $installdefs, $srcDirectory){
+        foreach($filesToInclude as $file) {
+            $installdefs['copy'][] = array(
+                'from' => '<basepath>/' . $file['fileRelative'],
+                'to' => preg_replace('/^' . $srcDirectory .'\/(.*)/', '$1', $file['fileRelative']),
+            );
+        }
+        return $installdefs;
+    }
 }
