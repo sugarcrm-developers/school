@@ -64,8 +64,8 @@ class PackageGenerator
         $id = "{$packageID}-{$version}";
 
         $directory = "releases";
-        if(!is_dir($this -> cwd . DIRECTORY_SEPARATOR . $directory)){
-            mkdir($this -> cwd . DIRECTORY_SEPARATOR . $directory);
+        if(!is_dir($directory)){
+            mkdir($directory);
         }
 
         $zipFile = $directory . DIRECTORY_SEPARATOR . "sugarcrm-{$id}.zip";
@@ -113,7 +113,7 @@ class PackageGenerator
     public function openZip($version, $packageID, $command){
         $zipFile = $this -> getZipFilePath($version, $packageID, $command);
 
-        if (file_exists($this -> cwd . "/" . $zipFile)) {
+        if (file_exists($zipFile)) {
             throw new \Exception("Error:  Release $zipFile already exists, so a new zip was not created. To generate a"
                 . " new zip, either delete the"
                 . " existing zip file or update the version number in the version file AND then run the script to build the"
@@ -130,6 +130,7 @@ class PackageGenerator
         $filename = basename($zip -> filename);
         $zip->close();
         echo "Done creating $filename\n\n";
+        return $zip;
     }
 
     /*
@@ -176,6 +177,26 @@ class PackageGenerator
             var_export($installdefs, true)
         );
         $zip->addFromString('manifest.php', $manifestContent);
+        return $zip;
+    }
+
+    /*
+     * Creates the zip for the Module Loadable Package
+     */
+    public function generateZip($version, $packageID, $command, $srcDirectory, $manifestContent, $installdefs ){
+        $zip = $this -> openZip($version, $packageID, $command);
+
+        $arrayOfFiles = $this -> getFileArraysForZip($srcDirectory);
+        $filesToInclude = $arrayOfFiles["filesToInclude"];
+        $filesToExclude = $arrayOfFiles["filesToExclude"];
+
+        $zip = $this -> addFilesToZip($zip, $filesToInclude);
+        $installdefs = $this -> addFilesToInstalldefs($filesToInclude, $installdefs, $srcDirectory);
+
+        $zip = $this -> generateManifest($manifestContent, $installdefs, $zip);
+        $zip = $this -> closeZip($zip);
+
+        $this -> echoExcludedFiles($filesToExclude);
         return $zip;
     }
 }

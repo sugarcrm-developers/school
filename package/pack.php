@@ -212,21 +212,9 @@ $installdefs = array(
  */
 
 try {
-    $zip = $pg -> openZip($version, $packageID, $argv[0]);
+    $zip = $pg -> generateZip($version, $packageID, $argv[0], "src", $manifest, $installdefs);
 } catch (Exception $e) {
     die($e->getMessage());
 }
 
-$srcDirectory = "src";
-$arrayOfFiles = $pg -> getFileArraysForZip($srcDirectory );
-$filesToInclude = $arrayOfFiles["filesToInclude"];
-$filesToExclude = $arrayOfFiles["filesToExclude"];
-
-$zip = $pg -> addFilesToZip($zip, $filesToInclude);
-$installdefs = $pg -> addFilesToInstalldefs($filesToInclude, $installdefs, $srcDirectory);
-
-$pg -> generateManifest($manifest, $installdefs, $zip);
-$pg -> closeZip($zip);
-
-$pg -> echoExcludedFiles($filesToExclude);
 exit(0);

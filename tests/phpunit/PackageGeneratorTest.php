@@ -246,17 +246,14 @@ class PackageGeneratorTest extends TestCase
     }
 
     public function testGetZipFilePathValidParamsReleasesDirectoryDoesNotExist(){
-        $root = vfsStream::setup();
-
         $pg = new PackageGenerator();
-        $pg -> setCwd($root -> url());
 
-        $this -> assertFalse($root -> hasChild("releases"));
+        $this -> assertFalse(is_dir("releases"));
 
         $this -> assertEquals("releases" . DIRECTORY_SEPARATOR . "sugarcrm-ProfessorM-1.5.zip",
             $pg -> getZipFilePath("1.5", "ProfessorM", "./pack.php"));
 
-        $this -> assertTrue($root -> hasChild("releases"));
+        $this -> assertTrue(is_dir("releases"));
 
     }
 
@@ -372,12 +369,10 @@ class PackageGeneratorTest extends TestCase
     }
 
     public function testOpenZipFileAlreadyExists(){
-        $root = vfsStream::setup();
-        $releasesDirectory = vfsStream::newDirectory("releases") -> at($root);
-        vfsStream::newFile("sugarcrm-profM-1.zip") -> at($releasesDirectory);
+        mkdir("releases");
+        fopen("releases/sugarcrm-profM-1.zip", "w");
 
         $pg = new PackageGenerator();
-        $pg -> setCwd($root -> url());
 
         $this -> expectException(Exception::class);
         $pg -> openZip("1", "profM", "pack.php");
@@ -606,4 +601,37 @@ class PackageGeneratorTest extends TestCase
         $this -> assertEquals($expectedManifest, $generatedManifest);
     }
 
+    /*
+     * Things get really hairy when we're going back and forth between using the virtual file system and the
+     * real file system. Since we have other tests that test the individual pieces, we'll just check that the
+     * output of generating the zip is correct.
+     */
+    public function testGenerateZipMultipleFiles(){
+        $testVariables = $this -> getTestVariablesForMultipleFiles();
+        $root = $testVariables['root'];
+
+        $manifest = array(
+            'id' => 'profM',
+            'name' => 'Professor M');
+
+        $installdefs = $this->getSampleInstalldefs();
+
+        $pg = new PackageGenerator();
+        $pg -> setCwd($root -> url());
+
+        $zip = $pg -> generateZip("1", "profM", "pack.php", "src", $manifest, $installdefs);
+
+        $expectedOutput =
+            "Creating releases/sugarcrm-profM-1.zip ... \n" .
+            " [*] src/language/application/en_us.lang.php\n" .
+            " [*] src/icons/default/images/PR_Professors.gif\n" .
+            " [*] src/icons/default/images/CreatePR_Professors.gif\n" .
+            "Done creating sugarcrm-profM-1.zip\n\n" .
+
+            "The following files were excluded from the zip: \n" .
+            " [*] src/custom/application/Ext/test.php\n" .
+            " [*] src/custom/modules/test/Ext/excludeme.php\n";
+
+        $this -> assertEquals($expectedOutput, $this -> getActualOutput());
+    }
 }
