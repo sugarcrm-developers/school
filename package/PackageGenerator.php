@@ -164,4 +164,18 @@ class PackageGenerator
             }
         }
     }
+
+    /*
+     * Creates manifest.php where the content of the file is made up of the $manifestContent and $installdefs.
+     * The resulting manifest.php file is placed in the $zip.
+     */
+    public function generateManifest($manifestContent, $installdefs, $zip){
+        $manifestContent = sprintf(
+            "<?php\n\$manifest = %s;\n\$installdefs = %s;\n",
+            var_export($manifestContent, true),
+            var_export($installdefs, true)
+        );
+        $zip->addFromString('manifest.php', $manifestContent);
+        return $zip;
+    }
 }

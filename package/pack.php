@@ -225,12 +225,7 @@ $filesToExclude = $arrayOfFiles["filesToExclude"];
 $zip = $pg -> addFilesToZip($zip, $filesToInclude);
 $installdefs = $pg -> addFilesToInstalldefs($filesToInclude, $installdefs, $srcDirectory);
 
-$manifestContent = sprintf(
-    "<?php\n\$manifest = %s;\n\$installdefs = %s;\n",
-    var_export($manifest, true),
-    var_export($installdefs, true)
-);
-$zip->addFromString('manifest.php', $manifestContent);
+$pg -> generateManifest($manifest, $installdefs, $zip);
 $pg -> closeZip($zip);
 
 $pg -> echoExcludedFiles($filesToExclude);

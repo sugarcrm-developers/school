@@ -559,4 +559,51 @@ class PackageGeneratorTest extends TestCase
             $output);
     }
 
+    public function testGenerateManifestValidParams(){
+        $manifest = array(
+            'id' => 'profM',
+            'name' => 'Professor M');
+
+        $installdefs = $this->getSampleInstalldefs();
+
+        $pg = new PackageGenerator();
+
+        $zip = $pg -> openZip("1", "profM", "pack.php");
+
+        $zip = $pg -> generateManifest($manifest, $installdefs, $zip);
+
+        $zip->open('releases/sugarcrm-profM-1.zip');
+        $generatedManifest = $zip -> getFromName('manifest.php');
+
+        $expectedManifest =
+            "<?php\n" .
+            "\$manifest = array (\n" .
+            "  'id' => 'profM',\n" .
+            "  'name' => 'Professor M',\n" .
+            ");\n" .
+            "\$installdefs = array (\n" .
+            "  'beans' => \n" .
+            "  array (\n" .
+            "    0 => \n" .
+            "    array (\n" .
+            "      'module' => 'PR_Professors',\n" .
+            "      'class' => 'PR_Professors',\n" .
+            "      'path' => 'modules/PR_Professors/PR_Professors.php',\n" .
+            "      'tab' => true,\n" .
+            "    ),\n" .
+            "  ),\n" .
+            "  'language' => \n" .
+            "  array (\n" .
+            "    0 => \n" .
+            "    array (\n" .
+            "      'from' => 'language/application/en_us.lang.php',\n" .
+            "      'to_module' => 'application',\n" .
+            "      'language' => 'en_us',\n" .
+            "    ),\n" .
+            "  ),\n" .
+            ");\n";
+
+        $this -> assertEquals($expectedManifest, $generatedManifest);
+    }
+
 }
