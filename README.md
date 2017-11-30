@@ -172,12 +172,21 @@ The tests are located in [/tests/phpunit](tests/phpunit).  Currently, there is o
 multiple test files, and each test file can contain multiple tests.
 
 ### Manual execution
-To manually execute the tests, you will need to install PHPUnit on your machine.  See 
-[Getting Started with PHPUnit](https://phpunit.de/getting-started.html) for details.
+To manually execute the tests, you will need to use Composer to install PHPUnit and other PHP dependencies.
+If you have not installed Composer before, visit the [Composer Getting Started Guide](https://getcomposer.org/doc/00-intro.md).
 
-The PHPUnit tests can be executed by running the following command from your `school` directory:
+Begin by navigating to your `school` directory and running the following command. 
+This will install all of this project's PHP dependencies including development dependencies such as PHPUnit.
+
 ```
-phpunit --bootstrap package tests/phpunit/
+composer install
+```
+
+Composer will then place the appropriate phpunit executable under `vendor/bin` of your current directory.
+
+The PHPUnit tests can then be executed using the following command:
+```
+vendor/bin/phpunit
 ```
 
 ### Automatic execution
@@ -221,29 +230,18 @@ To manually execute the tests, you will need to install a few different things o
 tests. 
 
 #### Setup
+Install Yarn which is an NPM compatible package manager. See [Yarn Installation Guide](https://yarnpkg.com/lang/en/docs/install/) for more details on how to install Yarn.
 
-Begin by navigating to your school directory and then execute the following commands. 
+Next navigate to your school directory and then execute the following commands. 
 
-Install phantomJS.  See [PhantomJS's Downloads Page](http://phantomjs.org/download.html) for other ways to download
-and install.
+Install the JavaScript dependencies using Yarn. These dependencies include Grunt, Jasmine, and Phantomjs.
 ```
-brew install phantomjs
-```
-
-Install the Grunt command line interface.  See [Grunt's Getting Started Guide](https://gruntjs.com/getting-started) 
-for more details.
-```
-npm install -g grunt-cli
+yarn install
 ```
 
-Install Grunt in your local school project.
+Install the Grunt command line interface globally. See [Grunt's Getting Started Guide](https://gruntjs.com/getting-started) for more details on installing and using Grunt.
 ```
-npm install grunt
-```
-
-Install Jasmine.
-```
-npm install grunt-contrib-jasmine
+yarn global add grunt-cli
 ```
 
 #### Execution
@@ -251,10 +249,6 @@ Inside of your `school` directory, execute the following command to run the Jasm
 ```
 grunt test-js
 ```
-
-See 
-[Grunt's Getting Started Guide](https://gruntjs.com/getting-started) 
-for more details.
 
 ### Automatic execution
 The Jasmine tests are automatically run as part of the Travis CI build process.  Travis CI will automatically look

@@ -1,0 +1,19 @@
+{
+    "name": "sugarcrm/school",
+    "description": "Professor M's School for Gifted Coders",
+    "type": "project",
+    "require-dev": {
+        "phpunit/phpunit": "^6.4"
+    },
+    "license": "Apache-2",
+    "authors": [
+        {
+            "name": "SugarCRM Developer Advocacy",
+            "email": "developers@sugarcrm.com"
+        }
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/sugarcrm/school.git"
+    }
+}
