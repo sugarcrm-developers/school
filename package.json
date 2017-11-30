@@ -1,5 +1,6 @@
 {
-  "name": "school",
+  "name": "sugarcrm-school",
+  "description": "Professor M's School for Gifted Coders",
   "license": "Apache-2.0",
   "scripts": {
     "test": "grunt test-js --verbose"

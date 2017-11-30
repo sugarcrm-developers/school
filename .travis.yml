@@ -3,7 +3,10 @@ matrix:
     - language: php
       php: '7.1'
       os: linux
-      before_script: composer install
+      before_script:
+      - composer install
     - language: node_js
-      node_js: '5'
-      before_install: npm install -g grunt-cli
+      node_js: '9'
+      before_install:
+      - yarn global add grunt-cli
+
