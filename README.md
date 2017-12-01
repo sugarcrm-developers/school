@@ -160,31 +160,46 @@ The build is configured in [.travis.yml](.travis.yml). Currently, the build runs
 We hope to expand the build to do more (like deploy Sugar) in the future.
 
 ## Automated tests
-This repository contains automated PHPUnit and Jasmine tests the can be executed manually or as part of a
+This repository contains automated PHPUnit and Jasmine tests that can be executed manually or as part of a
  [Travis CI](http://travis-ci.com) build.
 
 ### PHPUnit tests
-[PHPUnit](https://phpunit.de/) is a testing framework for PHP.  We have included a very simple PHPUnit test in this 
-repository as an example.
-
-The tests are located in [/tests/phpunit](tests/phpunit).  Currently, there is one test inside of the 
-[DummyTest.php](tests/phpunit/DummyTest.php) test file.  The [/tests/phpunit](tests/phpunit) directory can contain 
+[PHPUnit](https://phpunit.de/) is a testing framework for PHP.  The PHPUnit test files are located in 
+[/tests/phpunit](tests/phpunit).  The [/tests/phpunit](tests/phpunit) directory can contain 
 multiple test files, and each test file can contain multiple tests.
 
 ### Manual execution
 To manually execute the tests, you will need to install PHPUnit on your machine.  See 
 [Getting Started with PHPUnit](https://phpunit.de/getting-started.html) for details.
 
-The PHPUnit tests can be executed by running the following command from your `school` directory:
+You'll also need to install [Composer](https://getcomposer.org/) to manage your dependencies.  See 
+[Download Composer](https://getcomposer.org/download/) for instructions on how to download Composer to your machine.  
+Then execute the following command from your `school` directory in order to install the test dependencies:
 ```
-phpunit --bootstrap package tests/phpunit/
+composer install
+```
+
+If you need to update the namespaces, manually update [composer.json](composer.json) and then run the following command from
+your `school` directory:
+```
+./composer.phar update
+```
+
+The PHPUnit tests can be executed by running the following command from your `school` directory on macOS:
+```
+vendor/bin/phpunit
+```
+or on Windows:
+```
+vendor\bin\phpunit
 ```
 
 ### Automatic execution
 The PHPUnit tests are automatically run as part of the Travis CI build process.  Travis CI's default build script
 for PHP is PHPUnit, so we don't have to include anything special in [.travis.yml](.travis.yml) in order for the tests 
-to run.  Travis CI looks in [phpunit.xml](phpunit.xml) for the PHPUnit config.  Our config indicates that the PHPUnit
-tests are stored in [tests/phpunit](tests/phpunit).
+to run.  However, we have added `composer install` to [.travis.yml](.travis.yml) in order for the dependencies to be 
+installed on the build machine. Travis CI looks in [phpunit.xml](phpunit.xml) for the PHPUnit config.  Our config 
+indicates that the PHPUnit tests are stored in [tests/phpunit](tests/phpunit).  
 
 #### Interpreting the results
 To see the results of the tests that are run as part of the Travis CI build, open the build in Travis CI.  If the build 

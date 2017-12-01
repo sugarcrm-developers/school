@@ -1,0 +1,11 @@
+{
+  "require-dev": {
+    "phpunit/phpunit": "*",
+    "mikey179/vfsStream": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Sugarcrm\\ProfessorM\\": "package/"
+    }
+  }
+}
