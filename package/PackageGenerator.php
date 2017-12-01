@@ -7,6 +7,10 @@ use const DIRECTORY_SEPARATOR;
 use function file_get_contents;
 use function getcwd;
 
+/**
+ * Class PackageGenerator
+ * @package Sugarcrm\ProfessorM
+ */
 class PackageGenerator
 {
     protected $cwd;
@@ -72,15 +76,19 @@ class PackageGenerator
         return $zipFile;
     }
 
-    /*
+    /**
      * Iterate over the files located in the $srcDirectory and return an array that contains a
      * array of files to include in the zip and an array of files to exclude from the zip
+     *
+     * @param $srcDirectory
+     * @return array
      */
-    public function getFileArraysForZip($srcDirectory){
+    public function getFileArraysForZip($srcDirectory)
+    {
         $filesToInclude = array();
         $filesToExclude = array();
 
-        $basePath = $this -> cwd . DIRECTORY_SEPARATOR . $srcDirectory;
+        $basePath = $this->cwd . DIRECTORY_SEPARATOR . $srcDirectory;
 
         $files = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($basePath, \RecursiveDirectoryIterator::SKIP_DOTS),
@@ -94,7 +102,7 @@ class PackageGenerator
                 $fileRelative = $srcDirectory . str_replace($basePath, '', $fileReal);
                 $fileArray = array("fileReal" => $fileReal, "fileRelative" => $fileRelative);
 
-                if($this -> shouldIncludeFileInZip($fileRelative)) {
+                if ($this->shouldIncludeFileInZip($fileRelative)) {
                     array_push($filesToInclude, $fileArray);
                 } else {
                     array_push($filesToExclude, $fileArray);
@@ -106,9 +114,14 @@ class PackageGenerator
 
     }
 
-    /*
+    /**
      * Creates and opens a new zip archive
-     * @throws Exception if a zip file with the same name already exists
+     *
+     * @param $version
+     * @param $packageID
+     * @param $command
+     * @return \ZipArchive
+     * @throws \Exception if a zip file with the same name already exists
      */
     public function openZip($version, $packageID, $command){
         $zipFile = $this -> getZipFilePath($version, $packageID, $command);
@@ -144,6 +157,12 @@ class PackageGenerator
         return $zip;
     }
 
+    /**
+     * @param $filesToInclude
+     * @param $installdefs
+     * @param $srcDirectory
+     * @return mixed
+     */
     public function addFilesToInstalldefs($filesToInclude, $installdefs, $srcDirectory){
         foreach($filesToInclude as $file) {
             $installdefs['copy'][] = array(
