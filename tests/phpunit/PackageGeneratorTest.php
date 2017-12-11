@@ -5,6 +5,9 @@ use PHPUnit\Framework\TestCase;
 use Sugarcrm\ProfessorM\PackageGenerator;
 use org\bovigo\vfs\vfsStream;
 
+/**
+ * Class PackageGeneratorTest
+ */
 class PackageGeneratorTest extends TestCase
 {
 
