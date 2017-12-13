@@ -13,6 +13,8 @@ All of the tutorials at UnCon 2017 will be based on Professor M's School for Gif
 
 [Continuous integration with Travis CI](#continuous-integration-with-travis-ci) 
 
+[Continuous integration with Jenkins](#continuous-integration-with-jenkins) 
+
 [Automated tests](#automated-tests)
 
 [How to fix your Sugar instance without starting completely over](#how-to-fix-your-sugar-instance-without-starting-completely-over)
@@ -214,6 +216,85 @@ the following in [.travis.yml](.travis.yml).
 ```
 
 We hope to expand the build to do more (like deploy Sugar) in the future.
+
+## Continuous integration with Jenkins
+This repository can be configured for continuous integration with [Jenkins](https://jenkins-ci.org/).  Jenkins can be configured so that
+whenever a commit is pushed to the repository or at certain time intervals, Jenkins will automatically kick off a build.
+
+### Installing Jenkins
+
+Before beginning, you'll need to set up your own installation of Jenkins.  Check out the 
+[Jenkins Installation Guide](https://jenkins.io/doc/book/installing/) for more details.  We recommend installing the 
+Jenkins suggested plugins.
+
+### Creating a Jenkins project
+
+Once you have Jenkins set up, you'll want to create a new project in Jenkins that will build the school project. 
+
+1. On the Jenkins dashboard, click **New Item**.
+1. Name your new item **ProfessorM**.  
+Note:  if you name your item something other than **ProfessorM**, you will need to update your copy of 
+[buildPackageInJenkins.sh](buildPackageInJenkins.sh) and push your change to your Git repo.
+1. Select **Freestyle project** and click **OK**. The item configuration page will display.
+1. In the **Source Code Management** section, select **Git.**
+1. Input your Repository URL (for example, `https://github.com/sugarcrm/school`) and add your credentials.
+1. Configure the Build Triggers section as you'd like. If you do not want to configure this now, you can skip this step
+and manually trigger the builds instead.
+1. You do not need to configure anything in the Build Environment section.
+1. In the **Build** section, click **Add build step** and select **Execute shell**. 
+1. In the **Command** box that appears, input the following: `bash -ex buildPackageInJenkins.sh`
+1. In the **Post-build Actions** section, click **Add post-build action** and select **Archive the artifacts**.
+1. In the **Files to archive** box that appears, input the following: `package/releases/*.zip`
+1. In the **Post-build Actions** section, click **Add post-build action** and select **Delete workspace when build is done**.
+1. Click **Save**.
+
+### Running a build and viewing the results
+
+Once you have your Jenkins project created, it's time to see if it works!
+
+Navigate to your ProfessorM project in Jenkins. Trigger your build manually by clicking **Build Now**.
+
+View the Build History panel to quickly browse the build results.  If you see a blue dot, you know all of the tests passed!
+
+![Build passed](images/jenkins-buildpassed.png)
+
+Click on a build to view more details.  If the build passed, the Professor M module loadable packages will be stored as 
+build artifacts.
+
+![Build artifacts](images/jenkins-buildartifact.png)
+
+To see more details on a build, click **Console Output**.  If any step in the process fails (for example, a Jasmine test
+fails), the remaining steps will not be run.  If everything succeeds, you'll be able to find the Jasmine test results,
+the PHPUnit test results, and the results of the Professor M module loadable packages being generated, copied, and archived. 
+
+Jasmine results:
+
+![Jasmine passed](images/jenkins-jasmine.png)
+
+PHPUnit results:
+
+![PHPUnit results](images/jenkins-phpunit.png)
+
+Professor M package results:
+
+![ProfM zip](images/jenkins-profm.png)
+
+### About the build
+
+The build has 3 major parts
+1. Run the Jasmine tests
+1. Run the PHPUnit tests
+1. Generate the Professor M module loadable packages and archive the results
+
+The heart of the build is in [buildPackageInJenkins.sh](buildPackageInJenkins.sh).  The shell script relies on Docker images 
+stored on [Docker Hub](https://hub.docker.com/r/sugarcrmdev/school) in order to implement the three parts listed above. [The sugarcrmdev/school Docker Hub repository](https://hub.docker.com/r/sugarcrmdev/school) 
+stores two images:
+- The `yarn` image has all of the dependencies managed by Yarn installed in it.  The shell script uses this image to run 
+the Jasmine tests.
+- The `composer` image has all of the dependencies managed by Composer installed in it. The shell script uses this image 
+to run the PHPUnit tests as well as to generate the Professor M module loadable packages.
+
+Note:  if any step in the process fails (for example, a Jasmine test fails), the remaining steps will not be run.
 
 ## Automated tests
 This repository contains automated PHPUnit and Jasmine tests that can be executed manually or as part of a

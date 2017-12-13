@@ -1,0 +1,12 @@
+FROM php:7.0-cli as my-php
+
+RUN curl -sS https://getcomposer.org/installer | \
+    php -- --install-dir=/usr/bin/ --filename=composer \
+    && apt-get update \
+    && apt-get install -y zlib1g-dev \
+    && docker-php-ext-install zip
+
+WORKDIR /
+COPY . .
+
+RUN composer install
