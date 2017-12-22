@@ -153,9 +153,32 @@ You can then click Details to open the build results in Travis CI.
 
 ### About the build
 
-The build is configured in [.travis.yml](.travis.yml). Currently, the build runs two jobs:
-- Execute the PHPUnit tests (see [PHPUnit tests](#phpunit-tests) for details)
-- Execute the Jasmine tests (see [Jasmine tests](#jasmine-tests) for details)
+The build is configured in [.travis.yml](.travis.yml). Currently, the build has two stages:
+- test
+- Build & Post on GitHub
+
+The test stage is run first and has two jobs:
+  - Execute the PHPUnit tests (see [PHPUnit tests](#phpunit-tests) for details)
+  - Execute the Jasmine tests (see [Jasmine tests](#jasmine-tests) for details)
+  
+If the test stage passes and the build is being run against the master branch, the Build & Post on GitHub stage will be 
+kicked off. This stage executes the pack.php script to generate the Professor M module loadable package as a zip. The 
+zip will be automatically posted to GitHub: https://github.com/sugarcrm/school/releases.
+
+If you want the Build & Post on GitHub stage to be kicked off for a branch other than master, you should do **both** of 
+the following in [.travis.yml](.travis.yml).
+- Remove the "if: branch = master" in the `stages` section
+- Add the branch as an option in the deploy section. For example:
+```$xslt
+    deploy:
+      provider: releases
+      file: releases/sugarcrm-ProfessorM-latest.zip
+      api_key:
+          secure: mykey
+      skip_cleanup: true
+      on:
+        branch: mybranchname
+```
 
 We hope to expand the build to do more (like deploy Sugar) in the future.
 
