@@ -367,7 +367,7 @@ class PackageGeneratorTest extends TestCase
         $pg = new PackageGenerator();
 
         $zip = $pg -> openZip("1", "profM", "pack.php");
-        $this -> assertContains('Creating releases/sugarcrm-profM-1.zip', $this -> getActualOutput());
+        $this -> assertContains('Creating releases' . DIRECTORY_SEPARATOR . 'sugarcrm-profM-1.zip', $this -> getActualOutput());
         $this -> assertEquals(0, $zip -> numFiles);
     }
 
@@ -462,7 +462,8 @@ class PackageGeneratorTest extends TestCase
         $installdefs = $pg -> addFilesToInstalldefs($filesToInclude, $installdefs, "src");
 
         $this -> assertEquals(1, count($installdefs['copy']));
-        $this -> assertEquals('<basepath>/src/myfile.php', $installdefs['copy'][0]['from']);
+        $this -> assertEquals('<basepath>/src' . DIRECTORY_SEPARATOR . 'myfile.php',
+            $installdefs['copy'][0]['from']);
         $this -> assertEquals('myfile.php', $installdefs['copy'][0]['to']);
     }
 
@@ -494,12 +495,20 @@ class PackageGeneratorTest extends TestCase
         $installdefs = $pg -> addFilesToInstalldefs($filesToInclude, $installdefs, "src");
 
         $this -> assertEquals(3, count($installdefs['copy']));
-        $this -> assertEquals('<basepath>/src/language/application/en_us.lang.php', $installdefs['copy'][0]['from']);
-        $this -> assertEquals('language/application/en_us.lang.php', $installdefs['copy'][0]['to']);
-        $this -> assertEquals('<basepath>/src/icons/default/images/PR_Professors.gif', $installdefs['copy'][1]['from']);
-        $this -> assertEquals('icons/default/images/PR_Professors.gif', $installdefs['copy'][1]['to']);
-        $this -> assertEquals('<basepath>/src/icons/default/images/CreatePR_Professors.gif', $installdefs['copy'][2]['from']);
-        $this -> assertEquals('icons/default/images/CreatePR_Professors.gif', $installdefs['copy'][2]['to']);
+        $this -> assertEquals('<basepath>/src' . DIRECTORY_SEPARATOR . 'language' .
+            DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR . 'en_us.lang.php', $installdefs['copy'][0]['from']);
+        $this -> assertEquals('language' . DIRECTORY_SEPARATOR . 'application' . DIRECTORY_SEPARATOR .
+            'en_us.lang.php', $installdefs['copy'][0]['to']);
+        $this -> assertEquals('<basepath>/src' . DIRECTORY_SEPARATOR . 'icons'
+            . DIRECTORY_SEPARATOR . 'default' . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR
+            . 'PR_Professors.gif', $installdefs['copy'][1]['from']);
+        $this -> assertEquals('icons' . DIRECTORY_SEPARATOR . 'default' . DIRECTORY_SEPARATOR .
+            'images' . DIRECTORY_SEPARATOR . 'PR_Professors.gif', $installdefs['copy'][1]['to']);
+        $this -> assertEquals('<basepath>/src' . DIRECTORY_SEPARATOR . 'icons'
+            . DIRECTORY_SEPARATOR . 'default' . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR .
+            'CreatePR_Professors.gif', $installdefs['copy'][2]['from']);
+        $this -> assertEquals('icons' . DIRECTORY_SEPARATOR . 'default' . DIRECTORY_SEPARATOR . 'images'
+            . DIRECTORY_SEPARATOR . 'CreatePR_Professors.gif', $installdefs['copy'][2]['to']);
     }
 
     /*
@@ -528,7 +537,8 @@ class PackageGeneratorTest extends TestCase
         $output = $this->getActualOutput();
         $this -> assertContains('The following files were excluded from the zip:',
             $output);
-        $this -> assertContains('[*] src/custom/application/Ext/test.php',
+        $this -> assertContains('[*] src' . DIRECTORY_SEPARATOR . 'custom' . DIRECTORY_SEPARATOR .
+            'application' . DIRECTORY_SEPARATOR . 'Ext' . DIRECTORY_SEPARATOR . 'test.php',
             $output);
     }
 
@@ -551,9 +561,11 @@ class PackageGeneratorTest extends TestCase
         $output = $this->getActualOutput();
         $this -> assertContains('The following files were excluded from the zip:',
             $output);
-        $this -> assertContains('[*] src/custom/application/Ext/test.php',
+        $this -> assertContains('[*] src' . DIRECTORY_SEPARATOR . 'custom' . DIRECTORY_SEPARATOR . 'application'
+            . DIRECTORY_SEPARATOR . 'Ext' . DIRECTORY_SEPARATOR . 'test.php',
             $output);
-        $this -> assertContains('[*] src/custom/modules/test/Ext/excludeme.php',
+        $this -> assertContains('[*] src' . DIRECTORY_SEPARATOR . 'custom' . DIRECTORY_SEPARATOR . 'modules'
+            . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'Ext' . DIRECTORY_SEPARATOR . 'excludeme.php',
             $output);
     }
 
@@ -625,15 +637,20 @@ class PackageGeneratorTest extends TestCase
         $zip = $pg -> generateZip("1", "profM", "pack.php", "src", $manifest, $installdefs);
 
         $expectedOutput =
-            "Creating releases/sugarcrm-profM-1.zip ... \n" .
-            " [*] src/language/application/en_us.lang.php\n" .
-            " [*] src/icons/default/images/PR_Professors.gif\n" .
-            " [*] src/icons/default/images/CreatePR_Professors.gif\n" .
+            "Creating releases" . DIRECTORY_SEPARATOR . "sugarcrm-profM-1.zip ... \n" .
+            " [*] src" . DIRECTORY_SEPARATOR . "language" . DIRECTORY_SEPARATOR . "application" . DIRECTORY_SEPARATOR
+                . "en_us.lang.php\n" .
+            " [*] src" . DIRECTORY_SEPARATOR . "icons" . DIRECTORY_SEPARATOR . "default" . DIRECTORY_SEPARATOR
+                . "images" . DIRECTORY_SEPARATOR . "PR_Professors.gif\n" .
+            " [*] src" . DIRECTORY_SEPARATOR . "icons" . DIRECTORY_SEPARATOR . "default" . DIRECTORY_SEPARATOR .
+                "images" . DIRECTORY_SEPARATOR . "CreatePR_Professors.gif\n" .
             "Done creating sugarcrm-profM-1.zip\n\n" .
 
             "The following files were excluded from the zip: \n" .
-            " [*] src/custom/application/Ext/test.php\n" .
-            " [*] src/custom/modules/test/Ext/excludeme.php\n";
+            " [*] src" . DIRECTORY_SEPARATOR . "custom" . DIRECTORY_SEPARATOR . "application" . DIRECTORY_SEPARATOR .
+                "Ext" . DIRECTORY_SEPARATOR . "test.php\n" .
+            " [*] src" . DIRECTORY_SEPARATOR . "custom" . DIRECTORY_SEPARATOR . "modules" . DIRECTORY_SEPARATOR .
+                "test" . DIRECTORY_SEPARATOR . "Ext" . DIRECTORY_SEPARATOR . "excludeme.php\n";
 
         $this -> assertEquals($expectedOutput, $this -> getActualOutput());
     }
