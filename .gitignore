@@ -1,4 +1,8 @@
-# Created by .ignore support plugin (hsz.mobi)
+#Created by .ignore support plugin (hsz.mobi)
+
+package/releases
+
+
 ### Eclipse template
 
 .metadata
