@@ -6,6 +6,7 @@ use function array_push;
 use const DIRECTORY_SEPARATOR;
 use function file_get_contents;
 use function getcwd;
+use function strlen;
 
 /**
  * Class PackageGenerator
@@ -35,6 +36,21 @@ class PackageGenerator
          * The regular expressions allow for file paths with forward or backward slashes */
         if(preg_match('/.*custom[\/\\\]application[\/\\\]Ext[\/\\\].*/', $fileRelative) or
             preg_match('/.*custom[\/\\\]modules[\/\\\].+[\/\\\]Ext[\/\\\].*/', $fileRelative)){
+            return false;
+        }
+        return true;
+    }
+
+
+    /*
+     * Checks if the file path is too long and should be excluded from Windows builds
+     */
+    public function shouldIncludeFileInWindowsZip($fileRelative, $lengthOfWindowsSugarDirectoryPath)
+    {
+        # During install, Sugar puts files in [SugarDirectory]/cache/upgrades/temp/xxxx.tmp/relativefilepath
+        # Windows allows 259 characters in the file path plus the ending null character
+        # From manual testing, discovered 258 is the max file path allowed
+        if($lengthOfWindowsSugarDirectoryPath + strlen("/cache/upgrades/temp/xxxx.tmp/") + strlen($fileRelative) > 258){
             return false;
         }
         return true;
@@ -81,12 +97,17 @@ class PackageGenerator
      * array of files to include in the zip and an array of files to exclude from the zip
      *
      * @param $srcDirectory
-     * @return array
+     * @return array of arrays:
+     *   filesToInclude: list of files to include in the zip
+     *   filesToExclude: list of files that should not be included in the zip
+     *   filesToExcludeWindows: list of files that should not be included in the zip because they require manual installation
+     *                          on Windows. This list will be empty if this is NOT a Windows build.
      */
-    public function getFileArraysForZip($srcDirectory)
+    public function getFileArraysForZip($srcDirectory, $isWindowsBuild, $lengthOfWindowsSugarDirectoryPath)
     {
         $filesToInclude = array();
         $filesToExclude = array();
+        $filesToExcludeWindows = array();
 
         $basePath = $this->cwd . DIRECTORY_SEPARATOR . $srcDirectory;
 
@@ -103,6 +124,10 @@ class PackageGenerator
                 $fileArray = array("fileReal" => $fileReal, "fileRelative" => $fileRelative);
 
                 if ($this->shouldIncludeFileInZip($fileRelative)) {
+                    if ($isWindowsBuild && !$this->shouldIncludeFileInWindowsZip($fileRelative, $lengthOfWindowsSugarDirectoryPath)){
+                        array_push($filesToExcludeWindows, $fileArray);
+                        continue;
+                    }
                     array_push($filesToInclude, $fileArray);
                 } else {
                     array_push($filesToExclude, $fileArray);
@@ -110,7 +135,11 @@ class PackageGenerator
 
             }
         }
-        return array("filesToInclude" => $filesToInclude, "filesToExclude" => $filesToExclude);
+        return array(
+            "filesToInclude" => $filesToInclude,
+            "filesToExclude" => $filesToExclude,
+            "filesToExcludeWindows" => $filesToExcludeWindows
+        );
 
     }
 
@@ -154,6 +183,35 @@ class PackageGenerator
             echo " [*] " . $file['fileRelative'] . "\n";
             $zip->addFile($file['fileReal'], $file['fileRelative']);
         }
+        return $zip;
+    }
+
+    /*
+     * Adds the files listed in $filesToInclude to the zip in indexed directories
+     * Also adds a text file that describes where the files should be manually installed
+     */
+    public function addFilesToWindowsManualInstallZip($zip, $filesToInclude, $srcDirectory){
+        $readmeFile = 'ProfMForWindowsReadme.txt';
+        $readmeHandle = fopen($readmeFile, 'w') or die ("Unable to open file: " . $readmeFile);
+        $newFileText = "The following is a list of files that should be manually installed if you use the Professor M " .
+            "package for Windows.  After manual installation, run Quick Repair & Rebuild. " .
+            "See https://github.com/sugarcrm/school/blob/master/README.md for more details.\n\n";
+        fwrite($readmeHandle, $newFileText);
+
+
+        foreach($filesToInclude as $index => $file) {
+            echo " [*] " . $index . "/" . basename($file['fileReal']) . "\n";
+            fwrite($readmeHandle,
+                " [*] " . $index . "/" . basename($file['fileReal']) . "\n" .
+                "     should be manually installed at \n" .
+                "     [YourSugarDirectory]/" . preg_replace('/^' . $srcDirectory .'[\/\\\](.*)/', '$1', $file['fileRelative']) . "\n\n");
+            $zip->addFile($file['fileReal'], $index . "/" . basename($file['fileReal']));
+        }
+
+        fclose($readmeHandle);
+        echo " [*] " . $readmeFile . "\n";
+        $zip->addFile($readmeFile, $readmeFile);
+
         return $zip;
     }
 
@@ -202,12 +260,21 @@ class PackageGenerator
     /*
      * Creates the zip for the Module Loadable Package
      */
-    public function generateZip($version, $packageID, $command, $srcDirectory, $manifestContent, $installdefs ){
+    public function generateZip($version, $packageID, $command, $srcDirectory, $manifestContent, $installdefs,
+                                $isWindowsBuild, $lengthOfWindowsSugarDirectoryPath){
+
+        if ($isWindowsBuild){
+            $version = $version . "-windows";
+        } else {
+            $version = $version . "-standard";
+        }
+
         $zip = $this -> openZip($version, $packageID, $command);
 
-        $arrayOfFiles = $this -> getFileArraysForZip($srcDirectory);
+        $arrayOfFiles = $this -> getFileArraysForZip($srcDirectory, $isWindowsBuild, $lengthOfWindowsSugarDirectoryPath);
         $filesToInclude = $arrayOfFiles["filesToInclude"];
         $filesToExclude = $arrayOfFiles["filesToExclude"];
+        $filesToExcludeWindows = $arrayOfFiles["filesToExcludeWindows"];
 
         $zip = $this -> addFilesToZip($zip, $filesToInclude);
         $installdefs = $this -> addFilesToInstalldefs($filesToInclude, $installdefs, $srcDirectory);
@@ -216,6 +283,13 @@ class PackageGenerator
         $zip = $this -> closeZip($zip);
 
         $this -> echoExcludedFiles($filesToExclude);
+
+        if ($isWindowsBuild){
+            $zip = $this -> openZip($version . "-manual-install", $packageID, $command);
+            $zip = $this -> addFilesToWindowsManualInstallZip($zip, $filesToExcludeWindows, $srcDirectory);
+            $zip = $this -> closeZip($zip);
+        }
+
         return $zip;
     }
 }

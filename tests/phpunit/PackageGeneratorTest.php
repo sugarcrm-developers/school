@@ -167,6 +167,172 @@ class PackageGeneratorTest extends TestCase
     }
 
     /*
+     * Creates the virtual file system and associated arrays (filesToInclude, filesToExclude, filesToExcludeWindows)
+     * for a single file that should NOT be included in the standard zip but should BE included in the Windows Zip
+     * when the length of the Windows path is 38 or larger
+     *
+     * Files to be included:
+     *  [none]
+     *
+     * Files to be excluded:
+     *  [none]
+     *
+     * Files to be excluded on Windows:
+     * [*] /src/modules/Opportunities/clients/base/views/subpanel-for-pmse_bpmprocessdefinition-opportunities_locked_fields_link/subpanel-for-pmse_bpmprocessdefinition-opportunities_locked_fields_link.php
+     */
+    private function getTestVariablesForSingleFileToExcludeOnWindows(){
+        $root = vfsStream::setup();
+        $srcDirectory = vfsStream::newDirectory("src") -> at($root);
+        $modulesDirectory = vfsStream::newDirectory("modules") -> at($srcDirectory);
+        $opportunitiesDirectory = vfsStream::newDirectory("Opportunities") -> at($modulesDirectory);
+        $clientsDirectory = vfsStream::newDirectory("clients") -> at($opportunitiesDirectory);
+        $baseDirectory = vfsStream::newDirectory("base") -> at($clientsDirectory);
+        $viewsDirectory = vfsStream::newDirectory("views") -> at($baseDirectory);
+        $subpanelDirectory = vfsStream::newDirectory("subpanel-for-pmse_bpmprocessdefinition-opportunities_locked_fields_link") -> at($viewsDirectory);
+        vfsStream::newFile("subpanel-for-pmse_bpmprocessdefinition-opportunities_locked_fields_link.php") -> at($subpanelDirectory);
+
+        $filesToExcludeWindows = array();
+        $fileSubpanel = array(
+            "fileRelative" => "src" . DIRECTORY_SEPARATOR . "modules" . DIRECTORY_SEPARATOR . "Opportunities"
+                . DIRECTORY_SEPARATOR . "clients" . DIRECTORY_SEPARATOR . "base" . DIRECTORY_SEPARATOR
+                . "views" . DIRECTORY_SEPARATOR . "subpanel-for-pmse_bpmprocessdefinition-opportunities_locked_fields_link"
+                . DIRECTORY_SEPARATOR . "subpanel-for-pmse_bpmprocessdefinition-opportunities_locked_fields_link.php",
+            "fileReal" =>  "vfs://root" . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "modules" . DIRECTORY_SEPARATOR . "Opportunities"
+                . DIRECTORY_SEPARATOR . "clients" . DIRECTORY_SEPARATOR . "base" . DIRECTORY_SEPARATOR
+                . "views" . DIRECTORY_SEPARATOR . "subpanel-for-pmse_bpmprocessdefinition-opportunities_locked_fields_link"
+                . DIRECTORY_SEPARATOR . "subpanel-for-pmse_bpmprocessdefinition-opportunities_locked_fields_link.php",
+        );
+        array_push($filesToExcludeWindows, $fileSubpanel);
+
+        return array(
+            'root' => $root,
+            'filesToInclude' => array(),
+            'filesToExclude' => array(),
+            'filesToExcludeWindows' => $filesToExcludeWindows
+        );
+    }
+
+    /*
+     * Creates the virtual file system and associated arrays (filesToInclude, filesToExclude, filesToExcludeWindows)
+     * for a single file that should NOT be included in the standard zip but should BE included in the Windows Zip
+     * when the length of the Windows path is 38 or larger
+     *
+     * Files to be included:
+     *  [*] src/language/application/en_us.lang.php
+     *  [*] src/icons/default/images/PR_Professors.gif
+     *  [*] src/icons/default/images/CreatePR_Professors.gif
+     *
+     * Files to be excluded:
+     * [*] src/custom/application/Ext/test.php
+     * [*] src/custom/modules/test/Ext/excludeme.php
+     *
+     * Files to be excluded on Windows:
+     * [*] /src/modules/Opportunities/clients/base/views/subpanel-for-pmse_bpmprocessdefinition-opportunities_locked_fields_link/subpanel-for-pmse_bpmprocessdefinition-opportunities_locked_fields_link.php
+     * [*] /src/modules/Opportunities/clients/base/views/subpanel-for-pmse_bpmprocessdefinition-opportunities_locked_fields_link/another-really-super-duper-crazy-long-filename-that-windows-simply-cannot-handle.php
+     */
+    private function getTestVariablesForMultipleFileToExcludeOnWindows(){
+        $root = vfsStream::setup();
+        $srcDirectory = vfsStream::newDirectory("src") -> at($root);
+        $languageDirectory = vfsStream::newDirectory("language") -> at($srcDirectory);
+        $applicationUnderLanguageDirectory = vfsStream::newDirectory("application") -> at($languageDirectory);
+        $iconsDirectory = vfsStream::newDirectory("icons") -> at($srcDirectory);
+        $defaultDirectory = vfsStream::newDirectory("default") -> at($iconsDirectory);
+        $imagesDirectory = vfsStream::newDirectory("images") -> at($defaultDirectory);
+        $customDirectory = vfsStream::newDirectory("custom") -> at($srcDirectory);
+        $applicationDirectory = vfsStream::newDirectory("application") -> at($customDirectory);
+        $ExtDirectory = vfsStream::newDirectory("Ext") -> at($applicationDirectory);
+        $modulesDirectory = vfsStream::newDirectory("modules") -> at($customDirectory);
+        $testDirectory = vfsStream::newDirectory("test") -> at($modulesDirectory);
+        $ExtUnderTestDirectory = vfsStream::newDirectory("Ext") -> at($testDirectory);
+        $modulesDirectory = vfsStream::newDirectory("modules") -> at($srcDirectory);
+        $opportunitiesDirectory = vfsStream::newDirectory("Opportunities") -> at($modulesDirectory);
+        $clientsDirectory = vfsStream::newDirectory("clients") -> at($opportunitiesDirectory);
+        $baseDirectory = vfsStream::newDirectory("base") -> at($clientsDirectory);
+        $viewsDirectory = vfsStream::newDirectory("views") -> at($baseDirectory);
+        $subpanelDirectory = vfsStream::newDirectory("subpanel-for-pmse_bpmprocessdefinition-opportunities_locked_fields_link") -> at($viewsDirectory);
+
+        vfsStream::newFile("en_us.lang.php") -> at($applicationUnderLanguageDirectory);
+        vfsStream::newFile("PR_Professors.gif") -> at($imagesDirectory);
+        vfsStream::newFile("CreatePR_Professors.gif") -> at($imagesDirectory);
+        vfsStream::newFile("test.php") -> at($ExtDirectory);
+        vfsStream::newFile("excludeme.php") -> at($ExtUnderTestDirectory);
+        vfsStream::newFile("subpanel-for-pmse_bpmprocessdefinition-opportunities_locked_fields_link.php") -> at($subpanelDirectory);
+        vfsStream::newFile("another-really-super-duper-crazy-long-filename-that-windows-simply-cannot-handle.php") -> at($subpanelDirectory);
+
+        $filesToInclude = array();
+        $fileEnUs = array(
+            "fileRelative" => "src" . DIRECTORY_SEPARATOR . "language" . DIRECTORY_SEPARATOR . "application"
+                . DIRECTORY_SEPARATOR . "en_us.lang.php",
+            "fileReal" =>  "vfs://root" . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "language"
+                . DIRECTORY_SEPARATOR . "application" . DIRECTORY_SEPARATOR . "en_us.lang.php"
+        );
+        $filePRProfessors = array(
+            "fileRelative" => "src" . DIRECTORY_SEPARATOR . "icons" . DIRECTORY_SEPARATOR . "default"
+                . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . "PR_Professors.gif",
+            "fileReal" =>  "vfs://root" . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "icons"
+                . DIRECTORY_SEPARATOR . "default" . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . "PR_Professors.gif"
+        );
+        $fileCreatePRProfessors = array(
+            "fileRelative" => "src" . DIRECTORY_SEPARATOR . "icons" . DIRECTORY_SEPARATOR . "default"
+                . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . "CreatePR_Professors.gif",
+            "fileReal" =>  "vfs://root" . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "icons"
+                . DIRECTORY_SEPARATOR . "default" . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . "CreatePR_Professors.gif"
+        );
+        array_push($filesToInclude, $fileEnUs);
+        array_push($filesToInclude, $filePRProfessors);
+        array_push($filesToInclude, $fileCreatePRProfessors);
+
+        $filesToExclude = array();
+        $fileTest = array(
+            "fileRelative" => "src" . DIRECTORY_SEPARATOR . "custom" . DIRECTORY_SEPARATOR . "application"
+                . DIRECTORY_SEPARATOR . "Ext" . DIRECTORY_SEPARATOR . "test.php",
+            "fileReal" =>  "vfs://root" . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "custom"
+                . DIRECTORY_SEPARATOR . "application" . DIRECTORY_SEPARATOR . "Ext" . DIRECTORY_SEPARATOR . "test.php"
+        );
+        $fileExcludeme = array(
+            "fileRelative" => "src" . DIRECTORY_SEPARATOR . "custom" . DIRECTORY_SEPARATOR . "modules"
+                . DIRECTORY_SEPARATOR . "test" . DIRECTORY_SEPARATOR . "Ext" . DIRECTORY_SEPARATOR . "excludeme.php",
+            "fileReal" =>  "vfs://root" . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "custom"
+                . DIRECTORY_SEPARATOR . "modules" . DIRECTORY_SEPARATOR . "test" . DIRECTORY_SEPARATOR . "Ext" . DIRECTORY_SEPARATOR . "excludeme.php"
+        );
+        array_push($filesToExclude, $fileTest);
+        array_push($filesToExclude, $fileExcludeme);
+
+        $filesToExcludeWindows = array();
+        $fileSubpanel = array(
+            "fileRelative" => "src" . DIRECTORY_SEPARATOR . "modules" . DIRECTORY_SEPARATOR . "Opportunities"
+                . DIRECTORY_SEPARATOR . "clients" . DIRECTORY_SEPARATOR . "base" . DIRECTORY_SEPARATOR
+                . "views" . DIRECTORY_SEPARATOR . "subpanel-for-pmse_bpmprocessdefinition-opportunities_locked_fields_link"
+                . DIRECTORY_SEPARATOR . "subpanel-for-pmse_bpmprocessdefinition-opportunities_locked_fields_link.php",
+            "fileReal" =>  "vfs://root" . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "modules" . DIRECTORY_SEPARATOR . "Opportunities"
+                . DIRECTORY_SEPARATOR . "clients" . DIRECTORY_SEPARATOR . "base" . DIRECTORY_SEPARATOR
+                . "views" . DIRECTORY_SEPARATOR . "subpanel-for-pmse_bpmprocessdefinition-opportunities_locked_fields_link"
+                . DIRECTORY_SEPARATOR . "subpanel-for-pmse_bpmprocessdefinition-opportunities_locked_fields_link.php",
+        );
+        $fileAnother = array(
+            "fileRelative" => "src" . DIRECTORY_SEPARATOR . "modules" . DIRECTORY_SEPARATOR . "Opportunities"
+                . DIRECTORY_SEPARATOR . "clients" . DIRECTORY_SEPARATOR . "base" . DIRECTORY_SEPARATOR
+                . "views" . DIRECTORY_SEPARATOR . "subpanel-for-pmse_bpmprocessdefinition-opportunities_locked_fields_link"
+                . DIRECTORY_SEPARATOR . "subpanel-for-pmse_bpmprocessdefinition-opportunities_locked_fields_link.php",
+            "fileReal" =>  "vfs://root" . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "modules" . DIRECTORY_SEPARATOR . "Opportunities"
+                . DIRECTORY_SEPARATOR . "clients" . DIRECTORY_SEPARATOR . "base" . DIRECTORY_SEPARATOR
+                . "views" . DIRECTORY_SEPARATOR . "subpanel-for-pmse_bpmprocessdefinition-opportunities_locked_fields_link"
+                . DIRECTORY_SEPARATOR . "another-really-super-duper-crazy-long-filename-that-windows-simply-cannot-handle.php",
+        );
+        array_push($filesToExcludeWindows, $fileSubpanel);
+        array_push($filesToExcludeWindows, $fileAnother);
+
+        return array(
+            'root' => $root,
+            'filesToInclude' => $filesToInclude,
+            'filesToExclude' => $filesToExclude,
+            'filesToExcludeWindows' => $filesToExcludeWindows
+        );
+    }
+
+
+
+    /*
      * Returns sample installdefs that have beans and language
      */
     private function getSampleInstalldefs(){
@@ -218,6 +384,21 @@ class PackageGeneratorTest extends TestCase
     public function testShouldIncludeFileInZipFileInCustomModulesModuleNameExtWindows(){
         $pg = new PackageGenerator();
         $this->assertFalse($pg->shouldIncludeFileInZip("src\\custom\\modules\\test\\Ext\\excludeme.php"));
+    }
+
+    #TODO:  Lauren
+    public function testShouldIncludeFileInWindowsZip(){
+        $pg = new PackageGenerator();
+        $this->assertTrue($pg->shouldIncludeFileInWindowsZip(
+            "src/modules/Opportunities/clients/base/views/subpanel-for-pmse_bpmprocessdefinition-opportunities_locked_fields_link/subpanel-for-pmse_bpmprocessdefinition-opportunities_locked_fields_link.php",
+            36));
+    }
+
+    public function testShouldIncludeFileInWindowsZipLongPath(){
+        $pg = new PackageGenerator();
+        $this->assertFalse($pg->shouldIncludeFileInWindowsZip(
+            "src/modules/Opportunities/clients/base/views/subpanel-for-pmse_bpmprocessdefinition-opportunities_locked_fields_link/subpanel-for-pmse_bpmprocessdefinition-opportunities_locked_fields_link.php",
+            37));
     }
 
     public function testGetVersionNoDecimals(){
@@ -291,14 +472,14 @@ class PackageGeneratorTest extends TestCase
         $pg = new PackageGenerator();
         $pg -> setCwd($root -> url());
 
-        $fileArrays = $pg -> getFileArraysForZip("src");
+        $fileArrays = $pg -> getFileArraysForZip("src", false, null);
         $filesToInclude = $fileArrays["filesToInclude"];
         $filesToExclude = $fileArrays["filesToExclude"];
+        $filesToExcludeWindows = $fileArrays["filesToExcludeWindows"];
         $this -> assertEquals(1, count($filesToInclude));
-        $this -> assertEquals("src" . DIRECTORY_SEPARATOR . "myfile.php", $filesToInclude[0]["fileRelative"]);
-        $this -> assertEquals("vfs://root" . DIRECTORY_SEPARATOR
-            . "src" . DIRECTORY_SEPARATOR . "myfile.php", $filesToInclude[0]["fileReal"]);
+        $this -> assertEquals($testVariables["filesToInclude"], $filesToInclude);
         $this -> assertEquals(0, count($filesToExclude));
+        $this -> assertEquals(0, count($filesToExcludeWindows));
     }
 
     public function testGetFileArraysForZipSingleFileToExclude(){
@@ -308,16 +489,31 @@ class PackageGeneratorTest extends TestCase
         $pg = new PackageGenerator();
         $pg -> setCwd($root -> url());
 
-        $fileArrays = $pg -> getFileArraysForZip("src");
+        $fileArrays = $pg -> getFileArraysForZip("src", false, null);
         $filesToInclude = $fileArrays["filesToInclude"];
         $filesToExclude = $fileArrays["filesToExclude"];
+        $filesToExcludeWindows = $fileArrays["filesToExcludeWindows"];
         $this -> assertEquals(0, count($filesToInclude));
         $this -> assertEquals(1, count($filesToExclude));
-        $this -> assertEquals("src" . DIRECTORY_SEPARATOR . "custom" . DIRECTORY_SEPARATOR . "application"
-            . DIRECTORY_SEPARATOR . "Ext" . DIRECTORY_SEPARATOR . "test.php", $filesToExclude[0]["fileRelative"]);
-        $this -> assertEquals("vfs://root" . DIRECTORY_SEPARATOR
-            . "src" . DIRECTORY_SEPARATOR . "custom" . DIRECTORY_SEPARATOR . "application" . DIRECTORY_SEPARATOR .
-            "Ext" . DIRECTORY_SEPARATOR . "test.php", $filesToExclude[0]["fileReal"]);
+        $this -> assertEquals($testVariables["filesToExclude"], $filesToExclude);
+        $this -> assertEquals(0, count($filesToExcludeWindows));
+    }
+
+    public function testGetFileArraysForZipSingleFileToExcludeWindows(){
+        $testVariables = $this -> getTestVariablesForSingleFileToExcludeOnWindows();
+        $root = $testVariables['root'];
+
+        $pg = new PackageGenerator();
+        $pg -> setCwd($root -> url());
+
+        $fileArrays = $pg -> getFileArraysForZip("src", true, 38);
+        $filesToInclude = $fileArrays["filesToInclude"];
+        $filesToExclude = $fileArrays["filesToExclude"];
+        $filesToExcludeWindows = $fileArrays["filesToExcludeWindows"];
+        $this -> assertEquals(0, count($filesToInclude));
+        $this -> assertEquals(0, count($filesToExclude));
+        $this -> assertEquals(1, count($filesToExcludeWindows));
+        $this -> assertEquals($testVariables["filesToExcludeWindows"], $filesToExcludeWindows);
     }
 
     public function testGetFileArraysForZipMultipleFiles(){
@@ -327,40 +523,16 @@ class PackageGeneratorTest extends TestCase
         $pg = new PackageGenerator();
         $pg -> setCwd($root -> url());
 
-        $fileArrays = $pg -> getFileArraysForZip("src");
+        $fileArrays = $pg -> getFileArraysForZip("src", false, null);
         $filesToInclude = $fileArrays["filesToInclude"];
         $filesToExclude = $fileArrays["filesToExclude"];
+        $filesToExcludeWindows = $fileArrays["filesToExcludeWindows"];
 
         $this -> assertEquals(3, count($filesToInclude));
-        $this -> assertEquals("src" . DIRECTORY_SEPARATOR . "language" . DIRECTORY_SEPARATOR . "application"
-            . DIRECTORY_SEPARATOR . "en_us.lang.php", $filesToInclude[0]["fileRelative"]);
-        $this -> assertEquals("vfs://root" . DIRECTORY_SEPARATOR
-            . "src" . DIRECTORY_SEPARATOR . "language" . DIRECTORY_SEPARATOR . "application" . DIRECTORY_SEPARATOR .
-            "en_us.lang.php", $filesToInclude[0]["fileReal"]);
-        $this -> assertEquals("src" . DIRECTORY_SEPARATOR . "icons" . DIRECTORY_SEPARATOR . "default" .
-            DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . "PR_Professors.gif", $filesToInclude[1]["fileRelative"]);
-        $this -> assertEquals("vfs://root" . DIRECTORY_SEPARATOR
-            . "src" . DIRECTORY_SEPARATOR . "icons" . DIRECTORY_SEPARATOR . "default" . DIRECTORY_SEPARATOR . "images"
-            . DIRECTORY_SEPARATOR . "PR_Professors.gif", $filesToInclude[1]["fileReal"]);
-        $this -> assertEquals("src" . DIRECTORY_SEPARATOR . "icons" . DIRECTORY_SEPARATOR . "default"
-            . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . "CreatePR_Professors.gif", $filesToInclude[2]["fileRelative"]);
-        $this -> assertEquals("vfs://root" . DIRECTORY_SEPARATOR
-            . "src" . DIRECTORY_SEPARATOR . "icons" . DIRECTORY_SEPARATOR . "default" . DIRECTORY_SEPARATOR . "images"
-            . DIRECTORY_SEPARATOR . "CreatePR_Professors.gif", $filesToInclude[2]["fileReal"]);
-
+        $this -> assertEquals($testVariables["filesToInclude"], $filesToInclude);
         $this -> assertEquals(2, count($filesToExclude));
-        $this -> assertEquals("src" . DIRECTORY_SEPARATOR . "custom" . DIRECTORY_SEPARATOR . "application"
-            . DIRECTORY_SEPARATOR . "Ext" . DIRECTORY_SEPARATOR . "test.php", $filesToExclude[0]["fileRelative"]);
-        $this -> assertEquals("vfs://root" . DIRECTORY_SEPARATOR
-            . "src" . DIRECTORY_SEPARATOR . "custom" . DIRECTORY_SEPARATOR . "application" . DIRECTORY_SEPARATOR . "Ext"
-            . DIRECTORY_SEPARATOR . "test.php", $filesToExclude[0]["fileReal"]);
-        $this -> assertEquals("src" . DIRECTORY_SEPARATOR . "custom" . DIRECTORY_SEPARATOR . "modules" .
-            DIRECTORY_SEPARATOR . "test" . DIRECTORY_SEPARATOR . "Ext" . DIRECTORY_SEPARATOR . "excludeme.php",
-            $filesToExclude[1]["fileRelative"]);
-        $this -> assertEquals("vfs://root" . DIRECTORY_SEPARATOR
-            . "src" . DIRECTORY_SEPARATOR . "custom"
-            . DIRECTORY_SEPARATOR . "modules" . DIRECTORY_SEPARATOR . "test" . DIRECTORY_SEPARATOR . "Ext"
-            . DIRECTORY_SEPARATOR . "excludeme.php", $filesToExclude[1]["fileReal"]);
+        $this -> assertEquals($testVariables["filesToExclude"], $filesToExclude);
+        $this -> assertEquals(0, count($filesToExcludeWindows));
     }
 
     public function testOpenZipValidParams(){
@@ -447,6 +619,84 @@ class PackageGeneratorTest extends TestCase
             . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . "PR_Professors.gif", $this -> getActualOutput());
         $this -> assertContains("[*] src" . DIRECTORY_SEPARATOR . "icons" . DIRECTORY_SEPARATOR . "default"
             . DIRECTORY_SEPARATOR . "images" . DIRECTORY_SEPARATOR . "CreatePR_Professors.gif", $this -> getActualOutput());
+    }
+
+    /*
+     * addFile does not work with the urls beginning with "vfs://" so this test does NOT
+     * actually test that files were added to the zip.  Instead it tests the output of the
+     * function is correct
+     */
+    public function testAddFilesToWindowsManualInstallZipOneFile(){
+        $testVariables = $this -> getTestVariablesForSingleFileToExcludeOnWindows();
+        $root = $testVariables['root'];
+        $filesToInclude = $testVariables['filesToExcludeWindows'];
+
+        $pg = new PackageGenerator();
+        $pg -> setCwd($root -> url());
+
+        $zip = $pg -> openZip("1", "profM", "pack.php");
+
+        $zip = $pg -> addFilesToWindowsManualInstallZip($zip, $filesToInclude, "src");
+
+        $this -> assertContains(
+            "[*] 0/subpanel-for-pmse_bpmprocessdefinition-opportunities_locked_fields_link.php\n",
+            $this -> getActualOutput());
+
+        $this -> assertContains(
+            "ProfMForWindowsReadme.txt",
+            $this -> getActualOutput());
+    }
+
+    /*
+     * addFile does not work with the urls beginning with "vfs://" so this test does NOT
+     * actually test that files were added to the zip.  Instead it tests the output of the
+     * function is correct
+    */
+    public function testAddFilesToWindowsManualInstallZipNoFiles(){
+        $root = vfsStream::setup();
+
+        $pg = new PackageGenerator();
+        $pg -> setCwd($root -> url());
+
+        $zip = $pg -> openZip("1", "profM", "pack.php");
+
+        $filesToInclude = array();
+
+        $zip = $pg -> addFilesToWindowsManualInstallZip($zip, $filesToInclude, "src");
+
+        $this -> assertContains(
+            "ProfMForWindowsReadme.txt",
+            $this -> getActualOutput());
+    }
+
+    /*
+     * addFile does not work with the urls beginning with "vfs://" so this test does NOT
+     * actually test that files were added to the zip.  Instead it tests the output of the
+     * function is correct
+     */
+    public function testAddFilesToWindowsManualInstallZipMultipleFile(){
+        $testVariables = $this -> getTestVariablesForMultipleFileToExcludeOnWindows();
+        $root = $testVariables['root'];
+        $filesToInclude = $testVariables['filesToExcludeWindows'];
+
+        $pg = new PackageGenerator();
+        $pg -> setCwd($root -> url());
+
+        $zip = $pg -> openZip("1", "profM", "pack.php");
+
+        $zip = $pg -> addFilesToWindowsManualInstallZip($zip, $filesToInclude, "src");
+
+        $this -> assertContains(
+            "[*] 0/subpanel-for-pmse_bpmprocessdefinition-opportunities_locked_fields_link.php\n",
+            $this -> getActualOutput());
+
+        $this -> assertContains(
+            "[*] 1/another-really-super-duper-crazy-long-filename-that-windows-simply-cannot-handle.php\n",
+            $this -> getActualOutput());
+
+        $this -> assertContains(
+            "ProfMForWindowsReadme.txt",
+            $this -> getActualOutput());
     }
 
     public function testAddFilesToInstallDefsOneFile(){
@@ -634,23 +884,70 @@ class PackageGeneratorTest extends TestCase
         $pg = new PackageGenerator();
         $pg -> setCwd($root -> url());
 
-        $zip = $pg -> generateZip("1", "profM", "pack.php", "src", $manifest, $installdefs);
+        $zip = $pg -> generateZip("1", "profM", "pack.php", "src", $manifest,
+            $installdefs, false, null);
 
         $expectedOutput =
-            "Creating releases" . DIRECTORY_SEPARATOR . "sugarcrm-profM-1.zip ... \n" .
+            "Creating releases" . DIRECTORY_SEPARATOR . "sugarcrm-profM-1-standard.zip ... \n" .
             " [*] src" . DIRECTORY_SEPARATOR . "language" . DIRECTORY_SEPARATOR . "application" . DIRECTORY_SEPARATOR
                 . "en_us.lang.php\n" .
             " [*] src" . DIRECTORY_SEPARATOR . "icons" . DIRECTORY_SEPARATOR . "default" . DIRECTORY_SEPARATOR
                 . "images" . DIRECTORY_SEPARATOR . "PR_Professors.gif\n" .
             " [*] src" . DIRECTORY_SEPARATOR . "icons" . DIRECTORY_SEPARATOR . "default" . DIRECTORY_SEPARATOR .
                 "images" . DIRECTORY_SEPARATOR . "CreatePR_Professors.gif\n" .
-            "Done creating sugarcrm-profM-1.zip\n\n" .
+            "Done creating sugarcrm-profM-1-standard.zip\n\n" .
 
             "The following files were excluded from the zip: \n" .
             " [*] src" . DIRECTORY_SEPARATOR . "custom" . DIRECTORY_SEPARATOR . "application" . DIRECTORY_SEPARATOR .
                 "Ext" . DIRECTORY_SEPARATOR . "test.php\n" .
             " [*] src" . DIRECTORY_SEPARATOR . "custom" . DIRECTORY_SEPARATOR . "modules" . DIRECTORY_SEPARATOR .
                 "test" . DIRECTORY_SEPARATOR . "Ext" . DIRECTORY_SEPARATOR . "excludeme.php\n";
+
+        $this -> assertEquals($expectedOutput, $this -> getActualOutput());
+    }
+
+    /*
+     * Things get really hairy when we're going back and forth between using the virtual file system and the
+     * real file system. Since we have other tests that test the individual pieces, we'll just check that the
+     * output of generating the zip is correct.
+     */
+    public function testGenerateZipForWindowsMultipleFiles(){
+        $testVariables = $this -> getTestVariablesForMultipleFileToExcludeOnWindows();
+        $root = $testVariables['root'];
+
+        $manifest = array(
+            'id' => 'profM',
+            'name' => 'Professor M');
+
+        $installdefs = $this->getSampleInstalldefs();
+
+        $pg = new PackageGenerator();
+        $pg -> setCwd($root -> url());
+
+        $zip = $pg -> generateZip("1", "profM", "pack.php", "src", $manifest,
+            $installdefs, true, 38);
+
+        $expectedOutput =
+            "Creating releases" . DIRECTORY_SEPARATOR . "sugarcrm-profM-1-windows.zip ... \n" .
+            " [*] src" . DIRECTORY_SEPARATOR . "language" . DIRECTORY_SEPARATOR . "application" . DIRECTORY_SEPARATOR
+                . "en_us.lang.php\n" .
+            " [*] src" . DIRECTORY_SEPARATOR . "icons" . DIRECTORY_SEPARATOR . "default" . DIRECTORY_SEPARATOR
+                . "images" . DIRECTORY_SEPARATOR . "PR_Professors.gif\n" .
+            " [*] src" . DIRECTORY_SEPARATOR . "icons" . DIRECTORY_SEPARATOR . "default" . DIRECTORY_SEPARATOR .
+                "images" . DIRECTORY_SEPARATOR . "CreatePR_Professors.gif\n" .
+            "Done creating sugarcrm-profM-1-windows.zip\n\n" .
+
+            "The following files were excluded from the zip: \n" .
+            " [*] src" . DIRECTORY_SEPARATOR . "custom" . DIRECTORY_SEPARATOR . "application" . DIRECTORY_SEPARATOR .
+                "Ext" . DIRECTORY_SEPARATOR . "test.php\n" .
+            " [*] src" . DIRECTORY_SEPARATOR . "custom" . DIRECTORY_SEPARATOR . "modules" . DIRECTORY_SEPARATOR .
+                "test" . DIRECTORY_SEPARATOR . "Ext" . DIRECTORY_SEPARATOR . "excludeme.php\n" .
+
+            "Creating releases" . DIRECTORY_SEPARATOR . "sugarcrm-profM-1-windows-manual-install.zip ... \n" .
+            " [*] 0/subpanel-for-pmse_bpmprocessdefinition-opportunities_locked_fields_link.php\n" .
+            " [*] 1/another-really-super-duper-crazy-long-filename-that-windows-simply-cannot-handle.php\n" .
+            " [*] ProfMForWindowsReadme.txt\n" .
+            "Done creating sugarcrm-profM-1-windows-manual-install.zip\n\n";
 
         $this -> assertEquals($expectedOutput, $this -> getActualOutput());
     }

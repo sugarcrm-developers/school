@@ -9,24 +9,30 @@ jobs:
     php: '7.1'
     os: linux
     before_script:
-    - composer install
+      - composer install
   - stage: test
     language: node_js
     node_js: '9'
     before_install:
-    - yarn global add grunt-cli
+      - yarn global add grunt-cli
   - stage: Build & Post on GitHub
     language: php
     php: '7.1'
     before_script:
-    - composer install
-    - cd package
-    script: "./pack.php latest"
+      - composer install
+      - cd package
+    script:
+      - "./pack.php -v $(date +'%Y%m%d-%H.%M.%S')"
+      - "./pack.php -v $(date +'%Y%m%d-%H.%M.%S') -w 40" #Using 40 as a typical path length. May not work for all Windows installations
     before_deploy:
       git tag "$(date +'%Y%m%d-%H.%M.%S')-$(git log --format=%h -1)"
     deploy:
+      file_glob: true
       provider: releases
-      file: releases/sugarcrm-ProfessorM-latest.zip
+      file:
+        - releases/sugarcrm-ProfessorM-*-standard.zip
+        - releases/sugarcrm-ProfessorM-*-windows.zip
+        - releases/sugarcrm-ProfessorM-*-windows-manual-install.zip
       api_key:
           secure: bM9iT8Lh06t/BKWDHZpTKrsE3UQqs1EnPWkNy6+KqXCuaECeeyw9KlvkVfhsDgXH4a9g2RvnIkXwWuueOZvLEHeAdaVxC0JpP2Zbv4kBcF8LOuRKaJVCrjcnnPGQft2F5wKdnEbXPd4ZjSK40kSk8qSp3cSjMUYrVFwcttmvTY08sbNN2Tbx/zelkTELmOKWj+1QseNr6ch7r9PrzR2GvK6p6QJUFmMXyIDywlUvCdFafjc4pikhhuTq/1gdUARyC8+pTSb70atP53PoKZtVcHXL1l+Jis7DxWAN/fVy+Fsv5yeLbXsj8M4xc5Uzy3TltAaIVLUSpOAU9KaKvJREkCy1V42ha10c5NSlkZ9jxI7XlPfiqVgKZB0bR9MAD+6sUYBF9gQvVfAJUztFCoLdPtMnmvVuhCY94t9hBc6WJbeldd6/aBy8NPAD2QZ3ZMeJ65m3PnboMPtnychhGGF+c4sU/Wmtz4ptUG0qe1ajEV/mX7chr5lWWHySdr41BwklcIm0ZSMmtI4lwZgUIMVkjowd3abWovN8OQg4i9AcvGyutfIANH+SQF357GfshzYSvUZ50E7uYeKrMjK0bqZJH/Gbw6WElQb7w88P0sCnpzb944ssXtl/zBCpW7zg6bBZCo+1E8wp8BWwqLj+li1F3Gn0kqEVoKgz+gjazkIqwmU=
       skip_cleanup: true

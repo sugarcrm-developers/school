@@ -7,6 +7,10 @@ All of the tutorials at UnCon 2017 will be based on Professor M's School for Gif
 
 [Installation instructions](#installation-instructions) 
 
+[Setting up your development environment](#setting-up-your-development-environment) 
+
+[Generating the Professor M module loadable packages locally](#generating-the-professor-m-module-loadable-packages-locally) 
+
 [Continuous integration with Travis CI](#continuous-integration-with-travis-ci) 
 
 [Automated tests](#automated-tests)
@@ -43,35 +47,33 @@ Watch the video below for instructions on how to install the scenario.  Text-bas
 [![The Professor M Scenario Part 2 - How do you install it?](images/profmvideo2.png)](https://youtu.be/SO-Rav35X5U "The Professor M Scenario Part 2 - How do you install it?")
 
 ### Prerequisites
-- Sugar 7.9.1.0 installed with NO sample data.  See [Getting Started with Sugar Development](https://developer.sugarcrm.com/getting-started) for help.
+- Sugar 7.9.1.0 (or newer) installed with NO sample data.  See [Getting Started with Sugar Development](https://developer.sugarcrm.com/getting-started) for help.
    * Note:  If you install Sugar using ***config_si.php***, ensure that the `disable_unknown_platforms` property is set to `false` or is not in the file.
    * Note for Windows users:  Make the path to your Sugar instance as short as possible to avoid errors of file paths being too long.
 - [Postman](https://www.getpostman.com) installed 
 
 ### Install the modules and customizations
 We've created a custom package you can install.  The package will create and customize the modules you'll need for the scenario.  The following instructions will walk you throw how to install the package.
-1. Download [ProfM.zip](/ProfessorM/ProfM.zip)
+1. Download **sugarcrm-ProfessorM-standard.zip** from the latest [release](https://github.com/sugarcrm/school/releases)
 1. Login to Sugar as an Administrator
-1. Go to **Administration** > **Module Loader**
-1. Upload **ProfM.zip**
+1. Navigate to **Administration** > **Module Loader**
+1. Upload **sugarcrm-ProfessorM-standard.zip**
 1. Click **Install** for the ProfessorM package
 1. Review and accept the license agreement
 1. Click **Commit**
    * Hint for Windows users:  If you receive a warning with the message "Full extraction path exceed MAXPATHLEN (260)...", try the following:
-     1. Install [ProfM.zip for Windows](/ProfessorM/windows/ProfM.zip).
-     1. In your Sugar instance, create the following directories if they do not already exist: [YourSugarDirectory]\custom\modules\Opportunities\clients\base\views\subpanel-for-pmse_bpmprocessdefinition-opportunities_locked_fields_link
-     1. Download [subpanel-for-pmse_bpmprocessdefinition-opportunities_locked_fields_link.php](/ProfessorM/windows/subpanel-for-pmse_bpmprocessdefinition-opportunities_locked_fields_link/subpanel-for-pmse_bpmprocessdefinition-opportunities_locked_fields_link.php)
-     1. Move the file you just downloaded in the step above to [YourSugarDirectory]\custom\modules\Opportunities\clients\base\views\subpanel-for-pmse_bpmprocessdefinition-opportunities_locked_fields_link
+     1. Download **sugarcrm-ProfessorM-windows.zip** from the latest [release](https://github.com/sugarcrm/school/releases).
+     1. Install the zip as a module loadable package using the steps above.
+     1. Download **sugarcrm-ProfessorM-windows-manual-install.zip** from the latest [release](https://github.com/sugarcrm/school/releases).
+     1. Unzip the file. Note that you'll find **ProfMForWindowsReadme.txt** and a set of directories inside of the zip.
+     1. Open **ProfMForWindowsReadme.txt**.
+     1. Follow the instructions inside of the readme to manually copy the files from the zip to your Sugar instance.  You
+     may need to create directories in your Sugar directory if they do not already exist.
      1. Navigate to **Administration** > **Repair** > **Quick Repair and Rebuild**.
-   * If the above installation still fails due to a MAXPATHLEN error, you may need to remove other files with long names from the zip file.
-     1. Determine which files are too long.  Hint:  you can see the full paths of the files in the manifest.
-     1. Unzip ProfM.zip.
-     1. For each file that needs to be removed, remove it from the unzipped copy of ProfM.zip.
-     1. For each file that needs to removed, remove the corresponding entry in the manifest, taking note of where the files should be eventually installed (indicated by 'to').
-     1. Zip the ProfM directory, ensuring that the manifest is at the root of the zip and is NOT enclosed in another directory.
-     1. Install the newly zipped ProfM.zip.
-     1. Move the files you removed from the zip to the appropriate locations in your local Sugar directories.
-     1. Navigate to **Administration** > **Repair** > **Quick Repair and Rebuild**.
+   * If the above installation still fails due to a MAXPATHLEN error, we recommend generating the zips yourself locally 
+   on your own machine.  See 
+   [Generating the Professor M module loadable packages locally](#generating-the-professor-m-module-loadable-packages-locally) 
+   for instructions on how to do so.
    
    
 ### Customize the modules that are displayed
@@ -127,7 +129,38 @@ In order to create the Professor M sample data, you'll use Postman to run a coll
 1. Ensure the environment you just created is selected
 1. Click **Run ProfessorM S...**
 1. Wait for the collection to finish running. All tests should pass.
-   Hint:  If you see many failures, you may have forgotten to install the modules and customizations using ProfM.zip.  See instructions in previous section for how to do the install.
+   Hint:  If you see many failures, you may have forgotten to install the Professor M module loadable package.  See the 
+   instructions in previous section for how to do the install.
+
+
+## Setting up your development environment
+If you want to generate the Professor M module loadable packages yourself or make changes to the code in this repo, you
+will need to set up a development environment.  You do NOT need to set up a development environment if you simply want
+to install the Professor M scenario as-is in your Sugar instance.
+
+1. Checkout or download a copy of this repo.
+1. [Install PHP 7](http://php.net/manual/en/install.php).
+1. [Install Composer](https://getcomposer.org/download/). We use Composer to install the PHP dependencies for the project.  
+1. Execute the following command from your `school` directory in order to install the dependencies:
+```
+composer install
+```
+
+You may also want to set up your development environment so you can execute the unit tests.  See 
+[Automated tests](#automated-tests) for more information.
+
+
+## Generating the Professor M module loadable packages locally
+The Professor M module loadable packages can be found on the [Releases](https://github.com/sugarcrm/school/releases) 
+page of this GitHub repo.  You may want to generate the module loadable packages yourself if you are a Windows user with 
+a long Sugar directory path or if you want to make changes to the package.
+
+1. [Set up your development environment](#setting-up-your-development-environment) if you have not already done so.
+1. In a shell, navigate to the `package` directory inside of your `school` directory.
+1. For standard builds, execute ```./pack.php -v versionNameOrNumber```
+1. For Windows builds where installing the standard build results in MAXPATHLEN errors, 
+execute ```./pack.php -v versionNameOrNumber -w lengthOfWindowsSugarDirectoryPath```
+
 
 ## Continuous integration with Travis CI
 This repository is configured to work with [Travis CI](https://docs.travis-ci.com/user/for-beginners/).  Whenever a commit
@@ -162,8 +195,8 @@ The test stage is run first and has two jobs:
   - Execute the Jasmine tests (see [Jasmine tests](#jasmine-tests) for details)
   
 If the test stage passes and the build is being run against the master branch, the Build & Post on GitHub stage will be 
-kicked off. This stage executes the pack.php script to generate the Professor M module loadable package as a zip. The 
-zip will be automatically posted to GitHub: https://github.com/sugarcrm/school/releases.
+kicked off. This stage executes the pack.php script to generate the Professor M module loadable packages as zips. The 
+zips will be automatically posted to GitHub: https://github.com/sugarcrm/school/releases.
 
 If you want the Build & Post on GitHub stage to be kicked off for a branch other than master, you should do **both** of 
 the following in [.travis.yml](.travis.yml).
