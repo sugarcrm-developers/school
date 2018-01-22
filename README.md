@@ -1,4 +1,4 @@
-# Professor M's School for Gifted Coders [![Build Status](https://travis-ci.com/sugarcrm/school.svg?token=bZhBry2RZxzLssWLLqgs&branch=master)](https://travis-ci.com/sugarcrm/school)
+# Professor M's School for Gifted Coders [![Build Status](https://travis-ci.org/sugarcrm/school.svg?branch=windows-build-pack-php)](https://travis-ci.org/sugarcrm/school)
 
 All of the tutorials at UnCon 2017 will be based on Professor M's School for Gifted Coders.  The following sections will explain more about the scenario and how to install the required modules and sample data.
 
@@ -168,11 +168,11 @@ is pushed to the repository or a Pull Request is made, Travis CI will automatica
 
 ### Viewing results in Travis CI
 
-You can view the Travis CI build results at [https://travis-ci.com/sugarcrm/school](https://travis-ci.com/sugarcrm/school).
+You can view the Travis CI build results at [https://travis-ci.org/sugarcrm/school](https://travis-ci.org/sugarcrm/school).
 
 ### Viewing results in GitHub
 
-You can view the latest build status at the top of this README ([![Build Status](https://travis-ci.com/sugarcrm/school.svg?token=bZhBry2RZxzLssWLLqgs&branch=master)](https://travis-ci.com/sugarcrm/school)).  
+You can view the latest build status at the top of this README ([![Build Status](https://travis-ci.org/sugarcrm/school.svg?branch=windows-build-pack-php)](https://travis-ci.org/sugarcrm/school)).  
 Clicking on the build status will open the detailed results in Travis CI.
 
 You can also view build results in Pull Requests.  Toward the bottom of each Pull Request, you can click "Show all 
