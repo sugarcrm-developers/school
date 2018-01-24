@@ -232,9 +232,7 @@ Jenkins suggested plugins.
 Once you have Jenkins set up, you'll want to create a new project in Jenkins that will build the school project. 
 
 1. On the Jenkins dashboard, click **New Item**.
-1. Name your new item **ProfessorM**.  
-Note:  if you name your item something other than **ProfessorM**, you will need to update your copy of 
-[buildPackageInJenkins.sh](buildPackageInJenkins.sh) and push your change to your Git repo.
+1. Name your new item something like **ProfessorM**.  
 1. Select **Freestyle project** and click **OK**. The item configuration page will display.
 1. In the **Source Code Management** section, select **Git.**
 1. Input your Repository URL (for example, `https://github.com/sugarcrm/school`) and add your credentials.
@@ -278,6 +276,21 @@ PHPUnit results:
 Professor M package results:
 
 ![ProfM zip](images/jenkins-profm.png)
+
+Tip:  If you see errors in the Console Output about git not being found, you may need to update your Jenkins configuration.
+On the Jenkins dashboard, click **Manage Jenkins**. Click **Conifgure System**. In the **Global Properties** section,
+enable the **Tool Locations** checkbox. In the Name box, select **(Git) Default**.  In the Home box, input the path
+to the Git installation (for example, `/usr/bin/git`).  Click **Save**.
+
+Tip for those running Jenkins in Docker:  If you see errors in the Console Output similar to 'Fatal error: Unable to 
+find local grunt', you may need to update your Jenkins job.  The likely cause is that your 
+`LOCALWORKSPACEPATH` is not pointing to the path of the workspace that is storing the school repo's files that are being pulled out of 
+GitHub.  You can diagnose if this is the issue by adding `docker exec my-yarn pwd` and `docker exec my-yarn ls` around 
+line 13 to see what is in the `workspace` directory after the `docker run` command has mounted the volume.  If you do 
+not see files from the school repo in the `workspace`, you need to update `LOCALWORKSPACEPATH`. The easiest way to 
+update `LOCALWORKSPACEPATH` is to pass in the correct value (for example `/Users/lschaefer/jenkins/workspace/ProfessorM`)
+as an argument when you call the script.  Open the configure page for your Jenkins job and update the Build step to have
+a script like `bash -ex buildPackageInJenkins.sh /Users/lschaefer/jenkins/workspace/ProfessorM`.
 
 ### About the build
 
