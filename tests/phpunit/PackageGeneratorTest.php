@@ -792,6 +792,19 @@ class PackageGeneratorTest extends TestCase
             $output);
     }
 
+    /**
+     * Unit test to verify that .DS_Store and .git subdirectories are excluded from MLP.
+     * They will fail if we try to install in OD instances due to package scanner.
+     */
+    public function testExcludesDSStoreGitDirectories(){
+        $pg = new PackageGenerator();
+        $fullPathDSStore = "src" . DIRECTORY_SEPARATOR . "modules" . DIRECTORY_SEPARATOR. ".DS_Store";
+        $this->assertFalse($pg->shouldIncludeFileInZip($fullPathDSStore), "Should exclude " . $fullPathDSStore);
+        $this->assertFalse($pg->shouldIncludeFileInZip("src" . DIRECTORY_SEPARATOR . "modules" . DIRECTORY_SEPARATOR. ".git"), "Should exclude .git in path");
+        $this->assertFalse($pg->shouldIncludeFileInZip(".DS_Store"), "Should exclude .DS_Store");
+        $this->assertFalse($pg->shouldIncludeFileInZip(".git"), "Should exclude .git");
+    }
+
     public function testEchoExcludedFilesWithNoFilesToExclude(){
         $filesToExclude = array();
 

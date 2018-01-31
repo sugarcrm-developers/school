@@ -38,6 +38,11 @@ class PackageGenerator
             preg_match('/.*custom[\/\\\]modules[\/\\\].+[\/\\\]Ext[\/\\\].*/', $fileRelative)){
             return false;
         }
+        // Fix for MacOS, Git submodules
+        if (preg_match('/\.(DS_Store|git)$/', $fileRelative))
+        {
+            return false;
+        }
         return true;
     }
 
