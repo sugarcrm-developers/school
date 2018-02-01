@@ -1,5 +1,5 @@
 <?php
-
+// Copyright 2018 SugarCRM Inc.  Licensed by SugarCRM under the Apache 2.0 license.
 namespace Sugarcrm\ProfessorM;
 
 use function array_push;

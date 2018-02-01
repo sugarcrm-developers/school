@@ -22,23 +22,9 @@ All of the tutorials at UnCon 2017 will be based on Professor M's School for Gif
 ## About the scenario
 Professor M aka Professor Marum has created an exclusive not-for-profit school for gifted coders.  
 
-The school uses Sugar for the following use cases:
-- Managing applicants, current students, former students, and professors
-- Tracking super groups
-- Soliciting donations from alumni and alumni affiliated super groups
+Learn more about the implemented [Use Cases](docs/UseCases.md) in the [docs](docs/).
 
-For those familiar with Sugar, you'll notice that some of the standard modules have been renamed.
-
-| Professor M Module | Original Sugar Module |
-| :--- | :--- |
-| Super Groups | Accounts |
-| Applicants | Leads |
-| Students | Contacts |
-| Professors | New custom person-type module |
-| Donations | Opportunities |
-| Funding Line Items | Revenue Line Items|
-
-Get all of the details on the Professor M scenario in the video below.
+Want a quick summary? Watch the video below we put together for SugarCon 2017.
 [![The Professor M Scenario Part 1 - What is it and why should you care?](images/profmvideo1.png)](https://youtu.be/aKBTKcaney4 "The Professor M Scenario Part 1 - What is it and why should you care?")
 
 ## Installation instructions
