@@ -1,4 +1,5 @@
 <?php
+// Copyright 2018 SugarCRM Inc.  Licensed by SugarCRM under the Apache 2.0 license.
 declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;

@@ -1,8 +1,9 @@
 <?php
+// Copyright 2018 SugarCRM Inc.  Licensed by SugarCRM under the Apache 2.0 license.
 /*
  * A valid platform name requires:
  * - Max length of 127 characters
  * - Valid characters are: a-z, A-Z, 0-9 - (hypen) _ (underscore)
  */
-$platforms[] = 'api';
+$platforms[] = 'profm_import';
 

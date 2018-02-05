@@ -1,5 +1,5 @@
 <?php
- // created: 2017-08-07 16:15:53
+ // created: 2018-02-01 21:17:38
 $dictionary['Contact']['fields']['alias_c']['labelValue']='Alias';
 $dictionary['Contact']['fields']['alias_c']['full_text_search']=array (
   'enabled' => '0',

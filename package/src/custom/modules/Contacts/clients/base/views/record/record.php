@@ -220,6 +220,8 @@ array (
               ),
               3 => 
               array (
+                'name' => 'vitals_c',
+                'label' => 'LBL_VITALS',
               ),
               4 => 
               array (
@@ -234,6 +236,29 @@ array (
             ),
           ),
           2 => 
+          array (
+            'newTab' => false,
+            'panelDefault' => 'expanded',
+            'name' => 'death_panel',
+            'label' => 'LBL_RECORDVIEW_PANEL1',
+            'columns' => 2,
+            'labelsOnTop' => 1,
+            'placeholders' => 1,
+            'fields' => 
+            array (
+              0 => 
+              array (
+                'name' => 'cause_of_death_c',
+                'label' => 'LBL_CAUSE_OF_DEATH',
+              ),
+              1 => 
+              array (
+                'name' => 'flowers_sent_c',
+                'label' => 'LBL_FLOWERS_SENT',
+              ),
+            ),
+          ),
+          3 => 
           array (
             'columns' => 2,
             'name' => 'panel_hidden',
