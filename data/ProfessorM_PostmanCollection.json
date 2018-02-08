@@ -2492,6 +2492,104 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Create Reports",
+			"description": "",
+			"item": [
+				{
+					"name": "Create Student Health Report",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"var idOfReport = jsonData.id;",
+									"",
+									"tests[\"Successful POST request\"] = responseCode.code === 200;",
+									"tests[\"id exists\"] = idOfReport !== null || idOfReport !== \"\";"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "OAuth-Token",
+								"value": "{{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "        {\n            \"name\": \"Student Health Report\",\n            \"description\": \"\",\n            \"deleted\": false,\n            \"module\": \"Contacts\",\n            \"report_type\": \"detailed_summary\",\n            \"content\": \"{\\\"display_columns\\\":[{\\\"name\\\":\\\"full_name\\\",\\\"label\\\":\\\"Name\\\",\\\"table_key\\\":\\\"self\\\"},{\\\"name\\\":\\\"alias_c\\\",\\\"label\\\":\\\"Alias\\\",\\\"table_key\\\":\\\"self\\\"},{\\\"name\\\":\\\"vitals_c\\\",\\\"label\\\":\\\"Vitals\\\",\\\"table_key\\\":\\\"self\\\"}],\\\"module\\\":\\\"Contacts\\\",\\\"group_defs\\\":[{\\\"name\\\":\\\"vitals_c\\\",\\\"label\\\":\\\"Vitals\\\",\\\"table_key\\\":\\\"self\\\",\\\"type\\\":\\\"enum\\\",\\\"force_label\\\":\\\"Vitals\\\"}],\\\"summary_columns\\\":[{\\\"name\\\":\\\"vitals_c\\\",\\\"label\\\":\\\"Vitals\\\",\\\"table_key\\\":\\\"self\\\"},{\\\"name\\\":\\\"count\\\",\\\"label\\\":\\\"Count\\\",\\\"field_type\\\":\\\"\\\",\\\"group_function\\\":\\\"count\\\",\\\"table_key\\\":\\\"self\\\"}],\\\"report_name\\\":\\\"Student Health Report\\\",\\\"chart_type\\\":\\\"vBarF\\\",\\\"do_round\\\":1,\\\"chart_description\\\":\\\"\\\",\\\"numerical_chart_column\\\":\\\"self:count\\\",\\\"numerical_chart_column_type\\\":\\\"\\\",\\\"assigned_user_id\\\":\\\"1\\\",\\\"report_type\\\":\\\"summary\\\",\\\"full_table_list\\\":{\\\"self\\\":{\\\"value\\\":\\\"Contacts\\\",\\\"module\\\":\\\"Contacts\\\",\\\"label\\\":\\\"Contacts\\\",\\\"dependents\\\":[]}},\\\"filters_def\\\":{\\\"Filter_1\\\":{\\\"operator\\\":\\\"AND\\\"}}}\",\n            \"is_published\": false,\n            \"last_run_date\": \"\",\n            \"report_cache_id\": \"\",\n            \"chart_type\": \"vBarF\",\n            \"schedule_type\": \"pro\",\n            \"favorite\": false,\n            \"next_run\": \"\",\n            \"assigned_user_id\": \"1\"\n        }"
+						},
+						"url": {
+							"raw": "{{url}}{{rest_endpoint}}/Reports",
+							"host": [
+								"{{url}}{{rest_endpoint}}"
+							],
+							"path": [
+								"Reports"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Create Cause of Death Report",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"var idOfReport = jsonData.id;",
+									"",
+									"tests[\"Successful POST request\"] = responseCode.code === 200;",
+									"tests[\"id exists\"] = idOfReport !== null || idOfReport !== \"\";"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "OAuth-Token",
+								"value": "{{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Cause of Death\",\n    \"description\": \"\",\n    \"module\": \"Contacts\",\n    \"report_type\": \"tabular\",\n    \"content\": \"{\\\"display_columns\\\":[{\\\"name\\\":\\\"full_name\\\",\\\"label\\\":\\\"Name\\\",\\\"table_key\\\":\\\"self\\\"},{\\\"name\\\":\\\"alias_c\\\",\\\"label\\\":\\\"Alias\\\",\\\"table_key\\\":\\\"self\\\"},{\\\"name\\\":\\\"cause_of_death_c\\\",\\\"label\\\":\\\"Cause of Death\\\",\\\"table_key\\\":\\\"self\\\"}],\\\"module\\\":\\\"Contacts\\\",\\\"group_defs\\\":[],\\\"summary_columns\\\":[],\\\"order_by\\\":[{\\\"name\\\":\\\"full_name\\\",\\\"vname\\\":\\\"Name\\\",\\\"type\\\":\\\"fullname\\\",\\\"sort_on\\\":\\\"last_name\\\",\\\"source\\\":\\\"non-db\\\",\\\"group\\\":\\\"last_name\\\",\\\"duplicate_on_record_copy\\\":\\\"always\\\",\\\"table_key\\\":\\\"self\\\",\\\"sort_dir\\\":\\\"a\\\"}],\\\"report_name\\\":\\\"Cause of Death\\\",\\\"do_round\\\":1,\\\"numerical_chart_column\\\":\\\"\\\",\\\"numerical_chart_column_type\\\":\\\"\\\",\\\"assigned_user_id\\\":\\\"1\\\",\\\"report_type\\\":\\\"tabular\\\",\\\"full_table_list\\\":{\\\"self\\\":{\\\"value\\\":\\\"Contacts\\\",\\\"module\\\":\\\"Contacts\\\",\\\"label\\\":\\\"Contacts\\\"}},\\\"filters_def\\\":{\\\"Filter_1\\\":{\\\"operator\\\":\\\"AND\\\",\\\"0\\\":{\\\"name\\\":\\\"vitals_c\\\",\\\"table_key\\\":\\\"self\\\",\\\"qualifier_name\\\":\\\"is\\\",\\\"input_name0\\\":[\\\"deceased\\\"]}}},\\\"chart_type\\\":\\\"none\\\"}\",\n    \"is_published\": false,\n    \"last_run_date\": \"\",\n    \"report_cache_id\": \"\",\n    \"chart_type\": \"none\",\n    \"schedule_type\": \"pro\",\n    \"favorite\": false,\n    \"next_run\": \"\",\n    \"assigned_user_id\": \"1\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}{{rest_endpoint}}/Reports",
+							"host": [
+								"{{url}}{{rest_endpoint}}"
+							],
+							"path": [
+								"Reports"
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
