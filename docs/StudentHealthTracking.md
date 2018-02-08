@@ -29,7 +29,7 @@ Report JSON data is then retrieved from dev instance using the `GET /rest/Report
 
 | Module | Extension | Name | Description | 
 | :--- | :--- | :---- | :---- |
-|Contacts|Vardefs|`vital_c`|Dropdown for tracking vital status of student.|
+|Contacts|Vardefs|`vital_c`|Dropdown for tracking vital status of student. Audit field for tracking datestamps|
 |Contacts|Vardefs|`cause_of_death_c`|Text field that allows Prof. M to enter cause of death.|
 |Contacts|Vardefs|`flowers_sent_c`|Checkbox field that allows Prof M. to track if flowers were ordered.|
 |Contacts|Dependencies|`cause_of_death_required`|Makes `cause_of_death_c` a required field when `vital_c` is set to `deceased`.|
