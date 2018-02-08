@@ -8,7 +8,7 @@ record should be automatically created in the gradebook app.
 
 The gradebook app is being simulated by the files inside of 
 [package/src/custom/gradebook_fake](../package/src/custom/gradebook_fake).  If the gradebook app were real, 
-it would be stored outside of Sugar. 
+it would be implemented outside of Sugar as a separate system.
 
 The simulated gradebook app does not currently store any data.  It simulates responses that would be returned from an 
 external gradebook app.
@@ -28,14 +28,15 @@ to your php.  For example:
 
 ## Implementation Technique
 
-An after-save logic hook that puts a job on the Sugar Job Queue was created based on the example in the 
+An after_save logic hook that puts a job on the Sugar Job Queue was created based on the example in the 
 [Sugar Developer Guide](http://support.sugarcrm.com/SmartLinks/Developer_Guide/Architecture/Job_Queue/Jobs/Queuing_Logic_Hook_Actions).
 
 ## Implementation Details
 
-An after-save logic hook is defined in [profm.php](../package/src/custom/Extension/modules/Contacts/Ext/LogicHooks/profm.php).
+An after_save logic hook is defined in 
+[add_to_gradebook.profm.php](../package/src/custom/Extension/modules/Contacts/Ext/LogicHooks/add_to_gradebook.profm.php).
 
-Whenever a new record is created in the Contacts (Students) module, the after-save logic hook will be triggered.  The 
+Whenever a new record is created in the Contacts (Students) module, the after_save logic hook will be triggered.  The 
 logic hook indicates that the `AddStudentToGradebook()` function in 
 [Students_Gradebook.php](../package/src/custom/modules/Contacts/Students_Gradebook.php) should be called.
 
