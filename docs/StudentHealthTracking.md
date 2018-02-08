@@ -1,15 +1,15 @@
-# Student Vital Tracking
+# Student Health Tracking
 
-When doing battle against the forces of evil, it is possible that a coder is incapacitated by carpal tunnel syndrome or even killed in a freak hoverboard accident. Professor M needs to report on the cause of death of any coder who has died in order to prevent the same mistakes from happening again.
+When doing battle against the forces of evil, it is possible that a coder is incapacitated by carpal tunnel syndrome or even killed in a freak hoverboard accident. Professor M needs to keep track of the health of his students to make sure they are happy and productive and stay out of danger.
 
 ## Implementation Technique
 
 Sugar Studio was used to add custom fields, add a new drop down list, and to make Record View customizations within a dev instance. Sugar Logic is used with simple manually created custom Dependencies that are applied to conditionally change Record view panel visibility and make fields required.
  
 Finally, these changes are extracted out of dev instance and included in this package.
- 
-Adding these fields is enough to allow Prof. M to use out of the box functionality to create reports or list view filters to achieve his business goals.
 
+Next we rely on out of the box Reporting functionality to help Prof. M keep track of the health of the student body.
+ 
 ## Implementation Details
 
 A custom Vitals dropdown field (`vital_c`) was added to the Students module and the Record view. The following vital statuses are selectable.
@@ -21,7 +21,9 @@ A custom Vitals dropdown field (`vital_c`) was added to the Students module and 
 
 When `deceased` is selected, a new Death Information panel appears on the Record view and users are required to enter a Cause of Death (`cause_of_death_c`).
 
-Professor M can then build reports based upon vital status and the common causes of death.
+For the last step, Reports were created using the standard Reports module within in a dev instance. These reports rely primarily on `vital_c` and `cause_of_death_c` fields.
+
+Report JSON data is then retrieved from dev instance using the `GET /rest/Reports` REST endpoint. The JSON report representations were then converted by hand into `POST /rest/Reports` requests and tested. The final working `POST` requests are then added to Prof M. data collection which makes deploying these reports into other instances easy. 
 
 ## Extensions
 
@@ -41,5 +43,10 @@ Professor M can then build reports based upon vital status and the common causes
 |Contacts|Record|Vitals dropdown (`vital_c`) has been added to main business card. A Death Information (`death_panel`) panel was also added that contains custom fields named `cause_of_death_c` and `flowers_sent_c`.|
  
  
+## Reports
 
+|Name | Module | Type | Description |
+| :--- | :--- | :--- | :--- |
+|Student Health Report|Contacts|Summation with Details| A pie chart that is grouped by Student vital status. The details section shows student names, alias, etc. |
+|Cause of Death|Contacts|Rows and Columns| A table of 'deceased' students that includes name, alias, and cause of death. |
 
