@@ -19,7 +19,10 @@
     },
     "autoload": {
         "psr-4": {
-            "Sugarcrm\\ProfessorM\\": "package/"
+            "Sugarcrm\\ProfessorM\\": "package/",
+            "Sugarcrm\\Sugarcrm\\custom\\": [
+                "package/src/custom/"
+            ]
         }
     }
 }
