@@ -1,0 +1,56 @@
+<!--
+/*
+ * Your installation or use of this SugarCRM file is subject to the applicable
+ * terms available at
+ * http://support.sugarcrm.com/Resources/Master_Subscription_Agreements/.
+ * If you do not agree to all of the applicable terms or do not have the
+ * authority to bind the entity as an authorized representative, then do not
+ * install or use this SugarCRM file.
+ *
+ * Copyright (C) SugarCRM Inc. All rights reserved.
+ */
+-->
+
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.1/phpunit.xsd"
+         backupGlobals="false"
+         backupStaticAttributes="false"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false"
+         bootstrap="../../../../tests/unit-php/TestBootstrap.php"
+         beStrictAboutOutputDuringTests="true"
+         beStrictAboutTestsThatDoNotTestAnything="true"
+         beStrictAboutTestSize="true"
+         beStrictAboutCoversAnnotation="false"
+>
+
+    <php>
+        <ini name="intl.default_locale" value="en"/>
+        <ini name="intl.error_level" value="0"/>
+        <ini name="memory_limit" value="-1"/>
+    </php>
+    <testsuites>
+        <testsuite name="all">
+            <directory>./</directory>
+            <directory>modules/</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="false">
+            <directory suffix=".php">../../data/</directory>
+            <directory suffix=".php">../../src/</directory>
+            <directory suffix=".php">../../include/</directory>
+            <directory suffix=".php">../../clients/</directory>
+            <directory suffix=".php">../../modules/</directory>
+            <directory suffix=".php">../../api/</directory>
+        </whitelist>
+    </filter>
+    <listeners>
+        <listener class="Sugarcrm\SugarcrmTestsUnit\AnnotationListener"/>
+        <listener class="Sugarcrm\SugarcrmTestsUnit\ResultListener"/>
+    </listeners>
+</phpunit>

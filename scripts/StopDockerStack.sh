@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+# This script stops the appropriate Sugar Docker stack.
+
+
+######################################################################
+# Variables
+######################################################################
+
+if [[ -z "$1" ]]
+then
+    echo "Not all required command line arguments were set. Please run the script again with the required arguments:
+        1: Sugar version (Example: 7.11)
+        2: Path to where the Sugar Docker files should be stored relative to the current directory. WARNING: The
+           data/app/sugar directory will be deleted and recreated.
+
+        For example: ./StopDockerStack.sh 7.11 workspace/sugardocker"
+    exit 1
+fi
+
+# The Sugar version
+sugarVersion=$1
+
+# The local directory where the Sugar Docker stacks are stored
+dockerDirectory=$2
+
+
+######################################################################
+# Setup
+######################################################################
+
+if [[ "$sugarVersion" == "7.10" || "$sugarVersion" == "7.11" ]]
+then
+    ymlPath=$dockerDirectory/stacks/sugar710/php71.yml
+elif [[ "$sugarVersion" == "7.9" ]]
+then
+    ymlPath=$dockerDirectory/stacks/sugar79/php71.yml
+else
+    echo "Unable to identify Docker Stack yml for Sugar version $sugarVersion"
+    exit 1
+fi
+
+
+######################################################################
+# Stop the Docker Stack
+######################################################################
+
+docker-compose -f $ymlPath down
