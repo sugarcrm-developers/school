@@ -144,9 +144,8 @@ cd $sugarDirectory
 # Delete the cookie jar file if it exists
 rm -f $cookieFile
 
-# Create the cookie file and set the file permissions (required for Travis CI)
-#sudo touch $cookieFile
-
+# Set the file permissions for when sudo is required and is not required
+chmod -R 777 .
 sudo chmod -R 777 .
 
 

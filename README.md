@@ -178,8 +178,8 @@ The build has four Environment Variables that have been configured in the projec
 - DEV_COMMUNITY_USERNAME: The username for an account that has access to the 
 [SugarCRM Developer Builds Space](https://community.sugarcrm.com/community/developer/developer-builds)
 - DEV_COMMUNITY_PASSWORD: The password associated with the above account
-- GIT_HUB_USERNAME: The username for a GitHub account that has access to https://github.com/sugarcrm/unit-tests
-- GIT_HUB_PASSWORD: The password associated with the above account
+- GITHUB_USERNAME: The username for a GitHub account that has access to https://github.com/sugarcrm/unit-tests
+- GITHUB_PASSWORD: The password associated with the above account
 
 ![Travis CI Environment Variables](images/travisenvvars.png)
 
@@ -300,8 +300,8 @@ and manually trigger the builds instead.
 1. In the **Build Environment** section, select the **Delete workspace before build starts** option and the **Use secret
 text(s) or file(s)** option.
 1. In the **Bindings** section, select **Add** > **Username and password (separated)**. Then input the following:
-    1. Username Variable: `GIT_HUB_USERNAME`
-    1. Password Variable: `GIT_HUB_PASSWORD`
+    1. Username Variable: `GITHUB_USERNAME`
+    1. Password Variable: `GITHUB_PASSWORD`
     1. Credentials: **Specific credentials**
     1. Select the GITHUB_SUGARCRM_UNIT_TESTS credentials.
 1. In the **Bindings** section, select **Add** > **Username and password (separated)**. Then input the following:
@@ -338,7 +338,7 @@ text(s) or file(s)** option.
      
     bash -ex RunPackUnitTestsAndBuildProfMPackage.sh $SUGAR_WORKSPACE_PATH
      
-    bash SetupEnvAndRunPHPUnitTests.sh $DEV_COMMUNITY_USERNAME $DEV_COMMUNITY_PASSWORD $SUGAR_VERSION $SUGAR_EDITION $GIT_HUB_USERNAME $GIT_HUB_PASSWORD $SUGAR_DOCKER_DIRECTORY $SUGAR_SOURCE_ZIPS_DIRECTORY
+    bash SetupEnvAndRunPHPUnitTests.sh $DEV_COMMUNITY_USERNAME $DEV_COMMUNITY_PASSWORD $SUGAR_VERSION $SUGAR_EDITION $GITHUB_USERNAME $GITHUB_PASSWORD $SUGAR_DOCKER_DIRECTORY $SUGAR_SOURCE_ZIPS_DIRECTORY
     ```
     Be sure to update the variables appropriately.
 1. In the **Post-build Actions** section, click **Add post-build action** and select **Archive the artifacts**.

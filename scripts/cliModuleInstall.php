@@ -1,5 +1,4 @@
 #!/usr/bin/env php
-
 <?php
 
 # Script taken from https://github.com/sugarcrm/IPRestrictionManager/blob/master/.travis/cliModuleInstall.php

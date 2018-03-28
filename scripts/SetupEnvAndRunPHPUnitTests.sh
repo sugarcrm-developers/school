@@ -59,6 +59,8 @@ sugarSourceZipsDirectory=$8
 # Setup
 ######################################################################
 
+# Set permission for when sudo is required and is not required
+chmod -R 777 .
 sudo chmod -R 777 .
 
 mkdir workspace
