@@ -1,12 +1,15 @@
 <?php
 
+namespace Sugarcrm\SugarcrmTestsUnit\modules\Schedulers\Ext\ScheduledTasks;
+
 use Sugarcrm\SugarcrmTestsUnit\TestMockHelper;
 use Sugarcrm\Sugarcrm\Util\Uuid;
 
+require_once 'custom/Extension/modules/Schedulers/Ext/ScheduledTasks/StudentGradebookJob.php';
 /**
  * @coversDefaultClass \StudentGradebookJob
  */
-class StudentGradebookJobTest extends \PHPUnit_Framework_TestCase
+class StudentGradebookJobTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var a partial mock of a Student (Contact) with an id, first name, last name, and email
@@ -28,10 +31,9 @@ class StudentGradebookJobTest extends \PHPUnit_Framework_TestCase
      */
     private $sgJob;
 
-    public function setup()
+    protected function setUp()
     {
-        \SugarAutoLoader::load('../../../Extension/modules/Schedulers/Ext/ScheduledTasks/StudentGradebookJob.php');
-        parent::setup();
+        parent::setUp();
 
         // Create a new Student (Contact) with an id, first name, last name, and email
         $this->student = TestMockHelper::createPartialMock($this, '\\Contact', []);

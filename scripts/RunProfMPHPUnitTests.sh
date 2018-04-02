@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-# This script runs the Sugar PHPUnit tests. It assumes the Sugar Docker stack has already been started and that
-# SetupSugarPHPUnit tests has completed successfully.
+# This script runs the PHPUnit tests for the Professor M Module Loadable Package. It assumes the Sugar Docker stack has
+# already been started and that SetupSugarPHPUnit tests has completed successfully.
 
 
 ######################################################################

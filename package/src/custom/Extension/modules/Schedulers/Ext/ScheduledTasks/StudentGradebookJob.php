@@ -2,7 +2,8 @@
 
 use Sugarcrm\Sugarcrm\custom\gradebook_fake\RecordManager;
 
-class StudentGradebookJob implements RunnableSchedulerJob {
+class StudentGradebookJob implements RunnableSchedulerJob
+{
 
     /**
      * @var SchedulersJob
@@ -18,16 +19,15 @@ class StudentGradebookJob implements RunnableSchedulerJob {
 
     /**
      * This function defines the job that adds a new student to the GradebookFake app
-     * @param $job Information about the job. $job->data should be the id for the new Student (contact) record
+     * @param string $data The id for the new Student (contact) record
      * @return bool true if a record was successfully created in the GradebookFake app
      */
     public function run($data)
     {
-        if (!empty($data))
-        {
+        if (!empty($data)) {
             $bean = $this->getContactBean($data);
 
-            try{
+            try {
                 //Call the external GradebookFake app to create a new record in it
                 $rm = $this->getRecordManager();
                 $success = $rm->createStudentRecord($bean->email1, $bean->first_name, $bean->last_name);
@@ -50,10 +50,20 @@ class StudentGradebookJob implements RunnableSchedulerJob {
         return false;
     }
 
-    protected function getContactBean($id){
+    /**
+     * Get the Contact (Student) bean for the given id
+     * @param $id The id for which you want to retrieve a Contact (Student) bean
+     * @return null|SugarBean
+     */
+    protected function getContactBean($id)
+    {
         return BeanFactory::getBean('Contacts', $id);
     }
 
+    /**
+     * Get the Record Manager for the GradebookFake app
+     * @return RecordManager The Record Manager for the GradebookFake app
+     */
     protected function getRecordManager()
     {
         return new RecordManager();

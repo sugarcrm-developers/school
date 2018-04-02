@@ -13,7 +13,7 @@ class RecordManagerTest extends TestCase
 {
     /**
      * Check that when valid params are sent to createStudentRecord, true is returned
-     * @covers createStudentRecord
+     * @covers ::createStudentRecord
      */
     public function testRecordManagerValidParams(){
         $rm = new RecordManager();
@@ -23,7 +23,7 @@ class RecordManagerTest extends TestCase
     /**
      * Check that when the email address forceerror@example.com is used as a param for createStudentRecord, an
      * exception is thrown
-     * @covers createStudentRecord
+     * @covers ::createStudentRecord
      */
     public function testRecordManagerForceException(){
         $rm = new RecordManager();

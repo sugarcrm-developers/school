@@ -1,9 +1,5 @@
 <?php
 
-require_once 'include/SugarQueue/SugarJobQueue.php';
-
-if (!defined('sugarEntry') || !sugarEntry) die('Not A Valid Entry Point');
-
 /**
  * Class Students_Gradebook
  * Handles creating a job for the Sugar Job Queue that adds a new student to the GradebookFake app

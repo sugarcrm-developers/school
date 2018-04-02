@@ -3,12 +3,12 @@
 use Sugarcrm\SugarcrmTestsUnit\TestMockHelper;
 use Sugarcrm\Sugarcrm\Util\Uuid;
 
-require_once 'include/SugarQueue/SugarJobQueue.php';
+require_once 'custom/modules/Contacts/Students_Gradebook.php';
 
 /**
  * @coversDefaultClass \Students_Gradebook
  */
-class Student_GradebookTest extends \PHPUnit_Framework_TestCase
+class Student_GradebookTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -33,8 +33,6 @@ class Student_GradebookTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        \SugarAutoLoader::load('../../../modules/Contacts/Students_Gradebook.php');
-
         parent::setUp();
         $GLOBALS['current_user'] = $this->createPartialMock('\\User', []);
         $GLOBALS['current_user']->id = Uuid::uuid1();
@@ -80,8 +78,8 @@ class Student_GradebookTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddStudentToGradebook_DoesNotCreateTheJob_NotAfterSaveEvent()
     {
-        $this->sg->addStudentToGradebook($this->student, 'after_relationship_add', ['isUpdate' => false]);
         $this->queue->expects($this->never())->method('submitJob');
+        $this->sg->addStudentToGradebook($this->student, 'after_relationship_add', ['isUpdate' => false]);
     }
 
     /**
@@ -89,8 +87,8 @@ class Student_GradebookTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddStudentToGradebook_DoesNotCreateTheJob_IsUpdateEvent()
     {
-        $this->sg->addStudentToGradebook($this->student, 'after_save', ['isUpdate' => true]);
         $this->queue->expects($this->never())->method('submitJob');
+        $this->sg->addStudentToGradebook($this->student, 'after_save', ['isUpdate' => true]);
     }
 
 }
