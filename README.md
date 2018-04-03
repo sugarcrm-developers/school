@@ -175,9 +175,10 @@ You can then click Details to open the build results in Travis CI.
 ### About the build
 
 The build has four Environment Variables that have been configured in the project settings in Travis CI:
-- DEV_COMMUNITY_USERNAME: The username for an account that has access to the 
-[SugarCRM Developer Builds Space](https://community.sugarcrm.com/community/developer/developer-builds)
-- DEV_COMMUNITY_PASSWORD: The password associated with the above account
+- SUGARCRM_USERNAME: The username for an account that has access to the 
+[SugarCRM Developer Builds Space](https://community.sugarcrm.com/community/developer/developer-builds) and the [Sugar
+Store](https://store.sugarcrm.com/download)
+- SUGARCRM_PASSWORD: The password associated with the above account
 - GITHUB_USERNAME: The username for a GitHub account that has access to https://github.com/sugarcrm/unit-tests
 - GITHUB_PASSWORD: The password associated with the above account
 
@@ -265,13 +266,14 @@ Credentials Binding Plugin.)
    1. ID: GITHUB_SUGARCRM_UNIT_TESTS
    1. Description: GitHub account that has access to https://github.com/sugarcrm/unit-tests
 1. Create new global credentials for the account that has access to the 
-   [SugarCRM Developer Builds Space](https://community.sugarcrm.com/community/developer/developer-builds).  
+   [SugarCRM Developer Builds Space](https://community.sugarcrm.com/community/developer/developer-builds) and the [Sugar
+   Store](https://store.sugarcrm.com/download).  
    1. Kind: **Username with password**
    1. Scope: **Global** 
-   1. Username: your SugarCRM Developer Builds Space username
-   1. Password: your SugarCRM Developer Builds Space password
-   1. ID: SUGARCRM_DEVELOPER_BUILDS_SPACE
-   1. Description: Account that has access to the SugarCRM Developer Builds Space
+   1. Username: your SugarCRM username
+   1. Password: your SugarCRM password
+   1. ID: SUGARCRM_ACCOUNT
+   1. Description: SugarCRM Account
 1. Create a new global secret for the path to where Sugar Docker will be stored on your host machine (not the path on 
 Jenkins).
    1. Kind: **Secret text**
@@ -305,10 +307,10 @@ text(s) or file(s)** option.
     1. Credentials: **Specific credentials**
     1. Select the GITHUB_SUGARCRM_UNIT_TESTS credentials.
 1. In the **Bindings** section, select **Add** > **Username and password (separated)**. Then input the following:
-    1. Username Variable: `DEV_COMMUNITY_USERNAME`
-    1. Password Variable: `DEV_COMMUNITY_PASSWORD`
+    1. Username Variable: `SUGARCRM_USERNAME`
+    1. Password Variable: `SUGARCRM_PASSWORD`
     1. Credentials: **Specific credentials**
-    1. Select the SUGARCRM_DEVELOPER_BUILDS_SPACE credentials.
+    1. Select the SUGARCRM_ACCOUNT credentials.
 1. In the **Bindings** section, select **Add** > **Secret text**. Then input the following:
     1. Variable: `PATH_TO_SUGAR_DOCKER_ON_HOST`
     1. Credentials: **Specific credentials**
@@ -329,16 +331,16 @@ text(s) or file(s)** option.
     SUGAR_DOCKER_DIRECTORY="workspace/sugardocker"
     
     # This variable is completely optional.  If you want to store the Sugar source zips on your local machine instead
-    # of downloading them from the SugarCRM Developer Builds space, input the path to where the Sugar source zips are
-    # stored. For example: /var/sugardocker/data/app/sugar_source_zips. Note that your Sugar source zips MUST follow
-    # this naming convention: Sugar$sugarEdition-$sugarVersion.zip (for example: SugarEnt-7.11.zip).
+    # of downloading them from the SugarCRM Developer Builds space or Sugar Store, input the path to where the Sugar 
+    # source zips are stored. For example: /var/sugardocker/data/app/sugar_source_zips. Note that your Sugar source zips 
+    # MUST follow this naming convention: Sugar$sugarEdition-$sugarVersion.zip (for example: SugarEnt-7.11.zip).
     # SUGAR_SOURCE_ZIPS_DIRECTORY=""
      
     cd scripts
      
     bash -ex RunPackUnitTestsAndBuildProfMPackage.sh $SUGAR_WORKSPACE_PATH
      
-    bash SetupEnvAndRunPHPUnitTests.sh $DEV_COMMUNITY_USERNAME $DEV_COMMUNITY_PASSWORD $SUGAR_VERSION $SUGAR_EDITION $GITHUB_USERNAME $GITHUB_PASSWORD $SUGAR_DOCKER_DIRECTORY $SUGAR_SOURCE_ZIPS_DIRECTORY
+    bash SetupEnvAndRunPHPUnitTests.sh $SUGARCRM_USERNAME $SUGARCRM_PASSWORD $SUGAR_VERSION $SUGAR_EDITION $GITHUB_USERNAME $GITHUB_PASSWORD $SUGAR_DOCKER_DIRECTORY $SUGAR_SOURCE_ZIPS_DIRECTORY
     ```
     Be sure to update the variables appropriately.
 1. In the **Post-build Actions** section, click **Add post-build action** and select **Archive the artifacts**.
