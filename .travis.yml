@@ -31,7 +31,7 @@ jobs:
     - cd ../scripts
     - sudo service mysql stop
     script:
-      - ./SetupEnvAndRunPHPUnitTests.sh $DEV_COMMUNITY_USERNAME $DEV_COMMUNITY_PASSWORD $SUGAR_VERSION $SUGAR_EDITION $GITHUB_USERNAME $GITHUB_PASSWORD workspace/sugardocker
+      - ./SetupEnvAndRunPHPUnitTests.sh $SUGARCRM_USERNAME $SUGARCRM_PASSWORD $SUGAR_VERSION $SUGAR_EDITION $GITHUB_USERNAME $GITHUB_PASSWORD workspace/sugardocker
   - stage: Run PHPUnit
     sudo: required
     language: php
@@ -47,7 +47,7 @@ jobs:
     - cd ../scripts
     - sudo service mysql stop
     script:
-      - ./SetupEnvAndRunPHPUnitTests.sh $DEV_COMMUNITY_USERNAME $DEV_COMMUNITY_PASSWORD $SUGAR_VERSION $SUGAR_EDITION $GITHUB_USERNAME $GITHUB_PASSWORD workspace/sugardocker
+      - ./SetupEnvAndRunPHPUnitTests.sh $SUGARCRM_USERNAME $SUGARCRM_PASSWORD $SUGAR_VERSION $SUGAR_EDITION $GITHUB_USERNAME $GITHUB_PASSWORD workspace/sugardocker
   - stage: Run PHPUnit
     sudo: required
     language: php
@@ -63,7 +63,7 @@ jobs:
     - cd ../scripts
     - sudo service mysql stop
     script:
-      - ./SetupEnvAndRunPHPUnitTests.sh $DEV_COMMUNITY_USERNAME $DEV_COMMUNITY_PASSWORD $SUGAR_VERSION $SUGAR_EDITION $GITHUB_USERNAME $GITHUB_PASSWORD workspace/sugardocker
+      - ./SetupEnvAndRunPHPUnitTests.sh $SUGARCRM_USERNAME $SUGARCRM_PASSWORD $SUGAR_VERSION $SUGAR_EDITION $GITHUB_USERNAME $GITHUB_PASSWORD workspace/sugardocker
   - stage: Build & Post on GitHub
     language: php
     php: '7.1'

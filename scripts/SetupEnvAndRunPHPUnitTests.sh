@@ -7,7 +7,7 @@
 if [[ -z "$1" ]] || [[ -z "$2" ]] || [[ -z "$3" ]] || [[ -z "$4" ]] || [[ -z "$5" ]] || [[ -z "$6" ]] || [[ -z "$7" ]]
 then
     echo "Not all required command line arguments were set. Please run the script again with the required arguments:
-        1: Email address associated with your SugarCRM Developer Builds Community account
+        1: Email address associated with your SugarCRM account
         2: Password associated with the above account
         3: Sugar version (Example: 7.11)
         4: Sugar edition (Options: Ult, Ent, Pro)
@@ -24,10 +24,10 @@ then
     exit 1
 fi
 
-# Email address associated with your SugarCRM developer community account
+# Email address associated with your SugarCRM account
 email=$1
 
-# Password associated with your SugarCRM developer community account
+# Password associated with your SugarCRM account
 password=$2
 
 # The Sugar version to download
