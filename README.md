@@ -9,6 +9,8 @@ All of the tutorials at UnCon 2017 will be based on Professor M's School for Gif
 
 [Setting up your development environment](#setting-up-your-development-environment) 
 
+[Contribute to this project](#contribute-to-this-project)
+
 [Generating the Professor M module loadable packages locally](#generating-the-professor-m-module-loadable-packages-locally) 
 
 [Continuous integration with Travis CI](#continuous-integration-with-travis-ci) 
@@ -136,6 +138,26 @@ composer install
 
 You may also want to set up your development environment so you can execute the unit tests.  See 
 [Automated tests](#automated-tests) for more information.
+
+## Contribute to this project
+Professor M's School is [open source](https://github.com/sugarcrm/school/blob/master/LICENSE), and we would love for you 
+to get involved!  Below are some ways you can contribute to this project:
+- Get notifications about this repo by clicking the **Watch** button at the top of this 
+[repo](https://github.com/sugarcrm/school).
+- Explore the code and use it as a resource as you develop your integrations and customizations.
+- Create a [new Issue](https://github.com/sugarcrm/school/issues/new) if you have ideas for improvement, a feature 
+request, or a bug report.
+- Assign yourself an Issue, update the code, and create a pull request.
+
+
+### ZenHub
+We utilize ZenHub to organize our backlog and track our Issues.  You can view our ZenHub board inside the GitHub web 
+interface if you have a [ZenHub browser extension](https://www.zenhub.com/extension) installed.  You can also view our 
+ZenHub board at 
+[https://app.zenhub.com/workspace/o/sugarcrm/school/boards?repos=109023666](https://app.zenhub.com/workspace/o/sugarcrm/school/boards?repos=109023666). 
+
+When viewing our ZenHub board, you can view our prioritized backlog as well which stories are currently in progress, 
+blocked, under review, and closed.  
 
 
 ## Generating the Professor M module loadable packages locally
