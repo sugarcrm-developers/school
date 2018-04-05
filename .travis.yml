@@ -23,6 +23,54 @@ jobs:
     services:
     - docker
     env:
+    - SUGAR_VERSION=7.10 SUGAR_EDITION=Ent
+    before_script:
+    - composer install
+    - cd package
+    - "./pack.php -v $(date +'%Y%m%d-%H.%M.%S')"
+    - cd ../scripts
+    - sudo service mysql stop
+    script:
+      - ./SetupEnvAndRunPHPUnitTests.sh $SUGARCRM_USERNAME $SUGARCRM_PASSWORD $SUGAR_VERSION $SUGAR_EDITION $GITHUB_USERNAME $GITHUB_PASSWORD workspace/sugardocker
+  - stage: Run PHPUnit
+    sudo: required
+    language: php
+    php: '7.1'
+    services:
+    - docker
+    env:
+    - SUGAR_VERSION=7.10 SUGAR_EDITION=Pro
+    before_script:
+    - composer install
+    - cd package
+    - "./pack.php -v $(date +'%Y%m%d-%H.%M.%S')"
+    - cd ../scripts
+    - sudo service mysql stop
+    script:
+      - ./SetupEnvAndRunPHPUnitTests.sh $SUGARCRM_USERNAME $SUGARCRM_PASSWORD $SUGAR_VERSION $SUGAR_EDITION $GITHUB_USERNAME $GITHUB_PASSWORD workspace/sugardocker
+  - stage: Run PHPUnit
+    sudo: required
+    language: php
+    php: '7.1'
+    services:
+    - docker
+    env:
+    - SUGAR_VERSION=7.10 SUGAR_EDITION=Ult
+    before_script:
+    - composer install
+    - cd package
+    - "./pack.php -v $(date +'%Y%m%d-%H.%M.%S')"
+    - cd ../scripts
+    - sudo service mysql stop
+    script:
+      - ./SetupEnvAndRunPHPUnitTests.sh $SUGARCRM_USERNAME $SUGARCRM_PASSWORD $SUGAR_VERSION $SUGAR_EDITION $GITHUB_USERNAME $GITHUB_PASSWORD workspace/sugardocker
+  - stage: Run PHPUnit
+    sudo: required
+    language: php
+    php: '7.1'
+    services:
+    - docker
+    env:
     - SUGAR_VERSION=7.11 SUGAR_EDITION=Ent
     before_script:
     - composer install

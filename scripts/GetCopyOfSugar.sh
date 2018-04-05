@@ -238,17 +238,17 @@ sugarEdition_Pro="Pro"
 if [[ "$sugarName" == "Sugar$sugarEdition_Ult-$sugarVersion_7_10" ]]
 then
     authenticateToDevBuildsCommunity
-    downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/5839-102-1-8005/SugarUlt-7.10.2.0-dev.1.zip"
+    downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/4930-102-2-6967/SugarUlt-7.10.0.0-dev.1.zip"
 
 elif [[ "$sugarName" == "Sugar$sugarEdition_Ent-$sugarVersion_7_10" ]]
 then
     authenticateToDevBuildsCommunity
-    downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/5837-102-1-8003/SugarEnt-7.10.2.0-dev.1.zip"
+    downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/4921-102-5-6966/SugarEnt-7.10.0.0-dev.1.zip"
 
 elif [[ "$sugarName" == "Sugar$sugarEdition_Pro-$sugarVersion_7_10" ]]
 then
     authenticateToDevBuildsCommunity
-    downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/5838-102-1-8004/SugarPro-7.10.2.0-dev.1.zip"
+    downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/4941-102-2-6968/SugarPro-7.10.0.0-dev.1.zip"
 
 elif [[ "$sugarName" == "Sugar$sugarEdition_Ult-$sugarVersion_7_11" ]]
 then
