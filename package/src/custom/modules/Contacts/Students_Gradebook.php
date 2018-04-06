@@ -20,7 +20,7 @@ class Students_Gradebook
         }
 
         //Check if this is a new student record or just an update to an existing record
-        if($arguments['isUpdate']){
+        if ($arguments['isUpdate']) {
             return;
         }
 
@@ -61,11 +61,19 @@ class Students_Gradebook
         return $jq->submitJob($job);
     }
 
+    /**
+     * Returns a new instance of the SchedulersJob class
+     * @return SchedulersJob
+     */
     protected function getSchedulersJob()
     {
         return new SchedulersJob();
     }
 
+    /**
+     * Returns a new instance of the SugarJobQueue class
+     * @return SugarJobQueue
+     */
     protected function getSugarJobQueue()
     {
         return new SugarJobQueue();
