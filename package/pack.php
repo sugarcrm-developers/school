@@ -23,7 +23,7 @@ use Sugarcrm\ProfessorM\PackageGenerator;
 
 $packageID = "ProfessorM";
 $packageLabel = "Professor M School for Gifted Coders";
-$supportedVersionRegex = '7\\..*$';
+$supportedVersionRegex = '(8\..*|7\.(9|10|11)\..*)';
 
 /*
  * Determine the version of the zip

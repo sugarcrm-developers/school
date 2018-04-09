@@ -1,20 +1,69 @@
 stages:
-- name: test
+- name: Test PackageGenerator
+- name: Run PHPUnit
 - name: Build & Post on GitHub
   if: branch = master
 jobs:
   include:
-  - stage: test
+  - stage: Test PackageGenerator
     language: php
     php: '7.1'
     os: linux
     before_script:
     - composer install
-  - stage: test
+  - stage: Test PackageGenerator
     language: node_js
     node_js: '9'
     before_install:
     - yarn global add grunt-cli
+  - stage: Run PHPUnit
+    sudo: required
+    language: php
+    php: '7.1'
+    services:
+    - docker
+    env:
+    - SUGAR_VERSION=7.11 SUGAR_EDITION=Ent
+    before_script:
+    - composer install
+    - cd package
+    - "./pack.php -v $(date +'%Y%m%d-%H.%M.%S')"
+    - cd ../scripts
+    - sudo service mysql stop
+    script:
+      - ./SetupEnvAndRunPHPUnitTests.sh $DEV_COMMUNITY_USERNAME $DEV_COMMUNITY_PASSWORD $SUGAR_VERSION $SUGAR_EDITION $GITHUB_USERNAME $GITHUB_PASSWORD workspace/sugardocker
+  - stage: Run PHPUnit
+    sudo: required
+    language: php
+    php: '7.1'
+    services:
+    - docker
+    env:
+    - SUGAR_VERSION=7.11 SUGAR_EDITION=Pro
+    before_script:
+    - composer install
+    - cd package
+    - "./pack.php -v $(date +'%Y%m%d-%H.%M.%S')"
+    - cd ../scripts
+    - sudo service mysql stop
+    script:
+      - ./SetupEnvAndRunPHPUnitTests.sh $DEV_COMMUNITY_USERNAME $DEV_COMMUNITY_PASSWORD $SUGAR_VERSION $SUGAR_EDITION $GITHUB_USERNAME $GITHUB_PASSWORD workspace/sugardocker
+  - stage: Run PHPUnit
+    sudo: required
+    language: php
+    php: '7.1'
+    services:
+    - docker
+    env:
+    - SUGAR_VERSION=7.11 SUGAR_EDITION=Ult
+    before_script:
+    - composer install
+    - cd package
+    - "./pack.php -v $(date +'%Y%m%d-%H.%M.%S')"
+    - cd ../scripts
+    - sudo service mysql stop
+    script:
+      - ./SetupEnvAndRunPHPUnitTests.sh $DEV_COMMUNITY_USERNAME $DEV_COMMUNITY_PASSWORD $SUGAR_VERSION $SUGAR_EDITION $GITHUB_USERNAME $GITHUB_PASSWORD workspace/sugardocker
   - stage: Build & Post on GitHub
     language: php
     php: '7.1'
