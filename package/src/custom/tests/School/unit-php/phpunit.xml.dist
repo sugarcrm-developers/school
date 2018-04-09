@@ -39,8 +39,11 @@
         </testsuite>
     </testsuites>
     <filter>
-        <whitelist processUncoveredFilesFromWhitelist="false">
-            <directory suffix=".php">../../</directory>
+        <whitelist addUncoveredFilesFromWhitelist="false" processUncoveredFilesFromWhitelist="false">
+            <directory suffix=".php">../../..</directory>
+            <exclude>
+                <directory suffix=".php">../..</directory>
+            </exclude>
         </whitelist>
     </filter>
     <listeners>

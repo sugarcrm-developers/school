@@ -221,9 +221,9 @@ The PackageGenerator is responsible for creating the Professor M Module Loadable
 PackageGenerator is functioning as we expect that it would.  This stage does NOT test the Module Loadable Package.  
 
 The next stage to run is the Run PHPUnit stage.  Each job in this stage deploys Sugar, installs the Professor M Module
-Loadable Package, runs the PHPUnit tests that Sugar provides, and runs the PHPUnit tests written specifically for our 
-Professor M Module Loadable Package.  Each job in this stage is run against a different combination of Sugar versions 
-and editions.  See 
+Loadable Package, runs the setup for the PHPUnit tests that Sugar provides, and runs the PHPUnit tests written 
+specifically for our Professor M Module Loadable Package.  Each job in this stage is run against a different combination 
+of Sugar versions and editions.  See 
 [PHPUnit tests for the Professor M Module Loadable Package](#phpunit-tests-for-the-professor-m-module-loadable-package) 
 for details.
  
@@ -396,10 +396,6 @@ PHPUnit results for PackageGenerator:
 
 ![PHPUnit results](images/jenkins-phpunit.png)
 
-PHPUnit results for Sugar:
-
-![PHPUnit results](images/phpunitsugar.png)
-
 PHPUnit results for the Professor M Module Loadable Package:
 
 ![PHPUnit results](images/phpunitprofm.png)
@@ -443,8 +439,8 @@ to run the PHPUnit tests as well as to generate the Professor M module loadable 
 This script does NOT test the Module Loadable Package.  
 
 The next step is to run [SetupEnvAndRunPHPUnitTests.sh](scripts/SetupEnvAndRunPHPUnitTests.sh).  This script deploys 
-Sugar, installs the Professor M Module Loadable Package, runs the PHPUnit tests that Sugar provides, and runs the 
-PHPUnit tests written specifically for our Professor M Module Loadable Package.  
+Sugar, installs the Professor M Module Loadable Package, runs the setup for the PHPUnit tests that Sugar provides, and 
+runs the PHPUnit tests written specifically for our Professor M Module Loadable Package.  
 
 Note:  if any step in the process fails (for example, a Jasmine test fails), the remaining steps will not be run.
 
@@ -652,7 +648,13 @@ The easiest way to run the PHPUnit tests is to run the same scripts that the aut
 First, you will need to install [Docker](https://docs.docker.com/install/), 
 [Docker Compose](https://docs.docker.com/compose/install/#install-compose), and [Perl](https://www.perl.org/get.html).
 
-Then execute [SetupEnvAndRunPHPUnitTests.sh](scripts/SetupEnvAndRunPHPUnitTests.sh).
+Then execute [SetupEnvAndRunPHPUnitTests.sh](scripts/SetupEnvAndRunPHPUnitTests.sh).  Note that the Sugar provided unit 
+tests are NOT run as part of [SetupEnvAndRunPHPUnitTests.sh](scripts/SetupEnvAndRunPHPUnitTests.sh).  If you want to add
+them, add the following line after the call to `SetupSugarPHPUnitTests.sh`:
+
+```
+./RunSugarPHPUnitTests.sh $sugarDirectory || exit 1
+```
 
 ###### Manual execution in an installed version of Sugar
 
@@ -699,11 +701,19 @@ $ ../../../../vendor/bin/phpunit
 ```
 
 ##### Automatic execution in Travis CI
-The PHPUnit tests are automatically run as part of the Run PHPUnit stage of the Travis CI build.  
+The PHPUnit tests that test the Professor M Module Loadable Package are automatically run as part of the Run PHPUnit 
+stage of the Travis CI build.  
 
 Each job in this stage is basically the same with the exception of the environment variables.  Each job calls 
-[SetupEnvAndRunPHPUnitTests.sh](scripts/SetupEnvAndRunPHPUnitTests.sh), which executes both the Sugar provided PHPUnit 
-tests and the Professor M PHPUnit tests.
+[SetupEnvAndRunPHPUnitTests.sh](scripts/SetupEnvAndRunPHPUnitTests.sh), which executes the Professor M PHPUnit tests.
+
+Note that the Sugar provided unit tests are NOT run as part of 
+[SetupEnvAndRunPHPUnitTests.sh](scripts/SetupEnvAndRunPHPUnitTests.sh).  If you want to add
+them, add the following line after the call to `SetupSugarPHPUnitTests.sh`:
+
+```
+./RunSugarPHPUnitTests.sh $sugarDirectory || exit 1
+```
 
 #### Interpreting the results
 To see the results of the tests that are run as part of the Travis CI build, open the build in Travis CI.  If the build 
@@ -729,8 +739,16 @@ If a PHPUnit test fails, you'll see something like the following in the job log.
 
 ##### Automatic execution in Jenkins
 
-The PHPUnit tests are automatically run as part of the Jenkins build when 
-[RunPackUnitTestsAndBuildProfMPackage.sh](scripts/RunPackUnitTestsAndBuildProfMPackage.sh) is executed.
+The PHPUnit tests that test the Professor M Module Loadable Package are automatically run as part of the Jenkins build 
+when [SetupEnvAndRunPHPUnitTests.sh](scripts/SetupEnvAndRunPHPUnitTests.sh) is run.
+     
+Note that the Sugar provided unit tests are NOT run as part of 
+[SetupEnvAndRunPHPUnitTests.sh](scripts/SetupEnvAndRunPHPUnitTests.sh).  If you want to add them, add the following line 
+after the call to `SetupSugarPHPUnitTests.sh`:
+     
+     ```
+     ./RunSugarPHPUnitTests.sh $sugarDirectory || exit 1
+     ```
 
 #### Interpreting the results
 To see the results of the tests that are run as part of the Jenkins build, open the build in Jenkins.  If the build 

@@ -1,14 +1,16 @@
 # This script is designed specifically for Jenkins.  It runs the Jasmine and PHPUnit tests associated with the Pack
 # script.  It also builds the Professor M module loadable package.
 
-# If you are running Jenkins in a Docker container and mounting /var/jenkins_home to a directory on your machine's
-# local filesystem, you may need to update LOCALWORKSPACEPATH to reflect the path to the Jenkins workspace on your local
-# filesystem (for example: "/Users/lschaefer/jenkins/workspace/ProfessorM". The easiest way to update LOCALWORKSPACEPATH
-# is to pass in the value as an argument when you call this script.
+#If you are running Jenkins in a Docker container and mounting /var/jenkins_home to a directory on your machine's local
+# filesystem (for example: /Users/lschaefer/jenkins), you may need to update LOCALWORKSPACEPATH to reflect the path on
+# your local filesystem to the Jenkins workspace for your ProfessorM job
+# (for example: "/Users/lschaefer/jenkins/workspace/ProfessorM"). The easiest way to update LOCALWORKSPACEPATH is to
+# pass in the value as an argument when you call this script.
 
 LOCALWORKSPACEPATH=$1
 
 # Remove any lingering containers from previously failed builds
+echo "Removing old containers from previously failed builds. 'No such container' errors can be safely ignored..."
 docker rm my-yarn --force || true
 docker rm my-composer --force || true
 
