@@ -30,11 +30,12 @@ class StudentGradebookJob implements RunnableSchedulerJob
             try {
                 //Call the external GradebookFake app to create a new record in it
                 $rm = $this->getRecordManager();
-                $success = $rm->createStudentRecord($bean->email1, $bean->first_name, $bean->last_name);
-                if ($success){
+                $success = $rm->createStudentRecord($bean->emailAddress->getPrimaryAddress($bean), $bean->first_name,
+                    $bean->last_name);
+                if ($success) {
                     $this->job->succeedJob();
                     return true;
-                } else{
+                } else {
                     $this->job->failJob("Record not successfully created in GradebookFake");
                     return false;
                 }
@@ -57,7 +58,7 @@ class StudentGradebookJob implements RunnableSchedulerJob
      */
     protected function getContactBean($id)
     {
-        return BeanFactory::getBean('Contacts', $id);
+        return BeanFactory::retrieveBean('Contacts', $id);
     }
 
     /**

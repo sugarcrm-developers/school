@@ -292,7 +292,8 @@ response="$(curl -v -L -c ./mycookie -b ./mycookie -o $sugarName.zip $downloadUr
 checkStatusCode "200" "$response"
 echo "Download complete"
 
-# Verify we didn't get an empty zip file
+# Verify we didn't get an empty zip file. If the downloadUrl is invalid, we sometimes get a zip file of around 210
+# bytes. We've selected 60000000 to ensure we have a sufficiently large file that is likely correct.
 fileSize=$(wc -c <"$sugarName.zip")
 if [[ $fileSize -lt 60000000 ]]
 then

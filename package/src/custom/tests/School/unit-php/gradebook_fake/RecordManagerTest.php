@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Class RecordManagerTest
  * Tests the RecordManager for the GradebookFake app
- * @coversDefaultClass \RecordManager
+ * @coversDefaultClass Sugarcrm\Sugarcrm\custom\gradebook_fake\RecordManager
  */
 class RecordManagerTest extends TestCase
 {

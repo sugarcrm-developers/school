@@ -40,7 +40,10 @@ class StudentGradebookJobTest extends \PHPUnit\Framework\TestCase
         $this->student->id = Uuid::uuid1();
         $this->student->first_name = 'John';
         $this->student->last_name = 'Doe';
-        $this->student->email1 = 'jdoe@example.com';
+
+        $this->emailAddress = TestMockHelper::createMock($this, '\\SugarEmailAddress');
+        $this->student->emailAddress = $this->emailAddress;
+        $this->emailAddress->method('getPrimaryAddress')->willReturn('jdoe@example.com');
 
         // Create a new SchedulersJob and set the job's data to the student's id
         $this->job = TestMockHelper::createPartialMock($this, '\\SchedulersJob', ['succeedJob', 'failJob']);
