@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 
-# This script gets a copy of Sugar from the designated directory or downloads a Sugar dev build from the SugarCRM
-# Developer Builds community.
+# This script gets a copy of Sugar from the designated directory or downloads a Sugar dev build from the Sugar Store
+# or the SugarCRM Developer Builds community.
 #
-# Note: you must have access to the SugarCRM Developer Builds community
-# (https://community.sugarcrm.com/community/developer/developer-builds) in order for the download to be successful.
+# Note: you must have access to the Sugar Store (https://store.sugarcrm.com/download) and/or the SugarCRM Developer
+# Builds community (https://community.sugarcrm.com/community/developer/developer-builds) depending on where the build is
+# stored in order for the download to be successful.
 
 
 ######################################################################
@@ -14,7 +15,7 @@
 if [[ -z "$1" ]] || [[ -z "$2" ]] || [[ -z "$3" ]] || [[ -z "$4" ]]
 then
     echo "Not all required command line arguments were set. Please run the script again with the required arguments:
-        1: Email address associated with your SugarCRM Developer Builds Community account
+        1: Email address associated with your SugarCRM account
         2: Password associated with the above account
         3: Sugar name (For example: SugarEnt-7.11)
         4. The path to where the Sugar download should be stored
@@ -26,10 +27,10 @@ then
     exit 1
 fi
 
-# Email address associated with your SugarCRM developer community account
+# Email address associated with your SugarCRM account
 email=$1
 
-# Password associated with your SugarCRM developer community account
+# Password associated with your SugarCRM account
 password=$2
 
 # The Sugar name (For example: SugarEnt-7.11)
@@ -60,7 +61,7 @@ checkStatusCode(){
         statusCode="${BASH_REMATCH[1]}"
         if [[ "$statusCode" == $1 ]]
         then
-            echo "Status code is correct: $statusCode"
+            return
         else
             echo "Status code is not the expected $1: $statusCode"
             echo "$2"
@@ -83,6 +84,42 @@ getLocationFromResponse(){
         echo "$location"
     else
         echo "Unable to find location in response"
+        exit 1
+    fi
+}
+
+# Print the value associated with a given key for a JSON response
+# $1: The key associated with the JSON value you want to parse
+# $2: response from curl command
+getJsonValueFromResponse(){
+    regexJsonValue="$1\":\"([^\"]*)\""
+
+    if [[ $2 =~ $regexJsonValue ]]
+    then
+        value="${BASH_REMATCH[1]}"
+        echo "$value"
+    else
+        echo "Unable to find the value of $1 in response"
+        echo $2
+        exit 1
+    fi
+}
+
+# Print the Sugar Download ID associated with the given Sugar zip file
+# $1: The name of the Sugar zip file to search for in the response
+# $2: response from curl command
+getSugarDownloadIdFromResponse(){
+    # This regex parses a string similar to
+    # "id":"download-id-we-are-trying-to-get","name":"SugarEnt-7.9.3.0.zip"
+    regexJasonValue="\"id\":\"([^\"]*)\",\"name\":\"$1\""
+
+    if [[ $2 =~ $regexJasonValue ]]
+    then
+        value="${BASH_REMATCH[1]}"
+        echo "$value"
+    else
+        echo "Unable to find the value of $1 in response"
+        echo $2
         exit 1
     fi
 }
@@ -116,12 +153,47 @@ getHiddenFormFieldValue(){
         echo "$2"
         exit 1
     fi
+}
 
+# Authenticate to the Sugar Store and print the URL to download the given Sugar zip
+# $1: The name of zip to download (for example: SugarEnt-7.9.3.0.zip)
+function authenticateToSugarStoreAndGetDownloadUrl(){
+
+    response="$(curl -v -L -c $cookieFile -b $cookieFile 'https://store.sugarcrm.com/download' 2>&1)"
+    checkStatusCode "200" "$response"
+    token="$(getHiddenFormFieldValue "_token" "$response")"
+
+    response="$(curl -v -L -c $cookieFile -b $cookieFile --data "_token=$token&email=$email&password=$password" https://auth.sugarcrm.com/auth/login 2>&1)"
+    checkStatusCode "200" "$response"
+    accountId="$(getJsonValueFromResponse "id" "$response")"
+
+    response="$(curl -v -L -c $cookieFile -b $cookieFile "https://store.sugarcrm.com/api/v1/accounts/$accountId/downloads" 2>&1)"
+    checkStatusCode "200" "$response"
+    downloadId="$(getSugarDownloadIdFromResponse $1 "$response")"
+    hash="$(getJsonValueFromResponse "hash" "$response")"
+
+    downloadUrl="https://store.sugarcrm.com/download/$downloadId/$hash"
+    echo $downloadUrl
+}
+
+# Authenticate to the Developer Builds Community
+function authenticateToDevBuildsCommunity(){
+
+    response="$(curl -v -L -c $cookieFile -b $cookieFile 'https://community.sugarcrm.com/login.jspa?ssologin=true&fragment=&referer=%2Fcommunity%2Fdeveloper%2Fdeveloper-builds' 2>&1)"
+    checkStatusCode "200" "$response"
+    token="$(getHiddenFormFieldValue "_token" "$response")"
+
+    response="$(curl -v -L -c $cookieFile -b $cookieFile --data "_token=$token&email=$email&password=$password" https://auth.sugarcrm.com/saml2/idp/authpage?ReturnTo=https%3A%2F%2Fauth.sugarcrm.com%2Fsaml2%2Fidp%2FSSOService%3Fspentityid%3Dhttps%253A%252F%252Fcommunity.sugarcrm.com%26RelayState%3DL2NvbW11bml0eS9kZXZlbG9wZXIvZGV2ZWxvcGVyLWJ1aWxkcw%253D%253D 2>&1)"
+    checkStatusCode "200" "$response"
+    samlResponse="$(getHiddenFormFieldValue "SAMLResponse" "$response")"
+
+    response="$(curl -v -L -c $cookieFile -b $cookieFile --data-urlencode "SAMLResponse=$samlResponse" --data-urlencode "RelayState=L2NvbW11bml0eS9kZXZlbG9wZXIvZGV2ZWxvcGVyLWJ1aWxkcw==" 'https://community.sugarcrm.com/saml/sso' 2>&1)"
+    checkStatusCode "200" "$response"
 }
 
 
 ######################################################################
-# Check if we need to download the Sugar source zip
+# Check if we have a copy of the Sugar source zip already downloaded
 ######################################################################
 
 # If we already have a copy of the Sugar source zip, we'll copy it to the Sugar directory and exit the script
@@ -149,81 +221,79 @@ chmod -R 777 .
 sudo chmod -R 777 .
 
 
-######################################################################
-# Authenticate to the community
-######################################################################
-
-echo "Authenticating to Developer Builds Community..."
-
-response="$(curl -v -c $cookieFile -b $cookieFile 'https://community.sugarcrm.com/login.jspa?ssologin=true&fragment=&referer=%2Fcommunity%2Fdeveloper%2Fdeveloper-builds' 2>&1)"
-checkStatusCode "302" "$response"
-location="$(getLocationFromResponse "$response")"
-
-# Location should be something like https://auth.sugarcrm.com/saml2/idp/SSOService?SAMLRequest=fZHNbsIwEIRfxdp7EjuUn1okiBahIlGBSOihNxMMGCV26nVQ%2B%2FZ1IahUlTh6vbPf7sxw9FmV5CQtKqMTYCEFInVhtkrvE1jn02AAo3SIoirjmo8bd9Ar%2BdFIdMQLNfLLTwKN1dwIVMi1qCRyV%2FBs%2FDrncUh5bY0zhSmBjBGldR71bDQ2lbSZtCdVyPVqnsDBuRp5FBWmqhqt3FeIzV7YwlahL0U%2FpAjRAJl4vNLCnVe%2BqoTf7b8gjtS2jrJs0YKATI0t5PmQBHaiRF%2BaTRIQjPXo8aAGne6OdukDUxsmYnHsql7M2KNvwqVAVCf5K0Ns5EyjE9olEFM2CGgcsDhnfU47nPZD1um%2FA1m25z8pfbH1nlebSxPylzxfBstFlgN5u8bjG6ANg5%2Fp9jaF%2B4PF1XpI7xs9jG4Bafv8G376DQ%3D%3D&RelayState=L2NvbW11bml0eS9kZXZlbG9wZXIvZGV2ZWxvcGVyLWJ1aWxkcw%3D%3D
-response="$(curl -v -c $cookieFile -b $cookieFile $location 2>&1)"
-checkStatusCode "302" "$response"
-location="$(getLocationFromResponse "$response")"
-
-# Location should be something like https://auth.sugarcrm.com/saml2/idp/authpage?ReturnTo=https%3A%2F%2Fauth.sugarcrm.com%2Fsaml2%2Fidp%2FSSOService%3Fspentityid%3Dhttps%253A%252F%252Fcommunity.sugarcrm.com%26RelayState%3DL2NvbW11bml0eS9kZXZlbG9wZXIvZGV2ZWxvcGVyLWJ1aWxkcw%253D%253D
-response="$(curl -v -c $cookieFile -b $cookieFile $location 2>&1)"
-checkStatusCode "200" "$response"
-token="$(getHiddenFormFieldValue "_token" "$response")"
-
-response="$(curl -v -c $cookieFile -b $cookieFile --data "_token=$token&email=$email&password=$password" https://auth.sugarcrm.com/saml2/idp/authpage?ReturnTo=https%3A%2F%2Fauth.sugarcrm.com%2Fsaml2%2Fidp%2FSSOService%3Fspentityid%3Dhttps%253A%252F%252Fcommunity.sugarcrm.com%26RelayState%3DL2NvbW11bml0eS9kZXZlbG9wZXIvZGV2ZWxvcGVyLWJ1aWxkcw%253D%253D 2>&1)"
-checkStatusCode "302" "$response"
-location="$(getLocationFromResponse "$response")"
-
-# Location should be something like 'https://auth.sugarcrm.com/saml2/idp/SSOService?spentityid=https%3A%2F%2Fcommunity.sugarcrm.com&RelayState=L2NvbW11bml0eS9kZXZlbG9wZXIvZGV2ZWxvcGVyLWJ1aWxkcw%3D%3D'
-response="$(curl -v -c $cookieFile -b $cookieFile $location 2>&1)"
-checkStatusCode "200" "$response"
-samlResponse="$(getHiddenFormFieldValue "SAMLResponse" "$response")"
-
-response="$(curl -v -c $cookieFile -b $cookieFile --data-urlencode "SAMLResponse=$samlResponse" --data-urlencode "RelayState=L2NvbW11bml0eS9kZXZlbG9wZXIvZGV2ZWxvcGVyLWJ1aWxkcw==" 'https://community.sugarcrm.com/saml/sso' 2>&1)"
-checkStatusCode "302" "$response"
-
-
 #######################################################################
-## Download the Sugar zip
+# Get the URL to download and authenticate to the appropriate location
 #######################################################################
 
 sugarVersion_7_10="7.10"
 sugarVersion_7_11="7.11"
+sugarVersion_8_0="8.0"
 
 sugarEdition_Ult="Ult"
 sugarEdition_Ent="Ent"
 sugarEdition_Pro="Pro"
 
-# Get the url for the appropriate Sugar version and edition
+# Get the url for the appropriate Sugar version and edition as well as
+# authenticate to the appropriate location (Sugar Store or Developer Builds Community)
 if [[ "$sugarName" == "Sugar$sugarEdition_Ult-$sugarVersion_7_10" ]]
-then downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/5839-102-1-8005/SugarUlt-7.10.2.0-dev.1.zip"
+then
+    authenticateToDevBuildsCommunity
+    downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/5839-102-1-8005/SugarUlt-7.10.2.0-dev.1.zip"
 
 elif [[ "$sugarName" == "Sugar$sugarEdition_Ent-$sugarVersion_7_10" ]]
-then downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/5837-102-1-8003/SugarEnt-7.10.2.0-dev.1.zip"
+then
+    authenticateToDevBuildsCommunity
+    downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/5837-102-1-8003/SugarEnt-7.10.2.0-dev.1.zip"
 
 elif [[ "$sugarName" == "Sugar$sugarEdition_Pro-$sugarVersion_7_10" ]]
-then downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/5838-102-1-8004/SugarPro-7.10.2.0-dev.1.zip"
+then
+    authenticateToDevBuildsCommunity
+    downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/5838-102-1-8004/SugarPro-7.10.2.0-dev.1.zip"
 
 elif [[ "$sugarName" == "Sugar$sugarEdition_Ult-$sugarVersion_7_11" ]]
-then downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/5958-102-1-8147/SugarUlt-7.11.0.0-dev.1.zip"
+then
+    authenticateToDevBuildsCommunity
+    downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/5958-102-1-8147/SugarUlt-7.11.0.0-dev.1.zip"
 
 elif [[ "$sugarName" == "Sugar$sugarEdition_Ent-$sugarVersion_7_11" ]]
-then downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/5959-102-1-8148/SugarEnt-7.11.0.0-dev.1.zip"
+then
+    authenticateToDevBuildsCommunity
+    downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/5959-102-1-8148/SugarEnt-7.11.0.0-dev.1.zip"
 
 elif [[ "$sugarName" == "Sugar$sugarEdition_Pro-$sugarVersion_7_11" ]]
-then downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/5957-102-1-8146/SugarPro-7.11.0.0-dev.1.zip"
+then
+    authenticateToDevBuildsCommunity
+    downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/5957-102-1-8146/SugarPro-7.11.0.0-dev.1.zip"
+
+elif [[ "$sugarName" == "Sugar$sugarEdition_Ult-$sugarVersion_8_0" ]]
+then
+    downloadUrl="$(authenticateToSugarStoreAndGetDownloadUrl "SugarUlt-8.0.0.0.zip")"
+
+elif [[ "$sugarName" == "Sugar$sugarEdition_Ent-$sugarVersion_8_0" ]]
+then
+    downloadUrl="$(authenticateToSugarStoreAndGetDownloadUrl "SugarEnt-8.0.0.0.zip")"
+
+elif [[ "$sugarName" == "Sugar$sugarEdition_Pro-$sugarVersion_8_0" ]]
+then
+    downloadUrl="$(authenticateToSugarStoreAndGetDownloadUrl "SugarPro-8.0.0.0.zip")"
 
 else
     echo "Unable to find Sugar download URL for $sugarName"
     exit 1
 fi
 
-# Download the file
+
+######################################################################
+# Download Sugar
+######################################################################
+
 echo "Beginning download of $sugarName from $downloadUrl"
-response="$(curl -v -c ./mycookie -b ./mycookie -o $sugarName.zip $downloadUrl 2>&1)"
+response="$(curl -v -L -c ./mycookie -b ./mycookie -o $sugarName.zip $downloadUrl 2>&1)"
 checkStatusCode "200" "$response"
 echo "Download complete"
 
-# Check we didn't get an empty zip file
+# Verify we didn't get an empty zip file. If the downloadUrl is invalid, we sometimes get a zip file of around 210
+# bytes. We've selected 60000000 to ensure we have a sufficiently large file that is likely correct.
 fileSize=$(wc -c <"$sugarName.zip")
 if [[ $fileSize -lt 60000000 ]]
 then
