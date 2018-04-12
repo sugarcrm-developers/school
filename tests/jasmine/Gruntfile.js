@@ -5,10 +5,10 @@ module.exports = function(grunt) {
         jasmine: {
             components: {
                 src: [
-                    'package/*js'
+                    '../../package/*js'
                 ],
                 options: {
-                    specs: 'tests/jasmine/*Spec.js',
+                    specs: 'specs/*Spec.js',
                     keepRunner: false
                 }
             }
