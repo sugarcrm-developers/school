@@ -649,6 +649,9 @@ The easiest way to run the PHPUnit tests is to run the same scripts that the aut
 
 First, you will need to install [Docker](https://docs.docker.com/install/), 
 [Docker Compose](https://docs.docker.com/compose/install/#install-compose), and [Perl](https://www.perl.org/get.html).
+If the script will be downloading a copy of Sugar from the Sugar Store or the Sugar Developer Builds Community (instead 
+of using a copy of Sugar stored on your machine), you will also need a package installed that can execute the `sha1sum` 
+command. On a Mac, you can install md5sha1sum by executing `brew install md5sha1sum` in a shell.
 
 Then execute [SetupEnvAndRunPHPUnitTests.sh](scripts/SetupEnvAndRunPHPUnitTests.sh).  Note that the Sugar provided unit 
 tests are NOT run as part of [SetupEnvAndRunPHPUnitTests.sh](scripts/SetupEnvAndRunPHPUnitTests.sh).  If you want to add

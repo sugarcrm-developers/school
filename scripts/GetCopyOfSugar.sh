@@ -239,43 +239,55 @@ if [[ "$sugarName" == "Sugar$sugarEdition_Ult-$sugarVersion_7_10" ]]
 then
     authenticateToDevBuildsCommunity
     downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/4930-102-2-6967/SugarUlt-7.10.0.0-dev.1.zip"
+    expectedChecksum="ee8fa390e3764c829dd214bff7d1fab0dbf71045"
 
 elif [[ "$sugarName" == "Sugar$sugarEdition_Ent-$sugarVersion_7_10" ]]
 then
     authenticateToDevBuildsCommunity
     downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/4921-102-5-6966/SugarEnt-7.10.0.0-dev.1.zip"
+    expectedChecksum="b72d1e9928840ffb9be51a2c27354a9bc3bbc5c4"
 
 elif [[ "$sugarName" == "Sugar$sugarEdition_Pro-$sugarVersion_7_10" ]]
 then
     authenticateToDevBuildsCommunity
     downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/4941-102-2-6968/SugarPro-7.10.0.0-dev.1.zip"
+    expectedChecksum="ad379cd8fb9960237a025e635e047c0df99096e2"
 
 elif [[ "$sugarName" == "Sugar$sugarEdition_Ult-$sugarVersion_7_11" ]]
 then
     authenticateToDevBuildsCommunity
     downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/5958-102-1-8147/SugarUlt-7.11.0.0-dev.1.zip"
+    expectedChecksum="46e29eff7cfffda15da65bc6d4d5ca765d129595"
 
 elif [[ "$sugarName" == "Sugar$sugarEdition_Ent-$sugarVersion_7_11" ]]
 then
     authenticateToDevBuildsCommunity
     downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/5959-102-1-8148/SugarEnt-7.11.0.0-dev.1.zip"
+    expectedChecksum="9446be45f8e2ea2e8e8246b76d9a32a3737c0219"
 
 elif [[ "$sugarName" == "Sugar$sugarEdition_Pro-$sugarVersion_7_11" ]]
 then
     authenticateToDevBuildsCommunity
     downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/5957-102-1-8146/SugarPro-7.11.0.0-dev.1.zip"
+    expectedChecksum="8980d43bdf3a6af1a8d4d29396863121fa202603"
 
 elif [[ "$sugarName" == "Sugar$sugarEdition_Ult-$sugarVersion_8_0" ]]
 then
     downloadUrl="$(authenticateToSugarStoreAndGetDownloadUrl "SugarUlt-8.0.0.0.zip")"
+    #TODO: Add checksum once 8.0 is GA. Issue #55
+    expectedChecksum=""
 
 elif [[ "$sugarName" == "Sugar$sugarEdition_Ent-$sugarVersion_8_0" ]]
 then
     downloadUrl="$(authenticateToSugarStoreAndGetDownloadUrl "SugarEnt-8.0.0.0.zip")"
+    #TODO: Add checksum once 8.0 is GA. Issue #55
+    expectedChecksum=""
 
 elif [[ "$sugarName" == "Sugar$sugarEdition_Pro-$sugarVersion_8_0" ]]
 then
     downloadUrl="$(authenticateToSugarStoreAndGetDownloadUrl "SugarPro-8.0.0.0.zip")"
+    #TODO: Add checksum once 8.0 is GA. Issue #55
+    expectedChecksum=""
 
 else
     echo "Unable to find Sugar download URL for $sugarName"
@@ -292,12 +304,16 @@ response="$(curl -v -L -c ./mycookie -b ./mycookie -o $sugarName.zip $downloadUr
 checkStatusCode "200" "$response"
 echo "Download complete"
 
-# Verify we didn't get an empty zip file. If the downloadUrl is invalid, we sometimes get a zip file of around 210
-# bytes. We've selected 60000000 to ensure we have a sufficiently large file that is likely correct.
-fileSize=$(wc -c <"$sugarName.zip")
-if [[ $fileSize -lt 60000000 ]]
+#Verify the checksum is correct
+checksumOutput="$(sha1sum $sugarName.zip)"
+checksumOutput=($checksumOutput)
+checksumOfDownload=${checksumOutput[0]}
+
+if [[ $expectedChecksum != $checksumOfDownload ]]
 then
-    echo "$sugarName.zip has a file size of $fileSize.  The download may not have been successful."
+    echo "The checksum of the downloaded file did not match the expected checksum"
+    echo "Expected: $expectedChecksum"
+    echo "Actual:   $checksumOfDownload"
     exit 1
 fi
 
