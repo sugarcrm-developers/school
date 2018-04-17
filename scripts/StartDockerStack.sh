@@ -64,13 +64,19 @@ fi
 # Stop any previously running stack
 ######################################################################
 
-echo "Stopping any containers running from a previous Sugar Docker stack..."
+echo "Forcefully taking down any networks and/or containers still running from a previous Sugar Docker stack. 'Network
+not found' and 'No such container' errors can be safely ignored..."
+
 docker-compose -f $ymlPath down
-docker stop sugar-cron
-docker stop sugar-web1
-docker stop sugar-elasticsearch
-docker stop sugar-redis
-docker stop sugar-mysql
+
+docker rm -f sugar-cron
+docker rm -f sugar-web1
+docker rm -f sugar-elasticsearch
+docker rm -f sugar-redis
+docker rm -f sugar-mysql
+docker rm -f sugar-permissions
+
+echo "Network and/or containers removed."
 
 
 ######################################################################
