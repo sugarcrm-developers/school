@@ -19,7 +19,7 @@ then
            source zip files will be downloaded from the SugarCRM Developer Builds Community.  The Sugar source zip files
            should be named with the following pattern: Sugar$sugarEdition-$sugarVersion.zip. For example: SugarEnt-7.11.zip
 
-        For example: ./SetupEnvAndRunPHPUnitTests.sh communityemail@example.com mycommunitypassword 7.11 Pro githubusername
+        For example: ./SetupEnvAndRunTests.sh communityemail@example.com mycommunitypassword 7.11 Pro githubusername
         githubpassword workspace/sugardocker ../sugar_source_zips"
     exit 1
 fi
@@ -59,9 +59,9 @@ sugarSourceZipsDirectory=$8
 # Setup
 ######################################################################
 
-# Set permission for when sudo is required and is not required
-chmod -R 777 .
-sudo chmod -R 777 .
+# Set permission for when sudo is required and is not required. Output of these commands will not be printed.
+chmod -R 777 . &> /dev/null
+sudo chmod -R 777 . &> /dev/null
 
 mkdir workspace
 
@@ -83,5 +83,7 @@ mkdir workspace
 ./InstallSugarAndProfM.sh $sugarDirectory || exit 1
 
 ./RunProfMPHPUnitTests.sh $sugarDirectory || exit 1
+
+./RunPostmanTests.sh $sugarVersion $sugarDirectory || exit 1
 
 ./StopDockerStack.sh $sugarVersion $sugarDockerDirectory || exit 1

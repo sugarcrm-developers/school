@@ -36,9 +36,37 @@ cp cliModuleInstall.php $sugarDirectory/cliModuleInstall.php
 # Copy the Professor M module loadable package to the Sugar directory
 cp ../package/releases/sugarcrm-ProfessorM-*-standard.zip $sugarDirectory/sugarcrm-ProfessorM-standard.zip
 
-# Update the permissions for the Sugar directory for when sudo is required and is not required
-chmod -R 777 $sugarDirectory
-sudo chmod -R 777 $sugarDirectory
+# Set permission for when sudo is required and is not required. Output of these commands will not be printed.
+chmod -R 777 $sugarDirectory &> /dev/null
+sudo chmod -R 777 $sugarDirectory &> /dev/null
+
+
+######################################################################
+# Add license key to config_si.php
+######################################################################
+
+# If the SUGAR_LICENSE_KEY environment variable is set, we will update config_si.php to include the license key
+if [[ -n $SUGAR_LICENSE_KEY ]]
+then
+    # This regular expression searches for the following:
+    #
+    # array (
+    #     '
+    #
+    # And adds a line with the license key after it
+    #
+    # array (
+    #     'setup_license_key' => 'MySugarLicenseKey',
+    #     '
+    #
+    echo "Updating $sugarDirectory/config_si.php to include the license key. Output and errors from this command are
+suppressed to keep the license key private..."
+    perl -0777 -i -pe "s#(array \(\n *')#\1setup_license_key' => '$SUGAR_LICENSE_KEY',\n    '#g" $sugarDirectory/config_si.php &> /dev/null || exit 1
+else
+    echo "WARNING: The SUGAR_LICENSE_KEY environment variable was not set.  Tests that require a license key (for
+    example, the Postman tests) will not be able to run."
+fi
+
 
 ######################################################################
 # Install Sugar
@@ -47,6 +75,7 @@ sudo chmod -R 777 $sugarDirectory
 echo "Installing Sugar..."
 # Install Sugar using the configs in config_si.php
 docker exec sugar-web1 bash -c "php cliSilentInstall.php"
+
 
 ######################################################################
 # Install the Professor M Module Loadable Package
