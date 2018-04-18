@@ -131,7 +131,7 @@ to install the Professor M scenario as-is in your Sugar instance.
 1. Checkout or download a copy of this repo.
 1. [Install PHP 7](http://php.net/manual/en/install.php).
 1. [Install Composer](https://getcomposer.org/download/). We use Composer to install the PHP dependencies for the project.  
-1. Execute the following command from your `school` directory in order to install the dependencies:
+1. Execute the following command from your `school/package` directory in order to install the dependencies:
 ```
 composer install
 ```
@@ -147,7 +147,8 @@ to get involved!  Below are some ways you can contribute to this project:
 - Explore the code and use it as a resource as you develop your integrations and customizations.
 - Create a [new Issue](https://github.com/sugarcrm/school/issues/new) if you have ideas for improvement, a feature 
 request, or a bug report.
-- Assign yourself an Issue, update the code, and create a pull request.
+- Assign yourself an Issue, update the code, and create a pull request.  See [CONTRIBUTING.MD](docs/CONTRIBUTING.md) for
+more details.
 
 
 ### ZenHub
@@ -467,31 +468,31 @@ multiple test files, and each test file can contain multiple tests.
 To manually execute the tests, you will need to use Composer to install PHPUnit and other PHP dependencies.
 If you have not installed Composer before, visit the [Composer Getting Started Guide](https://getcomposer.org/doc/00-intro.md).
 
-Execute the following command from your `school` directory in order to install the test dependencies:
+Execute the following command from your `school/package` directory in order to install the test dependencies:
 ```
 composer install
 ```
 
-If you need to update the namespaces, manually update [composer.json](composer.json) and then run the following command from
-your `school` directory:
+If you need to update the namespaces, manually update [composer.json](package/composer.json) and then run the following command from
+your `school/package` directory:
 ```
 ./composer.phar update
 ```
 
-The PHPUnit tests can be executed by running the following command from your `school` directory on macOS:
+The PHPUnit tests can be executed by running the following command from your `school/tests/phpunit` directory on macOS:
 ```
-vendor/bin/phpunit
+../../vendor/bin/phpunit
 ```
 or on Windows:
 ```
-vendor\bin\phpunit
+..\..\vendor\bin\phpunit
 ```
 
 ##### Automatic execution in Travis CI
 The PHPUnit tests are automatically run as part of the Test PackageGenerator stage of the Travis CI build.  Travis CI's 
 default build script for PHP is PHPUnit, so we don't have to include anything special in [.travis.yml](.travis.yml) in 
 order for the tests to run.  However, we have added `composer install` to [.travis.yml](.travis.yml) in order for the 
-dependencies to be installed on the build machine. Travis CI looks in [phpunit.xml](phpunit.xml) for the PHPUnit config. 
+dependencies to be installed on the build machine. Travis CI looks in [phpunit.xml](tests/phpunit/phpunit.xml) for the PHPUnit config. 
 Our config indicates that the PHPUnit tests are stored in [tests/phpunit](tests/phpunit).  
 
 #### Interpreting the results
@@ -545,9 +546,9 @@ If a PHPUnit test fails, you'll see something like the following in the job log.
 [Jasmine](https://jasmine.github.io/) is a testing framework for JavaScript.  We have included a very simple Jasmine 
 test in this repository as an example.
 
-The tests are located in [/tests/jasmine](tests/jasmine).  Currently, there is one test inside of the 
-[DummySpec.js](tests/jasmine/DummySpec.js) test file.  The [/tests/jasmine](tests/jasmine) directory can contain 
-multiple test files, and each test file can contain multiple tests.
+The tests are located in [/tests/jasmine/specs](tests/jasmine/specs).  Currently, there is one test inside of the 
+[DummySpec.js](tests/jasmine/specs/DummySpec.js) test file.  The [/tests/jasmine/specs](tests/jasmine/specs) directory 
+can contain multiple test files, and each test file can contain multiple tests.
 
 ##### Manual execution
 To manually execute the tests, you will need to install a few different things on your machine before you can run the 
@@ -558,6 +559,11 @@ Install Yarn which is an NPM compatible package manager. See
 [Yarn Installation Guide](https://yarnpkg.com/lang/en/docs/install/) for more details on how to install Yarn.
 
 Next navigate to your school directory and then execute the following commands. 
+
+Navigate to the tests/jasmine directory.
+```
+cd tests/jasmine
+```
 
 Install the JavaScript dependencies using Yarn. These dependencies include Grunt, Jasmine, and Phantomjs.
 ```
@@ -571,15 +577,14 @@ yarn global add grunt-cli
 ```
 
 ###### Execution
-Inside of your `school` directory, execute the following command to run the Jasmine tests:
+Inside of your `tests/jasmine` directory, execute the following command to run the Jasmine tests:
 ```
 grunt test-js
 ```
 
 ##### Automatic execution in Travis CI
-The Jasmine tests are automatically run as part of the Travis CI build process.  Travis CI will automatically look
-for a script named "test" inside of [package.json](package.json).  In our case, the test script calls the "test-js" task
-defined in [Gruntfile.js](Gruntfile.js).  The "test-js" task only has one task:  jasmine.
+The Jasmine tests are automatically run as part of the Travis CI build process.  In [.travis.yml](.travis.yml), the Test 
+PackageGenerator stage kicks off the "test-js" task.
 
 ###### Interpreting the results
 To see the results of the tests that are run as part of the Travis CI build, open the build in Travis CI.  If the build 
@@ -604,7 +609,7 @@ If a Jasmine test fails, you'll see something like the following in the job log.
 
 ##### Automatic execution in Jenkins
 The Jasmine tests are automatically run as part of the Jenkins build when 
-[RunPackUnitTestsAndBuildProfMPackage.sh](scripts/RunPackUnitTestsAndBuildProfMPackage.sh) is executed
+[RunPackUnitTestsAndBuildProfMPackage.sh](scripts/RunPackUnitTestsAndBuildProfMPackage.sh) is executed.
 
 ###### Interpreting the results
 To see the results of the tests that are run as part of the Jenkins build, open the build in Jenkins.  If the build 

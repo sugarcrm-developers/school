@@ -12,7 +12,7 @@
 
 <?php
 // Copyright 2018 SugarCRM Inc.  Licensed by SugarCRM under the Apache 2.0 license.
-require("../vendor/autoload.php");
+require("vendor/autoload.php");
 
 use Sugarcrm\ProfessorM\PackageGenerator;
 
