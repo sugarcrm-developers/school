@@ -17,17 +17,17 @@ docker rm my-composer --force || true
 # Run the Jasmine tests
 docker pull sugarcrmdev/school:yarn
 docker run -t -d -v $LOCALWORKSPACEPATH:/workspace --name my-yarn sugarcrmdev/school:yarn
-docker exec my-yarn yarn install
-docker exec my-yarn yarn global add grunt-cli
+docker exec my-yarn sh -c "cd tests/jasmine && yarn install"
+docker exec my-yarn sh -c "cd tests/jasmine && yarn global add grunt-cli"
 echo "Running the Jasmine tests for PackageGenerator..."
-docker exec my-yarn grunt test-js
+docker exec my-yarn sh -c "cd tests/jasmine && grunt test-js"
 
 # Run the PHPUnit tests
 docker pull sugarcrmdev/school:composer
 docker run -t -d -v $LOCALWORKSPACEPATH:/workspace --name my-composer sugarcrmdev/school:composer
-docker exec my-composer composer install
+docker exec my-composer sh -c "cd package && composer install"
 echo "Running the PHPUnit tests for PackageGenerator..."
-docker exec my-composer vendor/bin/phpunit
+docker exec my-composer sh -c "cd tests/phpunit && ../../package/vendor/bin/phpunit"
 
 # Generate the Standard and Windows versions Professor M module loadable package
 docker exec my-composer sh -c "cd package && php ./pack.php -v jenkins"
