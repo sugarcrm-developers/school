@@ -387,7 +387,6 @@ class PackageGeneratorTest extends TestCase
         $this->assertFalse($pg->shouldIncludeFileInZip("src\\custom\\modules\\test\\Ext\\excludeme.php"));
     }
 
-    #TODO:  Lauren
     public function testShouldIncludeFileInWindowsZip(){
         $pg = new PackageGenerator();
         $this->assertTrue($pg->shouldIncludeFileInWindowsZip(
