@@ -29,11 +29,14 @@ gitHubPassword=$3
 # Determine which branch to clone
 ######################################################################
 
-if [[ "$sugarVersion" == "7.10" ]]
-then branch="7_10_0"
+if [[ "$sugarVersion" == "8.0" ]]
+then branch="8_0_0"
 
 elif [[ "$sugarVersion" == "7.11" ]]
 then branch="7_11_0"
+
+elif [[ "$sugarVersion" == "7.10" ]]
+then branch="7_10_0"
 
 else
     echo "Unable to find Sugar unit tests for version $sugarVersion"
