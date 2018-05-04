@@ -1,6 +1,6 @@
 stages:
 - name: Test PackageGenerator
-- name: Run PHPUnit
+- name: Run Tests
 - name: Build & Post on GitHub
   if: branch = master
 jobs:
@@ -23,14 +23,14 @@ jobs:
     - yarn global add grunt-cli
     script:
     - grunt test-js
-  - stage: Run PHPUnit
+  - stage: Run Tests
     sudo: required
     language: php
     php: '7.1'
     services:
     - docker
     env:
-    - SUGAR_VERSION=7.10 SUGAR_EDITION=Ent
+    - SUGAR_VERSION=8.0 SUGAR_EDITION=Ent
     before_script:
     - cd package
     - composer install
@@ -38,15 +38,15 @@ jobs:
     - cd ../scripts
     - sudo service mysql stop
     script:
-      - ./SetupEnvAndRunPHPUnitTests.sh $SUGARCRM_USERNAME $SUGARCRM_PASSWORD $SUGAR_VERSION $SUGAR_EDITION $GITHUB_USERNAME $GITHUB_PASSWORD workspace/sugardocker
-  - stage: Run PHPUnit
+      - ./SetupEnvAndRunTests.sh $SUGARCRM_USERNAME $SUGARCRM_PASSWORD $SUGAR_VERSION $SUGAR_EDITION $GITHUB_USERNAME $GITHUB_PASSWORD workspace/sugardocker
+  - stage: Run Tests
     sudo: required
     language: php
     php: '7.1'
     services:
     - docker
     env:
-    - SUGAR_VERSION=7.10 SUGAR_EDITION=Pro
+    - SUGAR_VERSION=8.0 SUGAR_EDITION=Pro
     before_script:
     - cd package
     - composer install
@@ -54,15 +54,15 @@ jobs:
     - cd ../scripts
     - sudo service mysql stop
     script:
-      - ./SetupEnvAndRunPHPUnitTests.sh $SUGARCRM_USERNAME $SUGARCRM_PASSWORD $SUGAR_VERSION $SUGAR_EDITION $GITHUB_USERNAME $GITHUB_PASSWORD workspace/sugardocker
-  - stage: Run PHPUnit
+      - ./SetupEnvAndRunTests.sh $SUGARCRM_USERNAME $SUGARCRM_PASSWORD $SUGAR_VERSION $SUGAR_EDITION $GITHUB_USERNAME $GITHUB_PASSWORD workspace/sugardocker
+  - stage: Run Tests
     sudo: required
     language: php
     php: '7.1'
     services:
     - docker
     env:
-    - SUGAR_VERSION=7.10 SUGAR_EDITION=Ult
+    - SUGAR_VERSION=8.0 SUGAR_EDITION=Ult
     before_script:
     - cd package
     - composer install
@@ -70,55 +70,7 @@ jobs:
     - cd ../scripts
     - sudo service mysql stop
     script:
-      - ./SetupEnvAndRunPHPUnitTests.sh $SUGARCRM_USERNAME $SUGARCRM_PASSWORD $SUGAR_VERSION $SUGAR_EDITION $GITHUB_USERNAME $GITHUB_PASSWORD workspace/sugardocker
-  - stage: Run PHPUnit
-    sudo: required
-    language: php
-    php: '7.1'
-    services:
-    - docker
-    env:
-    - SUGAR_VERSION=7.11 SUGAR_EDITION=Ent
-    before_script:
-    - cd package
-    - composer install
-    - "./pack.php -v $(date +'%Y%m%d-%H.%M.%S')"
-    - cd ../scripts
-    - sudo service mysql stop
-    script:
-      - ./SetupEnvAndRunPHPUnitTests.sh $SUGARCRM_USERNAME $SUGARCRM_PASSWORD $SUGAR_VERSION $SUGAR_EDITION $GITHUB_USERNAME $GITHUB_PASSWORD workspace/sugardocker
-  - stage: Run PHPUnit
-    sudo: required
-    language: php
-    php: '7.1'
-    services:
-    - docker
-    env:
-    - SUGAR_VERSION=7.11 SUGAR_EDITION=Pro
-    before_script:
-    - cd package
-    - composer install
-    - "./pack.php -v $(date +'%Y%m%d-%H.%M.%S')"
-    - cd ../scripts
-    - sudo service mysql stop
-    script:
-      - ./SetupEnvAndRunPHPUnitTests.sh $SUGARCRM_USERNAME $SUGARCRM_PASSWORD $SUGAR_VERSION $SUGAR_EDITION $GITHUB_USERNAME $GITHUB_PASSWORD workspace/sugardocker
-  - stage: Run PHPUnit
-    sudo: required
-    language: php
-    php: '7.1'
-    services:
-    - docker
-    env:
-    - SUGAR_VERSION=7.11 SUGAR_EDITION=Ult
-    before_script:
-    - cd package
-    - composer install
-    - "./pack.php -v $(date +'%Y%m%d-%H.%M.%S')"
-    - cd ../scripts
-    - sudo service mysql stop
-    script:
-      - ./SetupEnvAndRunPHPUnitTests.sh $SUGARCRM_USERNAME $SUGARCRM_PASSWORD $SUGAR_VERSION $SUGAR_EDITION $GITHUB_USERNAME $GITHUB_PASSWORD workspace/sugardocker
+      - ./SetupEnvAndRunTests.sh $SUGARCRM_USERNAME $SUGARCRM_PASSWORD $SUGAR_VERSION $SUGAR_EDITION $GITHUB_USERNAME $GITHUB_PASSWORD workspace/sugardocker
   - stage: Build & Post on GitHub
     language: php
     php: '7.1'

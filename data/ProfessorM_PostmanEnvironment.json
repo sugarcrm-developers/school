@@ -1,0 +1,33 @@
+{
+  "id": "9a6f384b-5b88-72ba-1b40-943d9634275b",
+  "name": "Professor M",
+  "values": [
+    {
+      "key": "url",
+      "value": "http://localhost/sugar",
+      "enabled": true,
+      "type": "text"
+    },
+    {
+      "key": "username",
+      "value": "admin",
+      "enabled": true,
+      "type": "text"
+    },
+    {
+      "key": "password",
+      "value": "sugarcrm",
+      "enabled": true,
+      "type": "text"
+    },
+    {
+      "key": "rest_endpoint",
+      "value": "/rest/v10",
+      "enabled": true,
+      "type": "text"
+    }
+  ],
+  "_postman_variable_scope": "environment",
+  "_postman_exported_at": "2018-04-17T20:15:00.101Z",
+  "_postman_exported_using": "Postman/6.0.10"
+}

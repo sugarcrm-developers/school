@@ -216,9 +216,9 @@ cd $sugarDirectory
 # Delete the cookie jar file if it exists
 rm -f $cookieFile
 
-# Set the file permissions for when sudo is required and is not required
-chmod -R 777 .
-sudo chmod -R 777 .
+# Set the file permissions for when sudo is required and is not required. Output of these commands will not be printed.
+chmod -R 777 . &> /dev/null
+sudo chmod -R 777 . &> /dev/null
 
 
 #######################################################################
@@ -273,21 +273,18 @@ then
 
 elif [[ "$sugarName" == "Sugar$sugarEdition_Ult-$sugarVersion_8_0" ]]
 then
-    downloadUrl="$(authenticateToSugarStoreAndGetDownloadUrl "SugarUlt-8.0.0.0.zip")"
-    #TODO: Add checksum once 8.0 is GA. Issue #55
-    expectedChecksum=""
+    downloadUrl="$(authenticateToSugarStoreAndGetDownloadUrl "SugarUlt-8.0.0.zip")"
+    expectedChecksum="f64d8b1a538dfe12009bbb88936d2d1230cafbc7"
 
 elif [[ "$sugarName" == "Sugar$sugarEdition_Ent-$sugarVersion_8_0" ]]
 then
-    downloadUrl="$(authenticateToSugarStoreAndGetDownloadUrl "SugarEnt-8.0.0.0.zip")"
-    #TODO: Add checksum once 8.0 is GA. Issue #55
-    expectedChecksum=""
+    downloadUrl="$(authenticateToSugarStoreAndGetDownloadUrl "SugarEnt-8.0.0.zip")"
+    expectedChecksum="378496a81a16c427c7add9762719668b2696b561"
 
 elif [[ "$sugarName" == "Sugar$sugarEdition_Pro-$sugarVersion_8_0" ]]
 then
-    downloadUrl="$(authenticateToSugarStoreAndGetDownloadUrl "SugarPro-8.0.0.0.zip")"
-    #TODO: Add checksum once 8.0 is GA. Issue #55
-    expectedChecksum=""
+    downloadUrl="$(authenticateToSugarStoreAndGetDownloadUrl "SugarPro-8.0.0.zip")"
+    expectedChecksum="418c4b23f6fc6db969dd132722f665d7e5426ed4"
 
 else
     echo "Unable to find Sugar download URL for $sugarName"
