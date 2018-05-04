@@ -13,6 +13,7 @@ then
            repo (-v /Users/lschaefer/git/sugardocker:/var/sugardocker).
 
         For example: ./PrepareJenkinsDockerContainer.sh /Users/lschaefer/jenkins2 \"-v /Users/lschaefer/git/sugardocker:/var/sugardocker\""
+    exit 1
 fi
 
 # The path to your Jenkins home directory on your host machine
