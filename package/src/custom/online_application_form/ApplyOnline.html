@@ -1,0 +1,327 @@
+<html lang='en_us'><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head>
+
+<style>
+
+    div.row{
+        width: 100%;
+    }
+
+    div.center{
+        text-align: center;
+    }
+
+    div.twenty-five{
+        width: 25%;
+        float: left;
+    }
+    div.fifty{
+        width:  50%;
+        float: left;
+    }
+    div.one-hundred{
+        width:  100%;
+        float: left;
+    }
+
+    div.form-element{
+        padding-right: 10px;
+    }
+
+    div.input{
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    div.input input,select,textarea {
+        width: 100%;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        font-size: 1em;
+        padding: 5px;
+    }
+    div.input textarea {
+        min-height: 200px;
+    }
+
+    label {
+        color: #555555;
+        font-size: .75em;
+    }
+
+</style>
+
+<body style="font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;"><p>
+    <script type="text/javascript" ></script>
+    </p>
+    <form id="WebToLeadForm" action="will be replaced in submit_form()" method="POST" name="WebToLeadForm">
+        <input id="email_opt_in" type="hidden" name="email_opt_in" value="off" />
+
+        <div class="center">
+            <img style="max-width:200px;" src="https://github.com/sugarcrm/school/blob/master/images/PROFESSOR-M_logo.png?raw=true" alt="Professor M's School for Gifted Coders Logo" />
+            <h1>Application for Admission</h1>
+        </div>
+
+        <div class="row">
+            <div class="fifty">
+                <div class="form-element">
+                    <div class="label">
+                        <label for="first_name">First Name:</label>
+                    </div>
+                    <div class="input">
+                        <input id="first_name" type="text" name="first_name" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="fifty">
+                <div class="form-element">
+                    <div class="label">
+                        <label for="last_name">Last Name: <span class="required" style="color: #ff0000;">*</span></label>
+                    </div>
+                    <div class="input">
+                        <input id="last_name" type="text" name="last_name" />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="one-hundred">
+                <div class="form-element">
+                    <div class="label">
+                        <label for="email">Email Address:</label>
+                    </div>
+                    <div class="input">
+                        <input type="text" id="email" name="email" onchange="validateEmailAdd();" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="one-hundred">
+                <div class="form-element">
+                    <div class="label">
+                        <label for="primary_address_street">Street Address:</label>
+                    </div>
+                    <div class="input">
+                        <input id="primary_address_street" type="text" name="primary_address_street" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="twenty-five">
+                <div class="form-element">
+                    <div class="label">
+                        <label for="primary_address_city">City:</label>
+                    </div>
+                    <div class="input">
+                        <input id="primary_address_city" type="text" name="primary_address_city" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="twenty-five">
+                <div class="form-element">
+                    <div class="label">
+                        <label for="primary_address_state">State:</label>
+                    </div>
+                    <div class="input">
+                        <input id="primary_address_state" type="text" name="primary_address_state" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="twenty-five">
+                <div class="form-element">
+                    <div class="label">
+                        <label for="primary_address_postalcode">Zip:</label>
+                    </div>
+                    <div class="input">
+                        <input id="primary_address_postalcode" type="text" name="primary_address_postalcode" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="twenty-five">
+                <div class="form-element">
+                    <div class="label">
+                        <label for="primary_address_country">Country:</label>
+                    </div>
+                    <div class="input">
+                        <input id="primary_address_country" type="text" name="primary_address_country" />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="twenty-five">
+                <div class="form-element">
+                    <div class="label">
+                        <label for="highschool_c">High School:</label>
+                    </div>
+                    <div class="input">
+                        <input id="highschool_c" type="text" name="highschool_c" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="twenty-five">
+                <div class="form-element">
+                    <div class="label">
+                        <label for="gpa_c">Grade Point Average (GPA):</label>
+                    </div>
+                    <div class="input">
+                        <input id="gpa_c" type="text" name="gpa_c" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="fifty">
+                <div class="form-element">
+                    <div class="label">
+                        <label for="programminglanguages_c">Programming Languages:</label>
+                    </div>
+                    <div class="input">
+                        <select id="programminglanguages_c" name="programminglanguages_c[]" multiple="multiple" tabindex="1">
+                            <option value="php">PHP</option>
+                            <option value="javascript">JavaScript</option>
+                            <option value="net">.NET</option>
+                            <option value="java">Java</option>
+                            <option value="c">C/C++</option>
+                            <option value="go">Go</option>
+                            <option value="python">Python</option>
+                            <option value="ruby">Ruby</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="one-hundred">
+                <div class="form-element">
+                    <div class="label">
+                        <label for="transcript_c">Transcript:</label>
+                    </div>
+                    <div class="input">
+                        <textarea id="transcript_c" type="text" name="transcript_c"></textarea>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="center">
+            <input class="submit-button" onclick="submit_form();" type="button" name="Submit" value="Submit" style="font-size: 1.5em; padding: .5em 1em; border-radius: 1em; color: #555555;"/>
+        </div>
+
+        <input id="campaign_id" type="hidden" name="campaign_id" value="will be replaced in submit_form()" />
+        <input id="redirect_url" type="hidden" name="redirect_url" value="will be replaced in submit_form()" />
+        <input id="assigned_user_id" type="hidden" name="assigned_user_id" value="1" />
+        <input id="team_id" type="hidden" name="team_id" value="1" />
+        <input id="team_set_id" type="hidden" name="team_set_id" value="1" />
+        <input id="req_id" type="hidden" name="req_id" value="last_name;" />
+    </form>
+    <p>
+    <script type="text/javascript">// <![CDATA[
+        function submit_form(){
+            // If you were implementing this yourself, you would know the URL of your Sugar instance and could hardcode
+            // it here.  To make this example easy for anyone to try, we are hosting this form on the
+            // Sugar instance (you could host this form anywhere) and pulling the URL of the Sugar instance
+            // from this webpage.
+            var url = window.location.href;
+            var urlBase = url.substring(0, url.lastIndexOf('/custom/online_application_form/ApplyOnline.html'));
+
+            // If you were implementing this yourself, you would hardcode the Campaign ID associated with this form.
+            // To make this example easy for anyone to try, we are getting the Campaign ID dynamically
+            // from Sugar using a custom endpoint.  When the GET request returns with the Campaign ID for the most
+            // recently updated campaign with the name 'Online Applications', we will set the form action, campaign id,
+            // and redirect url.
+            var xhr = new XMLHttpRequest();
+            xhr.withCredentials = true;
+            xhr.addEventListener("readystatechange", function () {
+                if (this.readyState === 4) {
+
+                    document.getElementById('WebToLeadForm').action = urlBase + "//index.php?entryPoint=WebToLeadCapture";
+
+                    document.getElementById('campaign_id').value = xhr.responseText;
+
+                    document.getElementById('redirect_url').value = urlBase + "/custom/online_application_form/ApplyOnlineSuccess.html";
+
+                    if(typeof(validateCaptchaAndSubmit)!='undefined'){
+                        validateCaptchaAndSubmit();
+                    }else{
+                        check_webtolead_fields();
+                    }
+                }
+            });
+            // Get the ID of the Online Applications Campaign
+            xhr.open("GET", urlBase + "/index.php?entryPoint=getOnlineApplicationsCampaign");
+            xhr.send(null);
+        }
+
+    //Javascript below this comment came directly from the Web to Lead form generated in the Sugar UI
+    function check_webtolead_fields(){
+        if(document.getElementById('bool_id') != null){
+            var reqs=document.getElementById('bool_id').value;
+            bools = reqs.substring(0,reqs.lastIndexOf(';'));
+            var bool_fields = new Array();
+            var bool_fields = bools.split(';');
+            nbr_fields = bool_fields.length;
+            for(var i=0;i<nbr_fields;i++){
+                if(document.getElementById(bool_fields[i]).value == 'on'){
+                    document.getElementById(bool_fields[i]).value = 1;
+                }
+                else{
+                    document.getElementById(bool_fields[i]).value = 0;
+                }
+            }
+        }
+        if(document.getElementById('req_id') != null){
+            var reqs=document.getElementById('req_id').value;
+            reqs = reqs.substring(0,reqs.lastIndexOf(';'));
+            var req_fields = new Array();
+            var req_fields = reqs.split(';');
+            nbr_fields = req_fields.length;
+            var req = true;
+            for(var i=0;i<nbr_fields;i++){
+                if(document.getElementById(req_fields[i]).value.length <=0 || document.getElementById(req_fields[i]).value==0){
+                    req = false;
+                    break;
+                }
+            }
+            if(req){
+                document.WebToLeadForm.submit();
+                return true;
+            }
+            else{
+                alert('Please provide all the required fields');
+                return false;
+            }
+            return false
+        }
+        else{
+            document.WebToLeadForm.submit();
+        }
+    }
+    function validateEmailAdd(){
+        if(document.getElementById('email1') && document.getElementById('email1').value.length >0) {
+            if(document.getElementById('email1').value.match(/^\w+(['\.\-\+]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,})+$/) == null){
+                                                                    alert('Not a valid email address');
+                                                                    }
+                                                                    }
+                                                                    if(document.getElementById('email2') && document.getElementById('email2').value.length >0) {
+                                                                    if(document.getElementById('email2').value.match(/^\w+(['\.\-\+]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,})+$/) == null){
+                                                                                                                            alert('Not a valid email address');
+                                                                                                                            }
+                                                                                                                            }
+                                                                                                                            }
+                                                                                                                            // ]]></script>
+    </p></body></html>
