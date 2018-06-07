@@ -101,7 +101,7 @@ Sugar will display many modules by default that you will not be using while work
 
 ### Use the Sugar REST API to create the Professor M sample data
 In order to create the Professor M sample data, you'll use Postman to run a collection of Sugar REST API calls.  Each call in the collection has one or more simple tests associated with it to ensure the call was successful.
-1. Save a copy of [ProfessorM_PostmanCollection.json](https://raw.githubusercontent.com/sugarcrm/uncon/2017/ProfessorM/ProfessorM_SampleData/ProfessorM_PostmanCollection.json)
+1. Save a copy of [ProfessorM_PostmanCollection.json](https://raw.githubusercontent.com/sugarcrm/school/master/data/ProfessorM_PostmanCollection.json)
 1. In Postman, click **Import**
 1. Click **Choose Files** and import **ProfessorM_PostmanCollection.json**
 1. Click the gear icon in the upper right corner and select **Manage Enviornments**
