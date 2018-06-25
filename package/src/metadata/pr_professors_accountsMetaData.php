@@ -14,8 +14,8 @@ $dictionary["pr_professors_accounts"] = array (
       'rhs_key' => 'id',
       'relationship_type' => 'many-to-many',
       'join_table' => 'pr_professors_accounts_c',
-      'join_key_lhs' => 'pr_professors_accountspr_professors_ida',
-      'join_key_rhs' => 'pr_professors_accountsaccounts_idb',
+      'join_key_lhs' => 'pr_prof_accountspr_prof_ida',
+      'join_key_rhs' => 'pr_prof_accountsaccounts_idb',
     ),
   ),
   'table' => 'pr_professors_accounts_c',
@@ -37,14 +37,14 @@ $dictionary["pr_professors_accounts"] = array (
       'type' => 'bool',
       'default' => 0,
     ),
-    'pr_professors_accountspr_professors_ida' => 
+    'pr_prof_accountspr_prof_ida' =>
     array (
-      'name' => 'pr_professors_accountspr_professors_ida',
+      'name' => 'pr_prof_accountspr_prof_ida',
       'type' => 'id',
     ),
-    'pr_professors_accountsaccounts_idb' => 
+    'pr_prof_accountsaccounts_idb' =>
     array (
-      'name' => 'pr_professors_accountsaccounts_idb',
+      'name' => 'pr_prof_accountsaccounts_idb',
       'type' => 'id',
     ),
   ),
@@ -65,7 +65,7 @@ $dictionary["pr_professors_accounts"] = array (
       'type' => 'index',
       'fields' => 
       array (
-        0 => 'pr_professors_accountspr_professors_ida',
+        0 => 'pr_prof_accountspr_prof_ida',
         1 => 'deleted',
       ),
     ),
@@ -75,7 +75,7 @@ $dictionary["pr_professors_accounts"] = array (
       'type' => 'index',
       'fields' => 
       array (
-        0 => 'pr_professors_accountsaccounts_idb',
+        0 => 'pr_prof_accountsaccounts_idb',
         1 => 'deleted',
       ),
     ),
@@ -85,8 +85,8 @@ $dictionary["pr_professors_accounts"] = array (
       'type' => 'alternate_key',
       'fields' => 
       array (
-        0 => 'pr_professors_accountspr_professors_ida',
-        1 => 'pr_professors_accountsaccounts_idb',
+        0 => 'pr_prof_accountspr_prof_ida',
+        1 => 'pr_prof_accountsaccounts_idb',
       ),
     ),
   ),

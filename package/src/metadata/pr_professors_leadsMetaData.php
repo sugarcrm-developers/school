@@ -14,7 +14,7 @@ $dictionary["pr_professors_leads"] = array (
       'rhs_key' => 'id',
       'relationship_type' => 'many-to-many',
       'join_table' => 'pr_professors_leads_c',
-      'join_key_lhs' => 'pr_professors_leadspr_professors_ida',
+      'join_key_lhs' => 'pr_prof_leadspr_prof_ida',
       'join_key_rhs' => 'pr_professors_leadsleads_idb',
     ),
   ),
@@ -37,9 +37,9 @@ $dictionary["pr_professors_leads"] = array (
       'type' => 'bool',
       'default' => 0,
     ),
-    'pr_professors_leadspr_professors_ida' => 
+    'pr_prof_leadspr_prof_ida' =>
     array (
-      'name' => 'pr_professors_leadspr_professors_ida',
+      'name' => 'pr_prof_leadspr_prof_ida',
       'type' => 'id',
     ),
     'pr_professors_leadsleads_idb' => 
@@ -65,7 +65,7 @@ $dictionary["pr_professors_leads"] = array (
       'type' => 'index',
       'fields' => 
       array (
-        0 => 'pr_professors_leadspr_professors_ida',
+        0 => 'pr_prof_leadspr_prof_ida',
         1 => 'deleted',
       ),
     ),

@@ -8,5 +8,5 @@ $dictionary["PR_Professors"]["fields"]["pr_professors_contacts"] = array (
   'module' => 'Contacts',
   'bean_name' => 'Contact',
   'vname' => 'LBL_PR_PROFESSORS_CONTACTS_FROM_CONTACTS_TITLE',
-  'id_name' => 'pr_professors_contactscontacts_idb',
+  'id_name' => 'pr_professors_contcont_idb',
 );
