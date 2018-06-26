@@ -77,7 +77,6 @@ Sugar will display many modules by default that you will not be using while work
    * Tasks
    * Notes
    * Emails
-   * Campaigns
    * Targets
    * Target Lists
    * Forecasts
@@ -95,6 +94,7 @@ Sugar will display many modules by default that you will not be using while work
    * Revenue Line Items
    * Quotes
    * Reports
+   * Campaigns
    * Process Email Templates
    * Process Definitions
 1. Click **Save**
