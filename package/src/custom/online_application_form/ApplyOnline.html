@@ -248,17 +248,20 @@
             xhr.withCredentials = true;
             xhr.addEventListener("readystatechange", function () {
                 if (this.readyState === 4) {
+                    if(xhr.responseText) {
+                        document.getElementById('WebToLeadForm').action = urlBase + "//index.php?entryPoint=WebToLeadCapture";
 
-                    document.getElementById('WebToLeadForm').action = urlBase + "//index.php?entryPoint=WebToLeadCapture";
+                        document.getElementById('campaign_id').value = xhr.responseText;
 
-                    document.getElementById('campaign_id').value = xhr.responseText;
+                        document.getElementById('redirect_url').value = urlBase + "/custom/online_application_form/ApplyOnlineSuccess.html";
 
-                    document.getElementById('redirect_url').value = urlBase + "/custom/online_application_form/ApplyOnlineSuccess.html";
-
-                    if(typeof(validateCaptchaAndSubmit)!='undefined'){
-                        validateCaptchaAndSubmit();
-                    }else{
-                        check_webtolead_fields();
+                        if (typeof(validateCaptchaAndSubmit) != 'undefined') {
+                            validateCaptchaAndSubmit();
+                        } else {
+                            check_webtolead_fields();
+                        }
+                    } else {
+                        alert('We were unable to process your request, because we could not find a Campaign in Sugar with the name Online Applications.');
                     }
                 }
             });

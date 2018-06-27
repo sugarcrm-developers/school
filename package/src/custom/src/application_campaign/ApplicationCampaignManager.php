@@ -40,6 +40,7 @@ class ApplicationCampaignManager
 
     /**
      * Get Sugar Query.
+     * This function exists so we can mock the SugarQuery in automated tests.
      *
      * @return \SugarQuery
      */
@@ -49,7 +50,8 @@ class ApplicationCampaignManager
     }
 
     /**
-     * Get a new Campaign Bean
+     * Get a new Campaign Bean.
+     * This function exists so we can mock the Campaigns Bean in automated tests.
      *
      * @return null|\SugarBean
      */
