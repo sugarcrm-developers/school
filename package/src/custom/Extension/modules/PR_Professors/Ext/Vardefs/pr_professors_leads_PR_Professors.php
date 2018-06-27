@@ -8,7 +8,7 @@ $dictionary["PR_Professors"]["fields"]["pr_professors_leads"] = array (
   'module' => 'Leads',
   'bean_name' => 'Lead',
   'vname' => 'LBL_PR_PROFESSORS_LEADS_FROM_PR_PROFESSORS_TITLE',
-  'id_name' => 'pr_professors_leadspr_professors_ida',
+  'id_name' => 'pr_prof_leadspr_prof_ida',
   'link-type' => 'many',
   'side' => 'left',
 );

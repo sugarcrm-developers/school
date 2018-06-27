@@ -252,7 +252,6 @@ $installdefs = array(
                     'help' => NULL,
                     'module' => 'Contacts',
                     'type' => 'bool',
-                    'max_size' => '255',
                     'require_option' => '0',
                     'default_value' => '0',
                     'date_modified' => '2018-01-31 21:23:13',
