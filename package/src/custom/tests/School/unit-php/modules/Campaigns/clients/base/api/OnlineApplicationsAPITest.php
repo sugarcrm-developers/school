@@ -3,15 +3,15 @@
 use Sugarcrm\SugarcrmTestsUnit\TestMockHelper;
 
 /**
- * @coversDefaultClass \ApplicationCampaignManager
+ * @coversDefaultClass \OnlineApplicationsAPI
  */
-class ApplicationCampaignManagerTest extends \PHPUnit\Framework\TestCase
+class OnlineApplicationsAPI extends \PHPUnit\Framework\TestCase
 {
 
     /**
-     * A partial mock of ApplicationCampaignManager
+     * A partial mock of OnlineApplicationsAPI
      */
-    private $acm;
+    private $api;
 
     /**
      * @var a partial mock of a SugarQuery
@@ -28,11 +28,11 @@ class ApplicationCampaignManagerTest extends \PHPUnit\Framework\TestCase
 
         $this->campaignBean = $this->createMock('SugarBean');
 
-        $this->acm = TestMockHelper::createPartialMock($this,
+        $this->api = TestMockHelper::createPartialMock($this,
             '\\Sugarcrm\\Sugarcrm\\custom\\application_campaign\\ApplicationCampaignManager',
             ['getSugarQuery', 'getNewCampaignBean']);
-        $this->acm->method('getSugarQuery')->willReturn($this->sugarQuery);
-        $this->acm->method('getNewCampaignBean')->willReturn($this->campaignBean);
+        $this->api->method('getSugarQuery')->willReturn($this->sugarQuery);
+        $this->api->method('getNewCampaignBean')->willReturn($this->campaignBean);
     }
 
     /**
@@ -51,7 +51,7 @@ class ApplicationCampaignManagerTest extends \PHPUnit\Framework\TestCase
         $this->sugarQuery->method('execute')->willReturn($this->queryResults);
 
         $this->sugarQuery->expects($this->once())->method('execute');
-        $this->assertEquals($this->campaignId, $this->acm->getOnlineApplicationsCampaignId());
+        $this->assertEquals($this->campaignId, $this->api->getOnlineApplicationsCampaignId());
     }
 
     /**
@@ -64,7 +64,7 @@ class ApplicationCampaignManagerTest extends \PHPUnit\Framework\TestCase
 
         $this->sugarQuery->expects($this->once())->method('execute');
         $this->expectException(Exception::class, "Unable to find ID for the Campaign named Online Applications");
-        $this->acm->getOnlineApplicationsCampaignId();
+        $this->api->getOnlineApplicationsCampaignId();
     }
 
 }
