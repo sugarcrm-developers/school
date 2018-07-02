@@ -359,32 +359,32 @@ class PackageGeneratorTest extends TestCase
 
     public function testShouldIncludeFileInZipValidFileMac(){
         $pg = new PackageGenerator();
-        $this->assertTrue($pg->shouldIncludeFileInZip("src/custom/Extension/modules/Accounts/Ext/WirelessLayoutdefs/pr_professors_accounts_Accounts.php"));
+        $this->assertTrue($pg->shouldIncludeFileInZip("src/custom/Extension/modules/Accounts/Ext/WirelessLayoutdefs/pr_professors_accounts_Accounts.php",));
     }
 
     public function testShouldIncludeFileInZipValidFileWindows(){
         $pg = new PackageGenerator();
-        $this->assertTrue($pg->shouldIncludeFileInZip("src\\custom\\Extension\\modules\\Accounts\\Ext\\WirelessLayoutdefs\\pr_professors_accounts_Accounts.php"));
+        $this->assertTrue($pg->shouldIncludeFileInZip("src\\custom\\Extension\\modules\\Accounts\\Ext\\WirelessLayoutdefs\\pr_professors_accounts_Accounts.php",));
     }
 
     public function testShouldIncludeFileInZipFileInCustomApplicationExtMac(){
         $pg = new PackageGenerator();
-        $this->assertFalse($pg->shouldIncludeFileInZip("src/custom/application/Ext/test.php"));
+        $this->assertFalse($pg->shouldIncludeFileInZip("src/custom/application/Ext/test.php",));
     }
 
     public function testShouldIncludeFileInZipFileInCustomApplicationExtWindows(){
         $pg = new PackageGenerator();
-        $this->assertFalse($pg->shouldIncludeFileInZip("src\\custom\\application\\Ext\\test.php"));
+        $this->assertFalse($pg->shouldIncludeFileInZip("src\\custom\\application\\Ext\\test.php",));
     }
 
     public function testShouldIncludeFileInZipFileInCustomModulesModuleNameExtMac(){
         $pg = new PackageGenerator();
-        $this->assertFalse($pg->shouldIncludeFileInZip("src/custom/modules/test/Ext/excludeme.php"));
+        $this->assertFalse($pg->shouldIncludeFileInZip("src/custom/modules/test/Ext/excludeme.php",));
     }
 
     public function testShouldIncludeFileInZipFileInCustomModulesModuleNameExtWindows(){
         $pg = new PackageGenerator();
-        $this->assertFalse($pg->shouldIncludeFileInZip("src\\custom\\modules\\test\\Ext\\excludeme.php"));
+        $this->assertFalse($pg->shouldIncludeFileInZip("src\\custom\\modules\\test\\Ext\\excludeme.php",));
     }
 
     public function testShouldIncludeFileInWindowsZip(){
@@ -799,10 +799,10 @@ class PackageGeneratorTest extends TestCase
     public function testExcludesDSStoreGitDirectories(){
         $pg = new PackageGenerator();
         $fullPathDSStore = "src" . DIRECTORY_SEPARATOR . "modules" . DIRECTORY_SEPARATOR. ".DS_Store";
-        $this->assertFalse($pg->shouldIncludeFileInZip($fullPathDSStore), "Should exclude " . $fullPathDSStore);
-        $this->assertFalse($pg->shouldIncludeFileInZip("src" . DIRECTORY_SEPARATOR . "modules" . DIRECTORY_SEPARATOR. ".git"), "Should exclude .git in path");
-        $this->assertFalse($pg->shouldIncludeFileInZip(".DS_Store"), "Should exclude .DS_Store");
-        $this->assertFalse($pg->shouldIncludeFileInZip(".git"), "Should exclude .git");
+        $this->assertFalse($pg->shouldIncludeFileInZip($fullPathDSStore,), "Should exclude " . $fullPathDSStore);
+        $this->assertFalse($pg->shouldIncludeFileInZip("src" . DIRECTORY_SEPARATOR . "modules" . DIRECTORY_SEPARATOR . ".git",), "Should exclude .git in path");
+        $this->assertFalse($pg->shouldIncludeFileInZip(".DS_Store",), "Should exclude .DS_Store");
+        $this->assertFalse($pg->shouldIncludeFileInZip(".git",), "Should exclude .git");
     }
 
     public function testEchoExcludedFilesWithNoFilesToExclude(){

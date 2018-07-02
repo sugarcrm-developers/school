@@ -396,13 +396,18 @@ $installdefs = array(
 
 try {
     $isWindowsBuild = false;
+    $isProductionBuild = false;
     $lengthOfWindowsSugarDirectoryPath = null;
     if (array_key_exists('w', $options)){
         $isWindowsBuild = true;
         $lengthOfWindowsSugarDirectoryPath = (int)$options['w'];
     }
-    $zip = $pg -> generateZip($version, $packageID, $argv[0], "src", $manifest, $installdefs, $isWindowsBuild,
-        $lengthOfWindowsSugarDirectoryPath);
+    if (array_key_exists('p', $options)){
+        $isProductionBuild = true;
+    }
+    echo "isProductionBuild: " . $isProductionBuild;
+    $zip = $pg -> generateZip($version, $packageID, $argv[0], "src", $manifest, $installdefs,
+        $isProductionBuild, $isWindowsBuild, $lengthOfWindowsSugarDirectoryPath);
 } catch (Exception $e) {
     die($e->getMessage());
 }

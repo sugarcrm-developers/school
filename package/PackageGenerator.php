@@ -27,7 +27,7 @@ class PackageGenerator
         $this -> cwd = $pathOfWorkingDirectory;
     }
 
-    public function shouldIncludeFileInZip($fileRelative)
+    public function shouldIncludeFileInZip($fileRelative, $isProductionBuild)
     {
         /*
          * We want to exclude files in the following directories:
@@ -38,6 +38,12 @@ class PackageGenerator
             preg_match('/.*custom[\/\\\]modules[\/\\\].+[\/\\\]Ext[\/\\\].*/', $fileRelative)){
             return false;
         }
+        #echo "is prod build: " . $isProductionBuild;
+
+        if($isProductionBuild == true && preg_match('/.*custom[\/\\\]tests[\/\\\].*/', $fileRelative)){
+            return false;
+        }
+
         // Fix for MacOS, Git submodules
         if (preg_match('/\.(DS_Store|git)$/', $fileRelative))
         {
@@ -108,7 +114,7 @@ class PackageGenerator
      *   filesToExcludeWindows: list of files that should not be included in the zip because they require manual installation
      *                          on Windows. This list will be empty if this is NOT a Windows build.
      */
-    public function getFileArraysForZip($srcDirectory, $isWindowsBuild, $lengthOfWindowsSugarDirectoryPath)
+    public function getFileArraysForZip($srcDirectory, $isProductionBuild, $isWindowsBuild, $lengthOfWindowsSugarDirectoryPath)
     {
         $filesToInclude = array();
         $filesToExclude = array();
@@ -128,7 +134,7 @@ class PackageGenerator
                 $fileRelative = $srcDirectory . str_replace($basePath, '', $fileReal);
                 $fileArray = array("fileReal" => $fileReal, "fileRelative" => $fileRelative);
 
-                if ($this->shouldIncludeFileInZip($fileRelative)) {
+                if ($this->shouldIncludeFileInZip($fileRelative, $isProductionBuild)) {
                     if ($isWindowsBuild && !$this->shouldIncludeFileInWindowsZip($fileRelative, $lengthOfWindowsSugarDirectoryPath)){
                         array_push($filesToExcludeWindows, $fileArray);
                         continue;
@@ -266,7 +272,7 @@ class PackageGenerator
      * Creates the zip for the Module Loadable Package
      */
     public function generateZip($version, $packageID, $command, $srcDirectory, $manifestContent, $installdefs,
-                                $isWindowsBuild, $lengthOfWindowsSugarDirectoryPath){
+                                $isProductionBuild, $isWindowsBuild, $lengthOfWindowsSugarDirectoryPath){
 
         if ($isWindowsBuild){
             $version = $version . "-windows";
@@ -276,7 +282,7 @@ class PackageGenerator
 
         $zip = $this -> openZip($version, $packageID, $command);
 
-        $arrayOfFiles = $this -> getFileArraysForZip($srcDirectory, $isWindowsBuild, $lengthOfWindowsSugarDirectoryPath);
+        $arrayOfFiles = $this -> getFileArraysForZip($srcDirectory, $isProductionBuild, $isWindowsBuild, $lengthOfWindowsSugarDirectoryPath);
         $filesToInclude = $arrayOfFiles["filesToInclude"];
         $filesToExclude = $arrayOfFiles["filesToExclude"];
         $filesToExcludeWindows = $arrayOfFiles["filesToExcludeWindows"];
