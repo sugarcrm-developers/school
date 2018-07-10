@@ -228,6 +228,7 @@ sudo chmod -R 777 . &> /dev/null
 sugarVersion_7_10="7.10"
 sugarVersion_7_11="7.11"
 sugarVersion_8_0="8.0"
+sugarVersion_8_1="8.1"
 
 sugarEdition_Ult="Ult"
 sugarEdition_Ent="Ent"
@@ -285,6 +286,24 @@ elif [[ "$sugarName" == "Sugar$sugarEdition_Pro-$sugarVersion_8_0" ]]
 then
     downloadUrl="$(authenticateToSugarStoreAndGetDownloadUrl "SugarPro-8.0.0.zip")"
     expectedChecksum="418c4b23f6fc6db969dd132722f665d7e5426ed4"
+
+elif [[ "$sugarName" == "Sugar$sugarEdition_Ult-$sugarVersion_8_1" ]]
+then
+    authenticateToDevBuildsCommunity
+    downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/6174-102-3-8633/SugarUlt-8.1.0-dev.1.zip"
+    expectedChecksum="91ee511ed56e26bcc0dce0d0c70a185cf2c6c54f"
+
+elif [[ "$sugarName" == "Sugar$sugarEdition_Ent-$sugarVersion_8_1" ]]
+then
+    authenticateToDevBuildsCommunity
+    downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/6176-102-3-8635/SugarEnt-8.1.0-dev.1.zip"
+    expectedChecksum="5f187d6704aee58f2e1085577b0c305fd3f18b45"
+
+elif [[ "$sugarName" == "Sugar$sugarEdition_Pro-$sugarVersion_8_1" ]]
+then
+    authenticateToDevBuildsCommunity
+    downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/6175-102-3-8634/SugarPro-8.1.0-dev.1.zip"
+    expectedChecksum="bfcf929d237faf3d316fb9d4c925fcc7359e989a"
 
 else
     echo "Unable to find Sugar download URL for $sugarName"
