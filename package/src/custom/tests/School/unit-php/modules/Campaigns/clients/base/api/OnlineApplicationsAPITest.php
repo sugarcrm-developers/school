@@ -2,10 +2,12 @@
 
 use Sugarcrm\SugarcrmTestsUnit\TestMockHelper;
 
+require_once 'custom/modules/Campaigns/clients/base/api/OnlineApplicationsAPI.php';
+
 /**
  * @coversDefaultClass \OnlineApplicationsAPI
  */
-class OnlineApplicationsAPI extends \PHPUnit\Framework\TestCase
+class OnlineApplicationsAPITest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -28,8 +30,7 @@ class OnlineApplicationsAPI extends \PHPUnit\Framework\TestCase
 
         $this->campaignBean = $this->createMock('SugarBean');
 
-        $this->api = TestMockHelper::createPartialMock($this,
-            '\\Sugarcrm\\Sugarcrm\\custom\\application_campaign\\ApplicationCampaignManager',
+        $this->api = TestMockHelper::createPartialMock($this, 'OnlineApplicationsAPI',
             ['getSugarQuery', 'getNewCampaignBean']);
         $this->api->method('getSugarQuery')->willReturn($this->sugarQuery);
         $this->api->method('getNewCampaignBean')->willReturn($this->campaignBean);
@@ -51,7 +52,7 @@ class OnlineApplicationsAPI extends \PHPUnit\Framework\TestCase
         $this->sugarQuery->method('execute')->willReturn($this->queryResults);
 
         $this->sugarQuery->expects($this->once())->method('execute');
-        $this->assertEquals($this->campaignId, $this->api->getOnlineApplicationsCampaignId());
+        $this->assertEquals(array('id' => $this->campaignId), $this->api->getOnlineApplicationsCampaignId());
     }
 
     /**
