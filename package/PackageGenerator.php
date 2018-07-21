@@ -38,8 +38,10 @@ class PackageGenerator
             preg_match('/.*custom[\/\\\]modules[\/\\\].+[\/\\\]Ext[\/\\\].*/', $fileRelative)){
             return false;
         }
-        #echo "is prod build: " . $isProductionBuild;
 
+        /*
+         * If the build is a production build, we want to exclude the custom/tests directory
+         */
         if($isProductionBuild == true && preg_match('/.*custom[\/\\\]tests[\/\\\].*/', $fileRelative)){
             return false;
         }
@@ -268,19 +270,39 @@ class PackageGenerator
         return $zip;
     }
 
+    /**
+     * Get the postfix that will be appended to the name of the zip file. The postfix is named "version-buildType."
+     * The default buildType is "standard."  If the build is a production build, the buildType is "production." If the
+     * build is a Windows build, the buildType will be "windows" or "windows-production."
+     * @param $version The version name or number
+     * @param $isProductionBuild True if the build is to be used in production
+     * @param $isWindowsBuild True if the build is to be installed on Windows
+     */
+    public function getZipFileNamePostfix($version, $isProductionBuild, $isWindowsBuild){
+        $postfix = $version;
+        if ($isWindowsBuild){
+            $postfix = $postfix . "-windows";
+            if($isProductionBuild){
+                $postfix = $postfix . "-production";
+            }
+        } elseif ($isProductionBuild){
+            $postfix = $postfix . "-production";
+        }
+        else {
+            $postfix = $postfix . "-standard";
+        }
+        return $postfix;
+    }
+
     /*
      * Creates the zip for the Module Loadable Package
      */
     public function generateZip($version, $packageID, $command, $srcDirectory, $manifestContent, $installdefs,
                                 $isProductionBuild, $isWindowsBuild, $lengthOfWindowsSugarDirectoryPath){
 
-        if ($isWindowsBuild){
-            $version = $version . "-windows";
-        } else {
-            $version = $version . "-standard";
-        }
+        $zipName = $this->getZipFileNamePostfix($version, $isProductionBuild, $isWindowsBuild);
 
-        $zip = $this -> openZip($version, $packageID, $command);
+        $zip = $this -> openZip($zipName, $packageID, $command);
 
         $arrayOfFiles = $this -> getFileArraysForZip($srcDirectory, $isProductionBuild, $isWindowsBuild, $lengthOfWindowsSugarDirectoryPath);
         $filesToInclude = $arrayOfFiles["filesToInclude"];
@@ -296,7 +318,7 @@ class PackageGenerator
         $this -> echoExcludedFiles($filesToExclude);
 
         if ($isWindowsBuild){
-            $zip = $this -> openZip($version . "-manual-install", $packageID, $command);
+            $zip = $this -> openZip($zipName . "-manual-install", $packageID, $command);
             $zip = $this -> addFilesToWindowsManualInstallZip($zip, $filesToExcludeWindows, $srcDirectory);
             $zip = $this -> closeZip($zip);
         }
