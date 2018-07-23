@@ -492,11 +492,11 @@ your `school/package` directory:
 
 The PHPUnit tests can be executed by running the following command from your `school/tests/phpunit` directory on macOS:
 ```
-../../vendor/bin/phpunit
+../../package/vendor/bin/phpunit
 ```
 or on Windows:
 ```
-..\..\vendor\bin\phpunit
+..\..\package\vendor\bin\phpunit
 ```
 
 ##### Automatic execution in Travis CI
@@ -569,9 +569,9 @@ tests.
 Install Yarn which is an NPM compatible package manager. See 
 [Yarn Installation Guide](https://yarnpkg.com/lang/en/docs/install/) for more details on how to install Yarn.
 
-Next navigate to your school directory and then execute the following commands. 
+Next navigate to your `school` directory and then execute the following commands. 
 
-Navigate to the tests/jasmine directory.
+Navigate to the `tests/jasmine` directory.
 ```
 cd tests/jasmine
 ```
@@ -703,7 +703,7 @@ Run the Sugar provided unit tests by executing the following command from the `t
 $ ../../vendor/bin/phpunit
 ```
 
-Install the Professor M Module Loadable Package using 
+Install the **standard** version of the Professor M Module Loadable Package using 
 [Module Loader](https://support.sugarcrm.com/SmartLinks/Administration_Guide/Developer_Tools/Module_Loader/index.html) 
 if you have not already done so.  The code for 
 Professor M and the associated tests will be installed in to the Sugar source directory.
@@ -803,9 +803,12 @@ The Postman Collection can be run via the Postman application as described
 
 ##### Manual execution using the command line interface
 
-You can execute the tests against any running instance of Sugar. The first step is to configure the Postman Environment 
-for your particular instance of Sugar.  Open [ProfessorM_PostmanEnvironment](data/ProfessorM_PostmanEnvironment.json) 
-and update the url, username, password, and rest_endpoint to reflect your instance.
+You can execute the tests against any running instance of Sugar. Note that the Postman tests will NOT be installed
+as part of the Professor M module loadable package.  The tests will only be available in your `school` repo.
+
+The first step is to configure the Postman Environment for your particular instance of Sugar.  Open 
+[ProfessorM_PostmanEnvironment](data/ProfessorM_PostmanEnvironment.json) and update the url, username, password, and 
+rest_endpoint to reflect your instance.
 
 Then you can choose to install Newman to execute the tests or use a Docker image to execute the tests.
 
