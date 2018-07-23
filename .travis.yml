@@ -30,7 +30,7 @@ jobs:
     services:
     - docker
     env:
-    - SUGAR_VERSION=8.0 SUGAR_EDITION=Ent
+    - SUGAR_VERSION=8.1 SUGAR_EDITION=Ent
     before_script:
     - cd package
     - composer install
@@ -46,7 +46,7 @@ jobs:
     services:
     - docker
     env:
-    - SUGAR_VERSION=8.0 SUGAR_EDITION=Pro
+    - SUGAR_VERSION=8.1 SUGAR_EDITION=Pro
     before_script:
     - cd package
     - composer install
@@ -62,7 +62,7 @@ jobs:
     services:
     - docker
     env:
-    - SUGAR_VERSION=8.0 SUGAR_EDITION=Ult
+    - SUGAR_VERSION=8.1 SUGAR_EDITION=Ult
     before_script:
     - cd package
     - composer install
