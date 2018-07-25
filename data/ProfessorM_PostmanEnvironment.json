@@ -22,7 +22,7 @@
     },
     {
       "key": "rest_endpoint",
-      "value": "/rest/v10",
+      "value": "/rest/v11_2",
       "enabled": true,
       "type": "text"
     }

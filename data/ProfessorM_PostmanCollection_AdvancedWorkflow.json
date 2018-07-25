@@ -1,0 +1,254 @@
+{
+	"variables": [],
+	"info": {
+		"name": "ProfessorM Sample Data - Advanced Workflow",
+		"_postman_id": "25243b31-94c2-10c2-4941-23034b34f669",
+		"description": "See https://github.com/sugarcrm/school for more information. Note: Advanced Workflow is exclusive to Enterprise and Ultimate editions of Sugar 7.6.x and later",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authenticate",
+			"description": "",
+			"item": [
+				{
+					"name": "Authenticate",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"var access_token = jsonData.access_token;",
+									"",
+									"tests[\"Successful POST request\"] = responseCode.code === 200;",
+									"tests[\"access_token exists\"] = access_token !== null || access_token !== \"\";",
+									"",
+									"postman.setEnvironmentVariable(\"access_token\", access_token);",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{url}}{{rest_endpoint}}/oauth2/token",
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"grant_type\":\"password\",\n   \"client_id\":\"sugar\",\n   \"client_secret\":\"\",\n   \"username\":\"{{username}}\",\n   \"password\":\"{{password}}\",\n   \"platform\":\"profm_import\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Create Admissions Advisors",
+			"description": "",
+			"item": [
+				{
+					"name": "Create Admissions Advisor Matthew",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a6107025-1a29-496e-b8c0-0ca178f7e0f0",
+								"type": "text/javascript",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"var idOfAdmissionsAdvisor = jsonData.id;",
+									"",
+									"tests[\"Successful POST request\"] = responseCode.code === 200;",
+									"tests[\"id is correct\"] = \"matthew-id\" === idOfAdmissionsAdvisor;",
+									"tests[\"user_name is correct\"] = \"matthew\" === jsonData.user_name;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "OAuth-Token",
+								"value": "{{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"first_name\":\"Matthew\",\n\t\"last_name\":\"Aysman\",\n\t\"user_name\":\"matthew\",\n\t\"employee_status\":\"Active\",\n\t\"status\":\"Active\",\n\t\"UserType\":\"RegularUser\",\n\t\"id\":\"matthew-id\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}{{rest_endpoint}}/Users",
+							"host": [
+								"{{url}}{{rest_endpoint}}"
+							],
+							"path": [
+								"Users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Admissions Advisor Ackburr",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d90b0950-0d7f-415b-9422-97f6c6b17063",
+								"type": "text/javascript",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"var idOfAdmissionsAdvisor = jsonData.id;",
+									"",
+									"tests[\"Successful POST request\"] = responseCode.code === 200;",
+									"tests[\"id is correct\"] = \"ackburr-id\" === idOfAdmissionsAdvisor;",
+									"tests[\"user_name is correct\"] = \"ackburr\" === jsonData.user_name;"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "OAuth-Token",
+								"value": "{{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"first_name\":\"Ackburr\",\n\t\"last_name\":\"Bahabialila\",\n\t\"user_name\":\"ackburr\",\n\t\"employee_status\":\"Active\",\n\t\"status\":\"Active\",\n\t\"UserType\":\"RegularUser\",\n\t\"id\":\"ackburr-id\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}{{rest_endpoint}}/Users",
+							"host": [
+								"{{url}}{{rest_endpoint}}"
+							],
+							"path": [
+								"Users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Create Process Definitions",
+			"description": "",
+			"item": [
+				{
+					"name": "Import Application Routing Process Definition",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6a27da1b-360c-434d-ad47-4e6c683fb7d7",
+								"type": "text/javascript",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"var idOfProcessDefinition = jsonData.project_import.id;",
+									"",
+									"tests[\"Successful POST request\"] = responseCode.code === 200;",
+									"tests[\"id exists\"] = idOfProcessDefinition !== null || idOfProcessDefinition !== \"\";",
+									"tests[\"successful project import\"] = true === jsonData.project_import.success;",
+									"tests[\"no br warnings\"] = false === jsonData.project_import.br_warning;",
+									"tests[\"no et warnings\"] = false === jsonData.project_import.et_warning;",
+									"",
+									"postman.setEnvironmentVariable(\"ApplicationRoutingProcessDefinitionId\", idOfProcessDefinition);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "OAuth-Token",
+								"value": "{{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"description": "",
+									"type": "file",
+									"src": "Application_Routing.bpm"
+								},
+								{
+									"key": "selectedIds",
+									"value": "[\"c1153366-8f43-11e8-b206-7200080cd7d0\"]",
+									"description": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}{{rest_endpoint}}/pmse_Project/file/project_import",
+							"host": [
+								"{{url}}{{rest_endpoint}}"
+							],
+							"path": [
+								"pmse_Project",
+								"file",
+								"project_import"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Enable Application Routing Process Definition",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2a57fe3a-f067-4b25-b54a-9d0ffd21e888",
+								"type": "text/javascript",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"var idOfProcessDefinition = jsonData.id;",
+									"",
+									"tests[\"Successful POST request\"] = responseCode.code === 200;",
+									"tests[\"id exists\"] = idOfProcessDefinition !== null || idOfProcessDefinition !== \"\";",
+									"tests[\"project status is active\"] = \"ACTIVE\" === jsonData.prj_status;",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "OAuth-Token",
+								"value": "{{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"prj_status\": \"ACTIVE\"}"
+						},
+						"url": {
+							"raw": "{{url}}{{rest_endpoint}}/pmse_Project/{{ApplicationRoutingProcessDefinitionId}}",
+							"host": [
+								"{{url}}{{rest_endpoint}}"
+							],
+							"path": [
+								"pmse_Project",
+								"{{ApplicationRoutingProcessDefinitionId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

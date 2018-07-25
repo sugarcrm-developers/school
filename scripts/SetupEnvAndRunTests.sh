@@ -84,6 +84,6 @@ mkdir workspace
 
 ./RunProfMPHPUnitTests.sh $sugarDirectory || exit 1
 
-./RunPostmanTests.sh $sugarVersion $sugarDirectory || exit 1
+./RunPostmanTests.sh $sugarVersion $sugarEdition || exit 1
 
 ./StopDockerStack.sh $sugarVersion $sugarDockerDirectory || exit 1
