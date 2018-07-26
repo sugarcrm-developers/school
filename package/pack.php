@@ -1,13 +1,12 @@
 #!/usr/bin/env php
 
 # Run this script with the following options:
-# ./pack.php -v versionNameOrNumber
-# ./pack.php -v versionNameOrNumber -w lengthOfWindowsSugarDirectoryPath
-#
-# -w lengthOfWindowsSugarDirectoryPath: This is an optional flag that can be used to generate a build specifically for
+# -v versionNameOrNumber: (Required) The version name or number of the generated package.
+# -p: (Optional) Flag indicating if this is a production build and files like tests should be excluded.
+# -w lengthOfWindowsSugarDirectoryPath: (Optional) This option can be used to generate a build specifically for
 # Windows.  Input the length of the Sugar Directory Path of the Windows installation.  The script will generate two zips:
 #     1. sugarcrm-ProfessorM-versionNameOrNumber-windows.zip: the module loadable package to be installed
-#     2. sugarcrm-ProfessorM-hello-versionNameOrNumber-manual-install.zip: a zip containing files to be manually installed
+#     2. sugarcrm-ProfessorM-versionNameOrNumber-manual-install.zip: a zip containing files to be manually installed
 
 
 <?php
@@ -30,7 +29,7 @@ $supportedVersionRegex = '(8\..*|7\.(9|10|11)\..*)';
  */
 $pg = new PackageGenerator;
 
-$options = getopt("v:w:");
+$options = getopt("v:w:p");
 if (!array_key_exists('v', $options)){
     die("Indicate version number by running script with -v. Example: ./pack.php -v 1.0\n");
 }
@@ -396,13 +395,17 @@ $installdefs = array(
 
 try {
     $isWindowsBuild = false;
+    $isProductionBuild = false;
     $lengthOfWindowsSugarDirectoryPath = null;
     if (array_key_exists('w', $options)){
         $isWindowsBuild = true;
         $lengthOfWindowsSugarDirectoryPath = (int)$options['w'];
     }
-    $zip = $pg -> generateZip($version, $packageID, $argv[0], "src", $manifest, $installdefs, $isWindowsBuild,
-        $lengthOfWindowsSugarDirectoryPath);
+    if (array_key_exists('p', $options)){
+        $isProductionBuild = true;
+    }
+    $zip = $pg -> generateZip($version, $packageID, $argv[0], "src", $manifest, $installdefs,
+        $isProductionBuild, $isWindowsBuild, $lengthOfWindowsSugarDirectoryPath);
 } catch (Exception $e) {
     die($e->getMessage());
 }

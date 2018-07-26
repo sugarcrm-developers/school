@@ -27,7 +27,13 @@ class PackageGenerator
         $this -> cwd = $pathOfWorkingDirectory;
     }
 
-    public function shouldIncludeFileInZip($fileRelative)
+    /*
+     * Should the file be included in the zip?
+     * @param $fileRelative The relative path for the file
+     * @param $isProductionBuild True if the build is to be used in production
+     * @return boolean True if the file should be included in the zip
+     */
+    public function shouldIncludeFileInZip($fileRelative, $isProductionBuild)
     {
         /*
          * We want to exclude files in the following directories:
@@ -38,6 +44,14 @@ class PackageGenerator
             preg_match('/.*custom[\/\\\]modules[\/\\\].+[\/\\\]Ext[\/\\\].*/', $fileRelative)){
             return false;
         }
+
+        /*
+         * If the build is a production build, we want to exclude the custom/tests directory
+         */
+        if($isProductionBuild == true && preg_match('/.*custom[\/\\\]tests[\/\\\].*/', $fileRelative)){
+            return false;
+        }
+
         // Fix for MacOS, Git submodules
         if (preg_match('/\.(DS_Store|git)$/', $fileRelative))
         {
@@ -49,6 +63,10 @@ class PackageGenerator
 
     /*
      * Checks if the file path is too long and should be excluded from Windows builds
+     * @param $fileRelative The relative path for the file
+     * @param $lengthOfWindowsSugarDirectoryPath The length of the Sugar directory path on the Windows machine where
+     * this package will be installed
+     * @return boolean True if the file should be included in the zip
      */
     public function shouldIncludeFileInWindowsZip($fileRelative, $lengthOfWindowsSugarDirectoryPath)
     {
@@ -65,6 +83,8 @@ class PackageGenerator
      * Get the version that should be used for the zip.  If a version
      * is not passed as a param, the function checks for a file named
      * "version" and gets the version out of the file.
+     * @param $versionPassedToScript The version passed to the script
+     * @return string The version that should be used for the zip
      */
     public function getVersion($versionPassedToScript){
         if (empty($versionPassedToScript)) {
@@ -80,6 +100,11 @@ class PackageGenerator
      * Returns the relative file path for the zip file that will be created.
      * @throws \Exception if $version is empty.
      * Will make a releases directory if one does not already exists.
+     *
+     * @param $version The version name or number for the package
+     * @param $packageId The package ID
+     * @param $command The command used to kick off the script
+     * @return string The relative file path for the zip file that will be created
      */
     public function getZipFilePath($version, $packageID, $command){
         if (empty($version)){
@@ -101,14 +126,19 @@ class PackageGenerator
      * Iterate over the files located in the $srcDirectory and return an array that contains a
      * array of files to include in the zip and an array of files to exclude from the zip
      *
-     * @param $srcDirectory
+     * @param $srcDirectory The directory that contains the source files to go in to the zip
+     * @param $isProductionBuild True if the build is to be used in production
+     * @param $isWindowsBuild True if the build is to be installed on Windows
+     * @param $lengthOfWindowsSugarDirectoryPath The length of the Sugar directory path on the Windows machine where
+     * this package will be installed
+     *
      * @return array of arrays:
      *   filesToInclude: list of files to include in the zip
      *   filesToExclude: list of files that should not be included in the zip
      *   filesToExcludeWindows: list of files that should not be included in the zip because they require manual installation
      *                          on Windows. This list will be empty if this is NOT a Windows build.
      */
-    public function getFileArraysForZip($srcDirectory, $isWindowsBuild, $lengthOfWindowsSugarDirectoryPath)
+    public function getFileArraysForZip($srcDirectory, $isProductionBuild, $isWindowsBuild, $lengthOfWindowsSugarDirectoryPath)
     {
         $filesToInclude = array();
         $filesToExclude = array();
@@ -128,7 +158,7 @@ class PackageGenerator
                 $fileRelative = $srcDirectory . str_replace($basePath, '', $fileReal);
                 $fileArray = array("fileReal" => $fileReal, "fileRelative" => $fileRelative);
 
-                if ($this->shouldIncludeFileInZip($fileRelative)) {
+                if ($this->shouldIncludeFileInZip($fileRelative, $isProductionBuild)) {
                     if ($isWindowsBuild && !$this->shouldIncludeFileInWindowsZip($fileRelative, $lengthOfWindowsSugarDirectoryPath)){
                         array_push($filesToExcludeWindows, $fileArray);
                         continue;
@@ -151,9 +181,9 @@ class PackageGenerator
     /**
      * Creates and opens a new zip archive
      *
-     * @param $version
-     * @param $packageID
-     * @param $command
+     * @param $version The version name or number for the package
+     * @param $packageId The package ID
+     * @param $command The command used to kick off the script
      * @return \ZipArchive
      * @throws \Exception if a zip file with the same name already exists
      */
@@ -173,6 +203,11 @@ class PackageGenerator
         return $zip;
     }
 
+    /**
+     * Close the zip
+     * @param $zip The zip to be closed
+     * @return mixed The closed zip
+     */
     public function closeZip($zip){
         $filename = basename($zip -> filename);
         $zip->close();
@@ -182,6 +217,9 @@ class PackageGenerator
 
     /*
      * Adds the files listed in $filesToInclude to the $zip
+     * @param $zip The zip file
+     * @param $filesToInclude The files to include in the zip
+     * @return mixed The updated zip
      */
     public function addFilesToZip($zip, $filesToInclude){
         foreach($filesToInclude as $file) {
@@ -194,6 +232,11 @@ class PackageGenerator
     /*
      * Adds the files listed in $filesToInclude to the zip in indexed directories
      * Also adds a text file that describes where the files should be manually installed
+     *
+     * @param $zip The zip file
+     * @param $filesToInclude The files to include in the zip
+     * @param $srcDirectory The directory that contains the source files to go in to the zip
+     * @return mixed The updated zip
      */
     public function addFilesToWindowsManualInstallZip($zip, $filesToInclude, $srcDirectory){
         $readmeFile = 'ProfMForWindowsReadme.txt';
@@ -221,10 +264,11 @@ class PackageGenerator
     }
 
     /**
-     * @param $filesToInclude
-     * @param $installdefs
-     * @param $srcDirectory
-     * @return mixed
+     * Add the list of files to the installdefs
+     * @param $filesToInclude The files to include in the zip
+     * @param $installdefs The installdefs for the package
+     * @param $srcDirectory The directory that contains the source files to go in to the zip
+     * @return mixed The installdefs
      */
     public function addFilesToInstalldefs($filesToInclude, $installdefs, $srcDirectory){
         foreach($filesToInclude as $file) {
@@ -238,6 +282,7 @@ class PackageGenerator
 
     /*
      * Outputs a list of files that were excluded from the zip
+     * @param $filesToExclude An array of files to be excluded
      */
     public function echoExcludedFiles($filesToExclude){
         if (!empty($filesToExclude)){
@@ -251,6 +296,10 @@ class PackageGenerator
     /*
      * Creates manifest.php where the content of the file is made up of the $manifestContent and $installdefs.
      * The resulting manifest.php file is placed in the $zip.
+     * @param $manifestContent The content for the package manifest
+     * @param $installdefs The installdefs for the package
+     * @param $zip The zip where the generated manifest should be placed
+     * @return mixed The updated zip
      */
     public function generateManifest($manifestContent, $installdefs, $zip){
         $manifestContent = sprintf(
@@ -262,21 +311,54 @@ class PackageGenerator
         return $zip;
     }
 
+    /**
+     * Get the postfix that will be appended to the name of the zip file. The postfix is named "version-buildType."
+     * The default buildType is "standard."  If the build is a production build, the buildType is "production." If the
+     * build is a Windows build, the buildType will be "windows" or "windows-production."
+     * @param $version The version name or number
+     * @param $isProductionBuild True if the build is to be used in production
+     * @param $isWindowsBuild True if the build is to be installed on Windows
+     * @return The postfix that should be appended to the name of the zip file
+     */
+    public function getZipFileNamePostfix($version, $isProductionBuild, $isWindowsBuild){
+        $postfix = $version;
+        if ($isWindowsBuild){
+            $postfix = $postfix . "-windows";
+            if($isProductionBuild){
+                $postfix = $postfix . "-production";
+            }
+        } elseif ($isProductionBuild){
+            $postfix = $postfix . "-production";
+        }
+        else {
+            $postfix = $postfix . "-standard";
+        }
+        return $postfix;
+    }
+
     /*
      * Creates the zip for the Module Loadable Package
+     *
+     * @param $version The version name or number for the package
+     * @param $packageId The package ID
+     * @param $command The command used to kick off the script
+     * @param $srcDirectory The directory that contains the source files to go in to the zip
+     * @param $manifestContent The content for the package manifest
+     * @param $installdefs The installdefs for the package
+     * @param $isProductionBuild True if the build is to be used in production
+     * @param $isWindowsBuild True if the build is to be installed on Windows
+     * @param $lengthOfWindowsSugarDirectoryPath The length of the Sugar directory path on the Windows machine where
+     * this package will be installed
+     * @return mixed The generated zip
      */
     public function generateZip($version, $packageID, $command, $srcDirectory, $manifestContent, $installdefs,
-                                $isWindowsBuild, $lengthOfWindowsSugarDirectoryPath){
+                                $isProductionBuild, $isWindowsBuild, $lengthOfWindowsSugarDirectoryPath){
 
-        if ($isWindowsBuild){
-            $version = $version . "-windows";
-        } else {
-            $version = $version . "-standard";
-        }
+        $zipName = $this->getZipFileNamePostfix($version, $isProductionBuild, $isWindowsBuild);
 
-        $zip = $this -> openZip($version, $packageID, $command);
+        $zip = $this -> openZip($zipName, $packageID, $command);
 
-        $arrayOfFiles = $this -> getFileArraysForZip($srcDirectory, $isWindowsBuild, $lengthOfWindowsSugarDirectoryPath);
+        $arrayOfFiles = $this -> getFileArraysForZip($srcDirectory, $isProductionBuild, $isWindowsBuild, $lengthOfWindowsSugarDirectoryPath);
         $filesToInclude = $arrayOfFiles["filesToInclude"];
         $filesToExclude = $arrayOfFiles["filesToExclude"];
         $filesToExcludeWindows = $arrayOfFiles["filesToExcludeWindows"];
@@ -290,7 +372,7 @@ class PackageGenerator
         $this -> echoExcludedFiles($filesToExclude);
 
         if ($isWindowsBuild){
-            $zip = $this -> openZip($version . "-manual-install", $packageID, $command);
+            $zip = $this -> openZip($zipName . "-manual-install", $packageID, $command);
             $zip = $this -> addFilesToWindowsManualInstallZip($zip, $filesToExcludeWindows, $srcDirectory);
             $zip = $this -> closeZip($zip);
         }

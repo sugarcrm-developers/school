@@ -44,7 +44,10 @@ Watch the video below for instructions on how to install the scenario.  Text-bas
 
 ### Install the modules and customizations
 We've created a custom package you can install.  The package will create and customize the modules you'll need for the scenario.  The following instructions will walk you throw how to install the package.
-1. Download **sugarcrm-ProfessorM-standard.zip** from the latest [release](https://github.com/sugarcrm/school/releases)
+1. Download the appropriate zip file from the latest [release](https://github.com/sugarcrm/school/releases). If you are
+installing in Sugar Cloud, you will need to select the **production** version of the release.  If you are installing
+elsewhere, you can select the **production** release or the **standard** release.  The **standard** release includes 
+automated testing files while the **production** release does not.
 1. Login to Sugar as an Administrator
 1. Navigate to **Administration** > **Module Loader**
 1. Upload **sugarcrm-ProfessorM-standard.zip**
@@ -56,6 +59,10 @@ We've created a custom package you can install.  The package will create and cus
      1. Install the zip as a module loadable package using the steps above.
      1. Download **sugarcrm-ProfessorM-windows-manual-install.zip** from the latest [release](https://github.com/sugarcrm/school/releases).
      1. Unzip the file. Note that you'll find **ProfMForWindowsReadme.txt** and a set of directories inside of the zip.
+     If no directories are inside the zip, then all file paths in the `package/src` directory have been deemed short 
+     enough to be included in a typical Windows installation and you will need to generate the zips yourself locally 
+     on your own machine (see [Generating the Professor M module loadable packages locally](#generating-the-professor-m-module-loadable-packages-locally) 
+     for instructions on how to do so).
      1. Open **ProfMForWindowsReadme.txt**.
      1. Follow the instructions inside of the readme to manually copy the files from the zip to your Sugar instance.  You
      may need to create directories in your Sugar directory if they do not already exist.

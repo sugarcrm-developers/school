@@ -80,6 +80,7 @@ jobs:
     script:
     - "./pack.php -v $(date +'%Y%m%d-%H.%M.%S')"
     - "./pack.php -v $(date +'%Y%m%d-%H.%M.%S') -w 40" #Using 40 as a typical path length. May not work for all Windows installations
+    - "./pack.php -v $(date +'%Y%m%d-%H.%M.%S') -p"
     before_deploy: git tag "$(date +'%Y%m%d-%H.%M.%S')-$(git log --format=%h -1)"
     deploy:
       file_glob: true
