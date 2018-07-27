@@ -291,6 +291,14 @@ array (
                                 'studio' => 'visible',
                                 'label' => 'LBL_TRANSCRIPT',
                             ),
+                        4 =>
+                            array (
+                                'name' => 'rating_c',
+                                'label' => 'LBL_RATING',
+                            ),
+                        5 =>
+                            array (
+                            ),
                     ),
           ),
           3 =>
