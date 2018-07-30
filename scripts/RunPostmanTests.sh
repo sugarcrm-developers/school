@@ -12,17 +12,17 @@ if [[ -z "$1" ]] || [[ -z "$2" ]]
 then
     echo "Not all required command line arguments were set. Please run the script again with the required arguments:
         1: Sugar version (Example: 7.11)
-        2: Path to where the Sugar files are stored
+        2: Sugar edition (Options: Ult, Ent, Pro)
 
-        For example: ./RunPostmanTests.sh 7.11 workspace/sugardocker/data/app/sugar"
+        For example: ./RunPostmanTests.sh 7.11 Ult"
     exit 1
 fi
 
 # The Sugar version
 sugarVersion=$1
 
-# The path to where the unzipped Sugar files are stored
-sugarDirectory=$2
+# The Sugar edition
+sugarEdition=$2
 
 
 ######################################################################
@@ -80,6 +80,7 @@ fi
 # Run the Postman tests
 ######################################################################
 
+# Run the tests that work with all editions of Sugar
 docker run -v $dataDirectoryPath:/etc/newman --net="host" -t postman/newman_ubuntu1404 run "ProfessorM_PostmanCollection.json" --environment="ProfessorM_PostmanEnvironment.json" --no-color
 
 # If the tests return 1, at least one of the tests failed, so we will exit the script with error code 1.
@@ -88,6 +89,16 @@ then
     exit 1
 fi
 
+# Run the Advanced Workflow tests, which only work with Ent and Ult
+if [[ "$sugarEdition" == "Ent" || "$sugarEdition" == "Ult" ]]
+    then
+        docker run -v $dataDirectoryPath:/etc/newman --net="host" -t postman/newman_ubuntu1404 run "ProfessorM_PostmanCollection_AdvancedWorkflow.json" --environment="ProfessorM_PostmanEnvironment.json" --no-color
+
+        if [[ $? -eq 1 ]]
+        then
+            exit 1
+        fi
+fi
 
 ######################################################################
 # Cleanup

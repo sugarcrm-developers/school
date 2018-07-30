@@ -87,8 +87,6 @@ Sugar will display many modules by default that you will not be using while work
    * Targets
    * Target Lists
    * Forecasts
-   * Processes
-   * Process Business Rules
    * Documents
    * Cases
    * Tags
@@ -104,6 +102,8 @@ Sugar will display many modules by default that you will not be using while work
    * Campaigns
    * Process Email Templates
    * Process Definitions
+   * Process Business Rules
+   * Processes
 1. Click **Save**
 
 ### Use the Sugar REST API to create the Professor M sample data
@@ -128,7 +128,10 @@ In order to create the Professor M sample data, you'll use Postman to run a coll
 1. Wait for the collection to finish running. All tests should pass.
    Hint:  If you see many failures, you may have forgotten to install the Professor M module loadable package.  See the 
    instructions in previous section for how to do the install.
-
+   
+If you are using an Enterprise or Ultimate edition of Sugar, you can use the features that leverage Advanced Workflow.
+Save a copy of [ProfessorM_PostmanCollection_AdvancedWorkflow.json](https://raw.githubusercontent.com/sugarcrm/school/master/data/ProfessorM_PostmanCollection_AdvancedWorkflow.json)
+and follow the steps above to import the collection and run it.
 
 ## Setting up your development environment
 If you want to generate the Professor M module loadable packages yourself or make changes to the code in this repo, you
@@ -800,11 +803,11 @@ If a PHPUnit test fails, you'll see something like the following in the job log.
 
 #### Postman tests for the Professor M Module Loadable Package
 
-[Postman](https://www.getpostman.com/) is an API development environment.  We use a Postman Collection to insert our 
-sample data into Sugar via the REST API.  Each API call in the collection has one or more associated tests to ensure
+[Postman](https://www.getpostman.com/) is an API development environment.  We use Postman Collections to insert our 
+sample data into Sugar via the REST API.  Each API call in the collections has one or more associated tests to ensure
 the calls were successful.  
 
-The Postman Collection can be run via the Postman application as described 
+The Postman Collections can be run via the Postman application as described 
 [above](#use-the-sugar-rest-api-to-create-the-professor-m-sample-data) or the command line using 
 [Newman](https://www.getpostman.com/docs/v6/postman/collection_runs/command_line_integration_with_newman).
 
@@ -831,6 +834,11 @@ Navigate to the `school/data` directory in your shell.  Execute the tests by run
 
 `newman run ProfessorM_PostmanCollection.json -e ProfessorM_PostmanEnvironment.json`
 
+You can execute the tests that leverage Advanced Workflow (only available in Enterprise and Ultimate editions of Sugar)
+by running the following:
+
+`newman run ProfessorM_PostmanCollection_AdvancedWorkflow.json -e ProfessorM_PostmanEnvironment.json`
+
 ###### Using Docker
 
 [Install Docker](https://docs.docker.com/install) if you haven't already.
@@ -844,6 +852,11 @@ Execute the tests by running the following:
 `docker run -v pathToTheDataDirectoryInYourSchoolRepo:/etc/newman -t postman/newman_ubuntu1404 run "ProfessorM_PostmanCollection.json" --environment="ProfessorM_PostmanEnvironment.json"`
 
 Be sure to replace `pathToTheDataDirectoryInYourSchoolRepo` with the path to the `data` directory in your school repo.
+
+You can execute the tests that leverage Advanced Workflow (only available in Enterprise and Ultimate editions of Sugar)
+by running the following:
+
+`docker run -v pathToTheDataDirectoryInYourSchoolRepo:/etc/newman -t postman/newman_ubuntu1404 run "ProfessorM_PostmanCollection_AdvancedWorkflow.json" --environment="ProfessorM_PostmanEnvironment.json"`
 
 Hint:  If your instance of Sugar is running inside a Docker container, you may need to add the `--net="host"` option:
 
