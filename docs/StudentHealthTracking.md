@@ -50,3 +50,15 @@ Report JSON data is then retrieved from dev instance using the `GET /rest/Report
 |Student Health Report|Contacts|Summation with Details| A pie chart that is grouped by Student vital status. The details section shows student names, alias, etc. |
 |Cause of Death|Contacts|Rows and Columns| A table of 'deceased' students that includes name, alias, and cause of death. |
 
+## Pull Request
+
+The pull request associated with these changes is [#24](https://github.com/sugarcrm/school/pull/24).
+
+## Trying the Use Case
+
+Update a student's health status by opening a Student record and updating the Vitals field.  If you select **Deceased**,
+the Death Information panel will appear so you can also input the Cause of Death and indicated if flowers have been 
+sent.
+
+View the **Cause of Death Report** and the **Student Health Report** by navigating to the Reports module and clicking 
+on the appropriate report title.
