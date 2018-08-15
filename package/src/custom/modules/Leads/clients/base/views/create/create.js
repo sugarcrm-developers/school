@@ -4,7 +4,7 @@
      * Note: If you add validation here, you probably want to add it to the Record view as well in
      * custom/modules/Leads/clients/base/views/record/record.js
      */
-    extendsFrom: 'CreateView',
+    extendsFrom: 'LeadsCreateView',
 
     initialize: function (options) {
 

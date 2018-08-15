@@ -1,4 +1,14 @@
 ({
+
+    /**
+     * Ratingfield is a custom data type that can be configured in Studio.  This data type will show 5 stars for the
+     * field.  The stars will be filled based on a calculated value.  The values can be 0 - 100, where partial stars
+     * will be displayed if necessary.  A field of this data type will be read-only and populated by a calculation.
+     *
+     * For more information on how this field is used in Professor M's School for Gifted Coders, see
+     * docs/ApplicationRatings.md.
+     */
+
     /**
      * Called when initializing the field
      * @param options

@@ -66,11 +66,15 @@ so the value must be at least 0 but not higher than 4.0.  The files associated w
 | --- | --- | ---| ---|
 | Leads | Vardefs | `rating_c` | "Rating (stars)" field that displays the applicant's rating. |
 | Leads | Vardefs | `programmingscore_c` | Float field that holds the applicant's programming score. This field is not displayed. |
+| Leads | LogicHooks | `update_applicant_programming_language_score` | A before_save logic hook that updates the applicant (lead) Programming Language Score field. |
+| Application | Language | `ERROR_GPA_NOT_IN_RANGE` | Custom error message for when the GPA is not in a valid range. This error message is used by the custom field validation for `gpa_c`. |
+
 
 ## View Customizations
 | Module | View | Description |
 | --- | --- | ---|
 | Leads | Record | The `rating_c` field has been added to a new row in the Application panel. |
+| Leads | Create and Record |  Custom validation has been added to the `gpa_c` field to ensure the value is within a valid range. | 
 
 ## Pull Request
 

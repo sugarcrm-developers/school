@@ -72,7 +72,7 @@ class ApplicantProgrammingScore
                 case "":
                     break;
                 default:
-                    $GLOBALS['log']->fatal("Unable to assign a value for $language in the Application Rating calculation.");
+                    $GLOBALS['log']->warn("Unable to assign a value for $language in the Application Rating calculation. The language should be added as a possible value in custom/modules/Leads/ApplicantProgrammingScore.php.");
             }
         }
 
