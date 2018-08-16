@@ -1,14 +1,14 @@
-## Online Applications ##
+# Online Applications
 
 Professor M wants to ensure he has a quality pipeline of students for his school.  He has decided to allow prospective
 students to apply online.
 
-### Implementation Technique ###
+## Implementation Technique
 
 A [Web to Lead Form](http://support.sugarcrm.com/Knowledge_Base/Campaigns_Target_Lists/Creating_a_Web-to-Lead_Form/) was 
 created in Sugar and then customized to become the online application for the school.
 
-### Implementation Details ###
+## Implementation Details
 
 [ApplyOnline.html](../package/src/custom/online_application_form/ApplyOnline.html) is a 
 customized Web to Lead Form.  This form is the online application that students can complete.  When students submit
@@ -21,7 +21,7 @@ this example.  You could host these two files on any server.
 
 When the form is submitted, a new Applicant (Lead) record is automatically created in the system.
 
-### Extensions ###
+## Extensions
 
 | Module | Extension | Name | Description |
 | --- | --- | ---| ---|
@@ -31,8 +31,19 @@ When the form is submitted, a new Applicant (Lead) record is automatically creat
 | Leads | Vardefs | `programminglanguages_c` | Multienum field that displays the applicant's programming languages based on the options stored in the `languages` drop down list.|
 
 
-### View Customizations ###
+## View Customizations
 | Module | View | Description |
 | --- | --- | ---|
 | Leads | Record | A new panel (Application) has been added to the record view below the Business Card.  The panel displays the new custom fields for the application. |
 
+## Pull Request
+
+The pull request associated with these changes is [#78](https://github.com/sugarcrm/school/pull/78).
+
+## Trying the Use Case
+
+Ensure you have inserted the sample data using 
+[ProfessorM_PostmanCollection.json](../data/ProfessorM_PostmanCollection.json).
+
+Navigate to http://{site_url}/custom/online_application_form/ApplyOnline.html and fill out the form.  Navigate to the 
+Applicants module in Sugar and note that a new Applicant record has been created.
