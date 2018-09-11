@@ -30,6 +30,7 @@ The Professor M School uses Sugar for the following high level use cases:
 - [Online Applications](OnlineApplications.md)
 - [Application Routing to Admissions Advisors](ApplicationRouting.md)
 - [Application Ratings](ApplicationRatings.md)
+- [Customized Home Dashboard](CustomizedHomeDashboard.md)
 
 ## Acceptance Tests ##
 
