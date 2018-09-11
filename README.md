@@ -1,6 +1,7 @@
 # Professor M's School for Gifted Coders [![Build Status](https://travis-ci.org/sugarcrm/school.svg?branch=windows-build-pack-php)](https://travis-ci.org/sugarcrm/school)
 
-All of the tutorials at UnCon 2017 will be based on Professor M's School for Gifted Coders.  The following sections will explain more about the scenario and how to install the required modules and sample data.
+Professor M's School for Gifted Coders is a module loadable package that can be installed in Sugar.  The following 
+sections explain more about the scenario and how to install the package and sample data.
 
 ## Contents
 [About the scenario](#about-the-scenario) 
@@ -26,12 +27,10 @@ Professor M aka Professor Marum has created an exclusive not-for-profit school f
 
 Learn more about the implemented [Use Cases](docs/UseCases.md) in the [docs](docs/).
 
-Want a quick summary? Watch the video below we put together for SugarCon 2017.
+Want a quick summary? Watch the video below.
 [![The Professor M Scenario Part 1 - What is it and why should you care?](images/profmvideo1.png)](https://youtu.be/aKBTKcaney4 "The Professor M Scenario Part 1 - What is it and why should you care?")
 
 ## Installation instructions
-
-Before beginning any of the tutorials associated with UnCon 2017, you'll want to setup a Sugar instance that has the Professor M scenario installed.
 
 Watch the video below for instructions on how to install the scenario.  Text-based instructions follow.
 [![The Professor M Scenario Part 2 - How do you install it?](images/profmvideo2.png)](https://youtu.be/SO-Rav35X5U "The Professor M Scenario Part 2 - How do you install it?")
