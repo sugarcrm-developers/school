@@ -137,11 +137,12 @@ getHiddenFormFieldValue(){
         # This is a hack specifically for Travis CI.  Travis CI outputs a string like the following in the middle
         # of the SAML Response:
         #
-        # 100 12223    0 12223    0     0  16084      0 --:--:-- --:--:-- --:--:-- 16104
+        #   0     0    0 12608    0     0   6973      0 --:--:--  0:00:01 --:--:--  6973
+        #   0     0    0 12608    0     0   6973      0 --:--:--  0:00:01 --:--:--     0
         # * Connection #0 to host auth.sugarcrm.com left intact
         #
         # This Regex Token pulls this junk out of the SAML Response
-        newLineRegexToken="(.*)[[:space:]]+[[:digit:]][[:digit:]][[:digit:]][[:space:]].*intact[[:space:]]*(.*)"
+        newLineRegexToken="([^[:space:]]*).*intact[[:space:]]*(.*)"
         if [[ $1 == 'SAMLResponse' && $value =~ $newLineRegexToken ]]
         then
             value="${BASH_REMATCH[1]}${BASH_REMATCH[2]}"
