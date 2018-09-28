@@ -435,6 +435,9 @@ $installdefs = array(
                     'ext4' => NULL,
                 ),
         ),
+    'post_execute' => array(
+        'cleanup.php',
+    ),
 );
 
 /*
