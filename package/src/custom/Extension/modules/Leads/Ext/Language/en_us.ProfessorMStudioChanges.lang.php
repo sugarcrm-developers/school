@@ -29,6 +29,7 @@ $mod_strings['LBL_LEAD_SOURCE_DESCRIPTION'] = 'Applicant Source Description:';
 $mod_strings['LBL_ALIAS'] = 'Alias';
 $mod_strings['LBL_DESCRIPTION'] = 'Origin Story';
 $mod_strings['LBL_PROGRAMMINGLANGUAGES'] = 'Programming Languages';
+$mod_strings['LBL_PROGRAMMING_SCORE_C'] = 'Programming Score';
 $mod_strings['LBL_TRANSCRIPT'] = 'Transcript';
 $mod_strings['LBL_HIGHSCHOOL'] = 'High School';
 $mod_strings['LBL_GPA'] = 'Grade Point Average (GPA)';
