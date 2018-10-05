@@ -662,7 +662,7 @@ Currently, we have PHPUnit tests and Postman tests.
 
 #### PHPUnit tests for the Professor M Module Loadable Package
 [PHPUnit](https://phpunit.de/) is a testing framework for PHP.  The PHPUnit test files are located in 
-[package/src/custom/tests/School/unit-php](package/src/custom/tests/School/unit-php).  
+[package/src/custom/tests/unit-php/School](package/src/custom/tests/unit-php/School).  
 
 ##### Manual execution
 
@@ -698,7 +698,7 @@ for instructions on setting up a development environment.
 You will also need to get a copy of the Sugar provided unit tests and put them in your Sugar source code directory. See
 the [SugarCRM unit tests GitHub repo](https://github.com/sugarcrm/unit-tests) for more information.  
 
-Prepare to run the Sugar provided PHPUnit tests by executing the following commands:
+Prepare to run the Sugar provided PHPUnit tests and the Professor M PHPUnit tests by executing the following commands:
 ```
 $ cd /path/to/sugar_source_dir
 $ composer install
@@ -717,17 +717,10 @@ Install the **standard** version of the Professor M Module Loadable Package usin
 if you have not already done so.  The code for 
 Professor M and the associated tests will be installed in to the Sugar source directory.
 
-Prepare to run the Professor M PHPUnit tests by executing the following commands:
-```
-$ cd /path/to/sugar_source_dir
-$ cd custom/tests/School/unit-php
-$ chmod +x ../../../../vendor/bin/phpunit
-```
-
-Run the Professor M PHPUnit tests by executing the following command from the `/custom/tests/School/unit-php` directory:
+Run the Professor M PHPUnit tests by executing the following command from the `tests/unit-php` directory:
 
 ```
-$ ../../../../vendor/bin/phpunit
+$ ../../vendor/bin/phpunit --testsuite custom
 ```
 
 ##### Automatic execution in Travis CI
