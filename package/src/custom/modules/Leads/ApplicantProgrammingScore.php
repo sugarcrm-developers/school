@@ -1,4 +1,9 @@
 <?php
+use Sugarcrm\Sugarcrm\DependencyInjection\Container;
+use Sugarcrm\Sugarcrm\Security\Context;
+
+use Sugarcrm\Sugarcrm\custom\Security\Subject\ApplicantProgrammingScore as ApsSubject;
+
 
 /**
  * Class ApplicantProgrammingScore
@@ -6,6 +11,7 @@
  */
 class ApplicantProgrammingScore
 {
+    private $version = '1.0.0';
     /**
      * Update an applicant's Programming Score and then update calculated fields.
      *
@@ -15,6 +21,12 @@ class ApplicantProgrammingScore
      */
     public function updateProgrammingScore($bean, $event, $arguments)
     {
+        //Set the security context to better track the source of changes
+        $context = Container::getInstance()->get(Context::class);
+        $subject = new ApsSubject($bean->id);
+        $context->activateSubject($subject);
+        $context->setAttribute('aps_calc_version', $this->version);
+
         // The programming languages are stored as a comma separated list in the bean. Convert them to an array.
         $programmingLanguages = explode(",", $bean->programminglanguages_c);
 
@@ -23,7 +35,12 @@ class ApplicantProgrammingScore
 
         // Update the calculated fields.  This is necessary for the Rating Star field to be updated immediately.
         $bean->updateCalculatedFields();
-
+        
+        //Have to commit the changes we made to the audit log because we didn't call save.
+        //Passing the subject rather than null here would override the additional attributes that were set on the context
+        $bean->commitAuditedStateChanges(null);
+        //Always deactivate the subject before leaving the function
+        $context->deactivateSubject($subject);
     }
 
     /**
