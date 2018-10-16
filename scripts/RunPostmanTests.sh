@@ -42,7 +42,7 @@ sudo chmod -R 777 . &> /dev/null
 currentDockerContainer="$(cat /etc/hostname)"
 if [[ -n $currentDockerContainer && $currentDockerContainer != *"travis-job"* ]]
 then
-    if [[ "$sugarVersion" == "8.1" ]]
+    if [[ "$sugarVersion" == "8.1" || "$sugarVersion" == "8.2" ]]
     then
         network="sugar81_default"
     elif [[ "$sugarVersion" == "8.0" ]]
