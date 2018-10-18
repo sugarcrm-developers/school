@@ -36,25 +36,9 @@ cp -rf workspace/unit-tests/$sugarEdition/* $sugarDirectory
 # Install dependencies needed to run unit tests
 ######################################################################
 
-# composer.json and composer.lock contain references to internal Sugar repositories. We'll remove the references
-# from composer.json and completely remove the composer.lock file.
-
-# Remove the repository matching the following pattern:
-#   {
-#       "packagist.org": false
-#   },
-perl -0777 -i -pe "s#{\n *\"packagist.org\"\: false\n *},##g" $sugarDirectory/composer.json
-
-# Remove the repository matching the following pattern:
-#   ,
-#   {
-#       "type": "composer",
-#       "url": "https://satis.sugardev.team"
-#   }
-perl -0777 -i -pe "s#,\n *{\n *\"type\"\: \"composer\",\n *\"url\"\: \"https:\/\/satis.sugardev.team\"\n *}##g" $sugarDirectory/composer.json
-
-# Remove the composer.lock file
-rm $sugarDirectory/composer.lock
+# Install git so composer will be able to pull files from git repos
+docker exec sugar-web1 bash -c "apt-get update"
+docker exec sugar-web1 bash -c "apt-get install -y git"
 
 # Install the dependencies
 docker exec sugar-web1 bash -c "composer install"
