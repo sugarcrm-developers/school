@@ -129,8 +129,7 @@ In order to create the Professor M sample data, you'll use Postman to run a coll
    instructions in previous section for how to do the install.
    
 If you are using an Enterprise or Ultimate edition of Sugar, you can use the features that leverage Advanced Workflow.
-Save a copy of [ProfessorM_PostmanCollection_AdvancedWorkflow.json](https://raw.githubusercontent.com/sugarcrm/school/master/data/ProfessorM_PostmanCollection_AdvancedWorkflow.json)
-and follow the steps above to import the collection and run it.
+Save a copy of [ProfessorM_PostmanCollection_AdvancedWorkflow.json](https://raw.githubusercontent.com/sugarcrm/school/master/data/ProfessorM_PostmanCollection_AdvancedWorkflow.json) and (https://raw.githubusercontent.com/sugarcrm/school/master/data/Application_Routing.bpm) to your local filesystem. Update the reference to Application_Routing.bpm in ProfessorM_PostmanCollection_AdvancedWorkflow.json to point to your local filesystem location for that file. Then follow the steps above to import the collection and run it.
 
 ## Setting up your development environment
 If you want to generate the Professor M module loadable packages yourself or make changes to the code in this repo, you
