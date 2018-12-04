@@ -74,15 +74,6 @@ $installdefs = array(
         ),
     ),
     'image_dir' => 'icons',
-    'layoutdefs' =>
-        array (
-            array (
-                'additional_fields' =>
-                    array (
-                        'Leads' => 'pr_professors_leads_name',
-                    ),
-            ),
-        ),
     'id' => $packageID,
     'relationships' =>
         array (
