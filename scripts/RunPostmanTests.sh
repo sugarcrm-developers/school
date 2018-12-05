@@ -90,15 +90,15 @@ then
 fi
 
 # Run the Advanced Workflow tests, which only work with Ent and Ult
-if [[ "$sugarEdition" == "Ent" || "$sugarEdition" == "Ult" ]]
-    then
-        docker run -v $dataDirectoryPath:/etc/newman --net="host" -t postman/newman_ubuntu1404 run "ProfessorM_PostmanCollection_AdvancedWorkflow.json" --environment="ProfessorM_PostmanEnvironment.json" --color off
-
-        if [[ $? -eq 1 ]]
-        then
-            exit 1
-        fi
-fi
+#if [[ "$sugarEdition" == "Ent" || "$sugarEdition" == "Ult" ]]
+#    then
+#        docker run -v $dataDirectoryPath:/etc/newman --net="host" -t postman/newman_ubuntu1404 run "ProfessorM_PostmanCollection_AdvancedWorkflow.json" --environment="ProfessorM_PostmanEnvironment.json" --color off
+#
+#        if [[ $? -eq 1 ]]
+#        then
+#            exit 1
+#        fi
+#fi
 
 ######################################################################
 # Cleanup
