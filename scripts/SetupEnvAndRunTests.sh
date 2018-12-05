@@ -6,6 +6,39 @@
 
 if [[ -z "$1" ]] || [[ -z "$2" ]] || [[ -z "$3" ]] || [[ -z "$4" ]] || [[ -z "$5" ]] || [[ -z "$6" ]] || [[ -z "$7" ]]
 then
+
+    if [[ -z "$1" ]]
+        echo "sugarcrm email $1"
+    then
+        echo "Missing sugarcrm email"
+    fi
+    if [[ -z "$2" ]]
+    then
+        echo "Missing sugarcrm password"
+    fi
+    if [[ -z "$3" ]]
+        echo "Sugar version $3"
+    then
+        echo "Missing sugar version"
+    fi
+    if [[ -z "$4" ]]
+        echo "Sugar edition $4"
+    then
+        echo "Missing sugar edition"
+    fi
+    if [[ -z "$5" ]]
+    then
+        echo "Missing github username"
+    fi
+    if [[ -z "$6" ]]
+    then
+        echo "Missing github password"
+    fi
+    if [[ -z "$7" ]]
+    then
+        echo "Missing sugar docker directory"
+    fi
+
     echo "Not all required command line arguments were set. Please run the script again with the required arguments:
         1: Email address associated with your SugarCRM account
         2: Password associated with the above account
@@ -69,21 +102,29 @@ mkdir workspace
 ######################################################################
 # Setup the environment for PHPUnit tests and run them
 ######################################################################
-
+echo "Calling StartDockerStack.sh"
 ./StartDockerStack.sh $sugarVersion $sugarDockerDirectory || exit 1
 
+echo "Calling GetCopyOfSugar.sh"
 ./GetCopyOfSugar.sh $email $password $sugarName "$(dirname "$sugarDirectory")" $sugarSourceZipsDirectory || exit 1
 
+echo "Calling CloneSUgarUnitTestsFromGitRepo.sh"
 ./CloneSugarUnitTestsFromGitRepo.sh $sugarVersion $gitHubUsername $gitHubPassword || exit 1
 
+echo "Calling UnzipSugarToDirectory.sh"
 ./UnzipSugarToDirectory.sh $sugarName $sugarDirectory || exit 1
 
+echo "Calling SetupSugarPHPUnitTests.sh"
 ./SetupSugarPHPUnitTests.sh $sugarName $sugarEdition $sugarDirectory || exit 1
 
+echo "Calling InstallSugarANdProfM.sh"
 ./InstallSugarAndProfM.sh $sugarDirectory || exit 1
 
+echo "Calling RunProfMPHPUnitTests.sh"
 ./RunProfMPHPUnitTests.sh $sugarDirectory || exit 1
 
+echo "Calling RunPostmanTests.sh"
 ./RunPostmanTests.sh $sugarVersion $sugarEdition || exit 1
 
+echo "Calling StopDockerStack.sh"
 ./StopDockerStack.sh $sugarVersion $sugarDockerDirectory || exit 1
