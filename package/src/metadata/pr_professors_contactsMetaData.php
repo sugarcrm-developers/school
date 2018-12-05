@@ -62,7 +62,7 @@ $dictionary["pr_professors_contacts"] = array (
             1 =>
                 array (
                     'name' => 'idx_pr_professors_contacts_ida1_deleted',
-                    'tyape' => 'index',
+                    'type' => 'index',
                     'fields' =>
                         array (
                             0 => 'pr_prof_contactspr_prof_ida',
