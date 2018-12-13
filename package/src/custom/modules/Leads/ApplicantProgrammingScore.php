@@ -16,31 +16,51 @@ class ApplicantProgrammingScore
      * Update an applicant's Programming Score and then update calculated fields.
      *
      * @param $bean The bean for the Applicant (Lead) record
-     * @param $event The current event
+     * @param $event string The current event
      * @param $arguments Additional information related to the event
      */
     public function updateProgrammingScore($bean, $event, $arguments)
     {
         //Set the security context to better track the source of changes
-        $context = Container::getInstance()->get(Context::class);
+        $context = $this->getSecurityContext();
         $subject = new ApsSubject($bean->id);
-        $context->activateSubject($subject);
-        $context->setAttribute('aps_calc_version', $this->version);
+        try {
+            $context->activateSubject($subject);
+            $context->setAttribute('aps_calc_version', $this->version);
 
-        // The programming languages are stored as a comma separated list in the bean. Convert them to an array.
-        $programmingLanguages = explode(",", $bean->programminglanguages_c);
+            // The programming languages are stored as a comma separated list in the bean. Convert them to an array.
+            $programmingLanguages = explode(",", $bean->programminglanguages_c);
 
-        // Store the calculated programming score in the Applicant bean
-        $bean->programming_score_c = $this->getProgrammingScore($programmingLanguages);
+            // Store the calculated programming score in the Applicant bean
+            $bean->programming_score_c = $this->getProgrammingScore($programmingLanguages);
 
-        // Update the calculated fields.  This is necessary for the Rating Star field to be updated immediately.
-        $bean->updateCalculatedFields();
-        
-        //Have to commit the changes we made to the audit log because we didn't call save.
-        //Passing the subject rather than null here would override the additional attributes that were set on the context
-        $bean->commitAuditedStateChanges(null);
-        //Always deactivate the subject before leaving the function
-        $context->deactivateSubject($subject);
+            // Update the calculated fields.  This is necessary for the Rating Star field to be updated immediately.
+            $bean->updateCalculatedFields();
+
+            //Have to commit the changes we made to the audit log because we didn't call save.
+            //Passing the subject rather than null here would override the additional attributes that were set on the context
+            $bean->commitAuditedStateChanges(null);
+
+        } finally {
+            //Always deactivate the subject before leaving the function
+            $context->deactivateSubject($subject);
+        }
+    }
+
+    /**
+     * Get the security context
+     */
+    public function getSecurityContext()
+    {
+        return Container::getInstance()->get(Context::class);
+    }
+
+    /**
+     * Returns Applicant Programming Score calculation version
+     */
+    public function getApsCalcVersion()
+    {
+        return $this->version;
     }
 
     /**

@@ -1,6 +1,9 @@
 <?php
 
 use Sugarcrm\SugarcrmTestsUnit\TestMockHelper;
+use Sugarcrm\Sugarcrm\custom\Security\Subject\ApplicantProgrammingScore as ApsSubject;
+
+use Sugarcrm\Sugarcrm\Security\Context;
 
 require_once 'custom/modules/Leads/ApplicantProgrammingScore.php';
 
@@ -25,6 +28,26 @@ class ApplicantProgrammingScoreTest extends \PHPUnit\Framework\TestCase
         $aps->updateProgrammingScore($applicant, null, null);
         $this->assertEquals(30, $applicant->programming_score_c);
     }
+
+    /**
+     * @covers ::updateProgrammingScore
+     */
+    public function testUpdateProgrammingScoreSecuritySubject(){
+        $aps = TestMockHelper::createMock($this, ApplicantProgrammingScore::class);
+        $applicant = TestMockHelper::createMock($this, '\\Lead');
+
+        $applicant->expects($this->once())->method('commitAuditedStateChanges');
+
+        $context = $this->getMockBuilder(Context::class)->disableOriginalConstructor()->getMock();
+        $aps->method('getSecurityContext')->willReturn($context);
+//        $context->expects($this->once())->method('activateSubject')->with($this->isInstanceOf(ApsSubject::class));
+//        $context->expects($this->once())->method('setAttribute')->with($this->equalTo("aps_calc_version"), $aps->getApsCalcVersion());
+//        $context->expects($this->once())->method('deactivateSubject')->with($this->isInstanceOf(ApsSubject::class));
+
+        $aps->updateProgrammingScore($applicant, null, null);
+
+    }
+
 
     /**
      * @covers ::getProgrammingScore
