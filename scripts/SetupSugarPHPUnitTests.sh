@@ -28,7 +28,7 @@ sugarDirectory=$3
 ######################################################################
 # Copy Sugar Unit Tests to Sugar Directory
 ######################################################################
-
+echo "Copying unit tests from workspace/unit-tests/$sugarEdition/ to $sugarDirectory"
 cp -rf workspace/unit-tests/$sugarEdition/* $sugarDirectory
 
 
@@ -38,7 +38,10 @@ cp -rf workspace/unit-tests/$sugarEdition/* $sugarDirectory
 
 # Install git so composer will be able to pull files from git repos
 docker exec sugar-web1 bash -c "apt-get update"
-docker exec sugar-web1 bash -c "apt-get install -y git"
-
+echo "Installing git on sugar-web1"
+docker exec sugar-web1 bash -c "apt-get install -y git wget"
+echo "Installing composer on sugar-web1"
+docker exec sugar-web1 bash -c "wget https://raw.githubusercontent.com/composer/getcomposer.org/d3e09029468023aa4e9dcd165e9b6f43df0a9999/web/installer -O - -q | php --"
+echo "Installing php dependencies (via composer)"
 # Install the dependencies
-docker exec sugar-web1 bash -c "composer install"
+docker exec sugar-web1 bash -c "php composer.phar install --ignore-platform-reqs"
