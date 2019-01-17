@@ -11,10 +11,10 @@
 if [[ -z "$1" ]] || [[ -z "$2" ]]
 then
     echo "Not all required command line arguments were set. Please run the script again with the required arguments:
-        1: Sugar version (Example: 7.11)
+        1: Sugar version (Example: 8.0)
         2: Sugar edition (Options: Ult, Ent, Pro)
 
-        For example: ./RunPostmanTests.sh 7.11 Ult"
+        For example: ./RunPostmanTests.sh 8.0 Ult"
     exit 1
 fi
 
@@ -42,18 +42,12 @@ sudo chmod -R 777 . &> /dev/null
 currentDockerContainer="$(cat /etc/hostname)"
 if [[ -n $currentDockerContainer && $currentDockerContainer != *"travis-job"* ]]
 then
-    if [[ "$sugarVersion" == "8.1" || "$sugarVersion" == "8.2" ]]
+    if [[ "$sugarVersion" == "8.1" || "$sugarVersion" == "8.2" || "$sugarVersion" == "8.3" ]]
     then
         network="sugar81_default"
     elif [[ "$sugarVersion" == "8.0" ]]
     then
         network="sugar8_default"
-    elif [[ "$sugarVersion" == "7.10" || "$sugarVersion" == "7.11" ]]
-    then
-        network="sugar710_default"
-    elif [[ "$sugarVersion" == "7.9" ]]
-    then
-        network="sugar79_default"
     else
         echo "Unable to identify network for Sugar version $sugarVersion"
         exit 1
