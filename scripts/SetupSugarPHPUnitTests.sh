@@ -44,4 +44,4 @@ echo "Installing composer on sugar-web1"
 docker exec sugar-web1 bash -c "wget https://raw.githubusercontent.com/composer/getcomposer.org/d3e09029468023aa4e9dcd165e9b6f43df0a9999/web/installer -O - -q | php --"
 echo "Installing php dependencies (via composer)"
 # Install the dependencies
-docker exec sugar-web1 bash -c "php composer.phar install --ignore-platform-reqs"
+docker exec sugar-web1 bash -c "php composer.phar install --profile --prefer-source --ignore-platform-reqs"
