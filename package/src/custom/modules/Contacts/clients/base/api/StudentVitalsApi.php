@@ -4,7 +4,7 @@
 use Sugarcrm\Sugarcrm\ProcessManager\Registry;
 
 
-class studentVitalsApi extends SugarApi
+class StudentVitalsApi extends SugarApi
 {
     public function registerApiRest()
     {
@@ -15,14 +15,19 @@ class studentVitalsApi extends SugarApi
                 'path' => array('contacts', 'professorM', 'getStudentVitalData', '?'),
                 'pathVars' => array('', '', '', 'team'),
                 'method' => 'getStudentVitalData',
-                'shortHelp' => 'An example of a GET endpoint',
+                'shortHelp' => 'API End point to retrieve data for vitals dashlet',
                 'longHelp' => 'custom/clients/base/api/help/MyEndPoint_MyGetEndPoint_help.html',
             ),
         );
     }
 
     /**
+     * API Endpoint for student vitals chart
+     * @param $api
+     * @param $args
      *
+     * @return false|string
+     * @throws SugarQueryException
      */
     public function getStudentVitalData($api, $args)
     {
@@ -32,7 +37,11 @@ class studentVitalsApi extends SugarApi
         $team = $args['team'];
         $helper = new \Sugarcrm\ProfessorM\Helpers\StudentVitalHelper();
         $status_data = $helper->getStudentVitalsByDays($team);
-        arsort($status_data);
+
+        // Sort if we have an array
+        if (is_array($status_data)) {
+            arsort($status_data);
+        }
         $chart_data = array(
 
         );

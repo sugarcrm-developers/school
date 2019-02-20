@@ -37,6 +37,7 @@ class StudentVitalHelper
      * @param $team
      *
      * @return mixed
+     * @throws \SugarQueryException
      */
     public function getStudentVitalsByDays($team)
     {
@@ -69,9 +70,14 @@ class StudentVitalHelper
          */
         $query1 = new \SugarQuery();
         $query1->from(\BeanFactory::newBean('Contacts'));
-        $query1->select(array(
-            array('id', 'student_id'),  array('date_entered', 'transaction_date') ,  array('vitals_c', 'start_status'), array('vitals_c', 'end_status')
-        ));
+        $query1->select(
+            array(
+                array('id', 'student_id'),
+                array('date_entered', 'transaction_date'),
+                array('vitals_c', 'start_status'),
+                array('vitals_c', 'end_status'),
+            )
+        );
 
 
         /**
@@ -80,11 +86,24 @@ class StudentVitalHelper
         $query2 = new \SugarQuery();
 
         $query2->from(\BeanFactory::newBean('Contacts'));
-        $query2->joinTable('contacts_audit', array('alias' => 'ca', 'joinType' => 'INNER', 'linkingTable' => true))->on()
-            ->equalsField('contacts.id', 'ca.parent_id');
+        $query2->joinTable('contacts_audit', array(
+            'alias'        => 'ca',
+            'joinType'     => 'INNER',
+            'linkingTable' => true,
+        ))->on()
+            ->equalsField('contacts.id', 'ca.parent_id')
+            ->equals('ca.field_name', 'vitals_c');
         $query2->select(array(
-            array('id', 'student_id'), array('ca.date_created','transaction_date'), array('ca.before_value_string', 'start_status'), array('ca.after_value_string', 'end_status')
+            array('id', 'student_id'),
+            array('ca.date_created', 'transaction_date'),
+            array('ca.before_value_string', 'start_status'),
+            array('ca.after_value_string', 'end_status'),
         ));
+
+
+        /**
+         * Format for for teams
+         */
         if ($team != 'all') {
             $query1->joinTable('accounts_contacts', array('alias' => 'ac'))->on()
                 ->equalsField('contacts.id','ac.contact_id')
