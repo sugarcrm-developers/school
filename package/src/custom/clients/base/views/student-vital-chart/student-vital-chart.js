@@ -21,9 +21,6 @@
     initialize: function(options) {
         this._super('initialize', [options]);
 
-        this.listenTo(this, 'render', function () {
-            this.retrieveSuperGroupOptions();
-        } );
         this.chart = sucrose.charts.pieChart()
             .donut(true)
             .donutLabelsOutside(true)
@@ -46,6 +43,33 @@
             .strings({
                 noData: app.lang.get('LBL_CHART_NO_DATA')
             });
+    },
+
+    /**
+     * Override to set options for team selector in config dynamically
+     */
+    initDashlet: function() {
+        if (this.meta.config) {
+
+            var team_value = this.meta.vitals_dashlet_team ? this.meta.vitals_dashlet_team : 'all';
+            var accounts = app.data.createBeanCollection('Accounts');
+            var teams = [];
+            teams.push({id: 'all', text:'All'})
+            accounts.fetch({
+                success: function() {
+                    accounts.comparator = 'name';
+                    accounts.sort({silent: true});
+                    _.each(accounts.models, function(account){
+                        teams.push({id: account.id, text: account.attributes.name});
+                    });
+
+                    $('[name="vitals_dashlet_team"]').html('').select2({data: teams, width: '100%'});
+                    $('[name="vitals_dashlet_team"]').val(team_value).trigger('change');
+                }
+            })
+        }
+
+        this._super('initDashlet');
     },
 
 
@@ -94,6 +118,7 @@
 
     },
 
+
     evaluateResponse: function(data) {
 
         this.total = 1;
@@ -102,26 +127,5 @@
 
     },
 
-    retrieveSuperGroupOptions: function() {
-      if (!this.meta.config) {
-          return;
-      }
-      console.log(this.meta.vitals_dashlet_team);
-      var team_value = this.meta.vitals_dashlet_team ? this.meta.vitals_dashlet_team : 'all';
-      var accounts = app.data.createBeanCollection('Accounts');
-      var teams = [];
-      teams.push({id: 'all', text:'All'})
-      accounts.fetch({
-          success: function() {
-              accounts.comparator = 'name';
-              accounts.sort({silent: true});
-              _.each(accounts.models, function(account){
-                 teams.push({id: account.id, text: account.attributes.name});
-              });
 
-              $('[name="vitals_dashlet_team"]').html('').select2({data: teams});
-              $('[name="vitals_dashlet_team"]').val(team_value).trigger('change');
-          }
-      })
-    },
-})
+})  
