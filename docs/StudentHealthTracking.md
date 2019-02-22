@@ -29,7 +29,7 @@ Report JSON data is then retrieved from dev instance using the `GET /rest/Report
 
 | Module | Extension | Name | Description | 
 | :--- | :--- | :---- | :---- |
-|Contacts|Vardefs|`vital_c`|Dropdown for tracking vital status of student. Audit field for tracking datestamps|
+|Contacts|Vardefs|`vital_c`|Dropdown for tracking vital status of student.|
 |Contacts|Vardefs|`cause_of_death_c`|Text field that allows Prof. M to enter cause of death.|
 |Contacts|Vardefs|`flowers_sent_c`|Checkbox field that allows Prof M. to track if flowers were ordered.|
 |Contacts|Dependencies|`cause_of_death_required`|Makes `cause_of_death_c` a required field when `vital_c` is set to `deceased`.|
@@ -50,14 +50,27 @@ Report JSON data is then retrieved from dev instance using the `GET /rest/Report
 |Student Health Report|Contacts|Summation with Details| A pie chart that is grouped by Student vital status. The details section shows student names, alias, etc. |
 |Cause of Death|Contacts|Rows and Columns| A table of 'deceased' students that includes name, alias, and cause of death. |
 
+## Pull Request
+
+The pull request associated with these changes is [#24](https://github.com/sugarcrm/school/pull/24).
+
+## Trying the Use Case
+
+Update a student's health status by opening a Student record and updating the Vitals field.  If you select **Deceased**,
+the Death Information panel will appear so you can also input the Cause of Death and indicated if flowers have been 
+sent.
+
+View the **Cause of Death Report** and the **Student Health Report** by navigating to the Reports module and clicking 
+on the appropriate report title.
+
 ## Student Vitals Dashlet
 A new dashlet is available to track the number of days students are in a given Vitals status. This dashlet leverages 
 the Contacts Audit table to populate a pie chart summarizing the number of days all Students in a given Super Group (or all Super Groups) 
 are in each Vital status.
 
-This dashlet displays use of the Sucrose charts in a custom dashlet
+This dashlet displays use of the Sucrose charts in a custom dashlet and is available in Home, List Views, and Record Views.
 
 There is also an accompanying API enpoint for retrieve the data from the Student records and shows use of Sugar Query in joins
-and union queries. For more information on the endpoint see /rest/v11/help
+and union queries. For more information on the endpoint see <instnace>/rest/v11/help.
 
-  
+The pull request for the Student vitals dashlet can be viewed in [#27](https://github.com/sugarcrm/school/pull/27).

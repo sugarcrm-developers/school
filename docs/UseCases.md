@@ -27,3 +27,11 @@ The Professor M School uses Sugar for the following high level use cases:
 
 - [Student Health Tracking](StudentHealthTracking.md)
 - [Gradebook Integration](Gradebook.md)
+- [Online Applications](OnlineApplications.md)
+- [Application Routing to Admissions Advisors](ApplicationRouting.md)
+- [Application Ratings](ApplicationRatings.md)
+- [Customized Home Dashboard](CustomizedHomeDashboard.md)
+
+## Acceptance Tests ##
+
+Acceptance tests for the use cases can be found in [AcceptanceTests.md](AcceptanceTests.md).

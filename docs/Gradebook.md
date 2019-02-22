@@ -60,6 +60,10 @@ not be slowed down by the process of creating a new record in a potentially slow
 the gradebook app directly from the logic hook, the record would not finish saving until a response was returned from
 the gradebook app.
 
+## Pull Request
+
+The pull request associated with these changes is [#25](https://github.com/sugarcrm/school/pull/25).
+
 ## Trying the Use Case
 
 Before trying the use case, be sure you have set up the cron scheduler.
