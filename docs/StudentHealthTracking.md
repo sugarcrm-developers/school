@@ -73,4 +73,5 @@ This dashlet displays use of the Sucrose charts in a custom dashlet and is avail
 There is also an accompanying API enpoint for retrieve the data from the Student records and shows use of Sugar Query in joins
 and union queries. For more information on the endpoint see <instnace>/rest/v11/help.
 
+
 The pull request for the Student vitals dashlet can be viewed in [#27](https://github.com/sugarcrm/school/pull/27).
