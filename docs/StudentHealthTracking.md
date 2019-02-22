@@ -55,9 +55,9 @@ A new dashlet is available to track the number of days students are in a given V
 the Contacts Audit table to populate a pie chart summarizing the number of days all Students in a given Super Group (or all Super Groups) 
 are in each Vital status.
 
-This dashlet displays use of the Sucrose charts in a custom dashlet
+This dashlet displays use of the Sucrose charts in a custom dashlet and is available in Home, List Views, and Record Views.
 
 There is also an accompanying API enpoint for retrieve the data from the Student records and shows use of Sugar Query in joins
-and union queries. For more information on the endpoint see /rest/v11/help
+and union queries. For more information on the endpoint see <instnace>/rest/v11/help.
 
   
