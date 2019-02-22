@@ -12,8 +12,8 @@ class StudentVitalsApi extends SugarApi
             'getStudentVitalData' => array(
                 'reqType' => 'GET',
                 'noLoginRequired' => false,
-                'path' => array('contacts', 'professorM', 'getStudentVitalData', '?'),
-                'pathVars' => array('', '', '', 'team'),
+                'path' => array('professorM', 'getStudentVitalData', '?'),
+                'pathVars' => array('', '', 'team'),
                 'method' => 'getStudentVitalData',
                 'shortHelp' => 'API End point to retrieve data for vitals dashlet',
                 'longHelp' => 'custom/clients/base/api/help/MyEndPoint_MyGetEndPoint_help.html',

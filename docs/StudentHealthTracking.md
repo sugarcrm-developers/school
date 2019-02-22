@@ -50,3 +50,14 @@ Report JSON data is then retrieved from dev instance using the `GET /rest/Report
 |Student Health Report|Contacts|Summation with Details| A pie chart that is grouped by Student vital status. The details section shows student names, alias, etc. |
 |Cause of Death|Contacts|Rows and Columns| A table of 'deceased' students that includes name, alias, and cause of death. |
 
+## Student Vitals Dashlet
+A new dashlet is available to track the number of days students are in a given Vitals status. This dashlet leverages 
+the Contacts Audit table to populate a pie chart summarizing the number of days all Students in a given Super Group (or all Super Groups) 
+are in each Vital status.
+
+This dashlet displays use of the Sucrose charts in a custom dashlet
+
+There is also an accompanying API enpoint for retrieve the data from the Student records and shows use of Sugar Query in joins
+and union queries. For more information on the endpoint see /rest/v11/help
+
+  
