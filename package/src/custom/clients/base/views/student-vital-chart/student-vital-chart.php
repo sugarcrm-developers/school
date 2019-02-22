@@ -7,7 +7,7 @@ $viewdefs['base']['view']['student-vital-chart'] = array(
             'description' => 'LBL_STUDENT_VITAL_CHART_DESC',
             'config' => array(
                 'date_range' => 'all',
-                'team' => 'all',
+                'supergroup' => 'all',
             ),
             'preview' => array(
             ),
@@ -30,7 +30,7 @@ $viewdefs['base']['view']['student-vital-chart'] = array(
             'fields' => array(
 
                 array(
-                    'name' => 'vitals_dashlet_team',
+                    'name' => 'vitals_dashlet_supergroup',
                     'label' => 'LBL_VITALS_DASHLET_SELECT_TEAM',
                     'type' => 'enum',
                     'span' => 6,

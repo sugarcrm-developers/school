@@ -46,25 +46,25 @@
     },
 
     /**
-     * Override to set options for team selector in config dynamically
+     * Override to set options for supergroup selector in config dynamically
      */
     initDashlet: function() {
         if (this.meta.config) {
 
-            var team_value = this.meta.vitals_dashlet_team ? this.meta.vitals_dashlet_team : 'all';
+            var supergroup_value = this.meta.vitals_dashlet_supergroup ? this.meta.vitals_dashlet_supergroup : 'all';
             var accounts = app.data.createBeanCollection('Accounts');
-            var teams = [];
-            teams.push({id: 'all', text:'All'})
+            var supergroups = [];
+            supergroups.push({id: 'all', text:'All'})
             accounts.fetch({
                 success: function() {
                     accounts.comparator = 'name';
                     accounts.sort({silent: true});
                     _.each(accounts.models, function(account){
-                        teams.push({id: account.id, text: account.attributes.name});
+                        supergroups.push({id: account.id, text: account.attributes.name});
                     });
 
-                    $('[name="vitals_dashlet_team"]').html('').select2({data: teams, width: '100%'});
-                    $('[name="vitals_dashlet_team"]').val(team_value).trigger('change');
+                    $('[name="vitals_dashlet_supergroup"]').html('').select2({data: supergroups, width: '100%'});
+                    $('[name="vitals_dashlet_supergroup"]').val(supergroup_value).trigger('change');
                 }
             })
         }
@@ -104,8 +104,8 @@
             return;
         }
         var self = this;
-        var team_value = this.meta.vitals_dashlet_team ? this.meta.vitals_dashlet_team : 'all';
-        url = app.api.buildURL('contacts/professorM/getStudentVitalData/' + team_value);
+        var supergroup_value = this.meta.vitals_dashlet_supergroup ? this.meta.vitals_dashlet_supergroup : 'all';
+        url = app.api.buildURL('professorM/getStudentVitalData/' + supergroup_value);
         this.hasData = false;
         app.api.call('GET', url, null, {
             success: function(data) {

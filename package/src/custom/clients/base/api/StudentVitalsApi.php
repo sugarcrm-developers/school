@@ -13,10 +13,10 @@ class StudentVitalsApi extends SugarApi
                 'reqType' => 'GET',
                 'noLoginRequired' => false,
                 'path' => array('professorM', 'getStudentVitalData', '?'),
-                'pathVars' => array('', '', 'team'),
+                'pathVars' => array('', '', 'supergroup'),
                 'method' => 'getStudentVitalData',
                 'shortHelp' => 'API End point to retrieve data for vitals dashlet',
-                'longHelp' => 'custom/clients/base/api/help/MyEndPoint_MyGetEndPoint_help.html',
+                'longHelp' => 'custom/include/api/help/student_vitals_api_help.html',
             ),
         );
     }
@@ -34,9 +34,9 @@ class StudentVitalsApi extends SugarApi
 
         global $app_list_strings;
         require_once('custom/include/ProfessorM/StudentVitalHelper.php');
-        $team = $args['team'];
+        $supergroup = $args['supergroup'];
         $helper = new \Sugarcrm\ProfessorM\Helpers\StudentVitalHelper();
-        $status_data = $helper->getStudentVitalsByDays($team);
+        $status_data = $helper->getStudentVitalsByDays($supergroup);
 
         // Sort if we have an array
         if (is_array($status_data)) {

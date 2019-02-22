@@ -34,15 +34,15 @@ class StudentVitalHelper
     /**
      * Called by API to query days in Vitals status using contacts (Students)
      * and contacts_audit tables
-     * @param $team
+     * @param $supergroup
      *
      * @return mixed
      * @throws \SugarQueryException
      */
-    public function getStudentVitalsByDays($team)
+    public function getStudentVitalsByDays($supergroup)
     {
 
-        $change_list = $this->getVitalChangeData($team);
+        $change_list = $this->getVitalChangeData($supergroup);
 
         $students_array = $this->compressStudentListToStudentIDArray($change_list);
 
@@ -57,12 +57,12 @@ class StudentVitalHelper
 
     /**
      * Query to retrieve student vitals transactions
-     * @param $team
+     * @param $supergroup
      *
      * @return array
      * @throws \SugarQueryException
      */
-    public function getVitalChangeData($team)
+    public function getVitalChangeData($supergroup)
     {
 
         /**
@@ -102,15 +102,15 @@ class StudentVitalHelper
 
 
         /**
-         * Format for for teams
+         * Format for for supergroups
          */
-        if ($team != 'all') {
+        if ($supergroup != 'all') {
             $query1->joinTable('accounts_contacts', array('alias' => 'ac'))->on()
                 ->equalsField('contacts.id','ac.contact_id')
-                ->equals('ac.account_id',$team);
+                ->equals('ac.account_id',$supergroup);
             $query2 ->joinTable('accounts_contacts', array('alias' => 'ac'))->on()
                 ->equalsField('contacts.id','ac.contact_id')
-                ->equals('ac.account_id',$team);
+                ->equals('ac.account_id',$supergroup);
         }
 
         $sqUnion = new \SugarQuery();
