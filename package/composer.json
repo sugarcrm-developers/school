@@ -6,7 +6,7 @@
         "phpunit/phpunit": "^6.5",
         "mikey179/vfsstream": "^1.6"
     },
-    "license": "Apache-2",
+    "license": "Apache-2.0",
     "authors": [
         {
             "name": "SugarCRM Developer Advocacy",
