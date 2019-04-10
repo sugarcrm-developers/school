@@ -1,13 +1,12 @@
 #!/usr/bin/env php
 
 # Run this script with the following options:
-# ./pack.php -v versionNameOrNumber
-# ./pack.php -v versionNameOrNumber -w lengthOfWindowsSugarDirectoryPath
-#
-# -w lengthOfWindowsSugarDirectoryPath: This is an optional flag that can be used to generate a build specifically for
+# -v versionNameOrNumber: (Required) The version name or number of the generated package.
+# -p: (Optional) Flag indicating if this is a production build and files like tests should be excluded.
+# -w lengthOfWindowsSugarDirectoryPath: (Optional) This option can be used to generate a build specifically for
 # Windows.  Input the length of the Sugar Directory Path of the Windows installation.  The script will generate two zips:
 #     1. sugarcrm-ProfessorM-versionNameOrNumber-windows.zip: the module loadable package to be installed
-#     2. sugarcrm-ProfessorM-hello-versionNameOrNumber-manual-install.zip: a zip containing files to be manually installed
+#     2. sugarcrm-ProfessorM-versionNameOrNumber-manual-install.zip: a zip containing files to be manually installed
 
 
 <?php
@@ -23,14 +22,14 @@ use Sugarcrm\ProfessorM\PackageGenerator;
 
 $packageID = "ProfessorM";
 $packageLabel = "Professor M School for Gifted Coders";
-$supportedVersionRegex = '(8\..*|7\.(9|10|11)\..*)';
+$supportedVersionRegex = '((8|9)\..*|7\.(9|10|11)\..*)';
 
 /*
  * Determine the version of the zip
  */
 $pg = new PackageGenerator;
 
-$options = getopt("v:w:");
+$options = getopt("v:w:p");
 if (!array_key_exists('v', $options)){
     die("Indicate version number by running script with -v. Example: ./pack.php -v 1.0\n");
 }
@@ -75,15 +74,6 @@ $installdefs = array(
         ),
     ),
     'image_dir' => 'icons',
-    'layoutdefs' =>
-        array (
-            array (
-                'additional_fields' =>
-                    array (
-                        'Leads' => 'pr_professors_leads_name',
-                    ),
-            ),
-        ),
     'id' => $packageID,
     'relationships' =>
         array (
@@ -252,7 +242,6 @@ $installdefs = array(
                     'help' => NULL,
                     'module' => 'Contacts',
                     'type' => 'bool',
-                    'max_size' => '255',
                     'require_option' => '0',
                     'default_value' => '0',
                     'date_modified' => '2018-01-31 21:23:13',
@@ -291,7 +280,155 @@ $installdefs = array(
                     'ext3' => NULL,
                     'ext4' => NULL,
                 ),
+            'Leadshighschool_c' =>
+                array (
+                    'id' => 'Leadshighschool_c',
+                    'name' => 'highschool_c',
+                    'label' => 'LBL_HIGHSCHOOL',
+                    'comments' => NULL,
+                    'help' => NULL,
+                    'module' => 'Leads',
+                    'type' => 'varchar',
+                    'max_size' => '255',
+                    'require_option' => '0',
+                    'default_value' => NULL,
+                    'date_modified' => '2018-05-10 22:50:43',
+                    'deleted' => '0',
+                    'audited' => '1',
+                    'mass_update' => '0',
+                    'duplicate_merge' => '1',
+                    'reportable' => '1',
+                    'importable' => 'true',
+                    'ext1' => NULL,
+                    'ext2' => NULL,
+                    'ext3' => NULL,
+                    'ext4' => NULL,
+                ),
+            'Leadstranscript_c' =>
+                array (
+                    'id' => 'Leadstranscript_c',
+                    'name' => 'transcript_c',
+                    'label' => 'LBL_TRANSCRIPT',
+                    'comments' => NULL,
+                    'help' => NULL,
+                    'module' => 'Leads',
+                    'type' => 'text',
+                    'max_size' => NULL,
+                    'require_option' => '0',
+                    'default_value' => NULL,
+                    'date_modified' => '2018-05-10 22:50:43',
+                    'deleted' => '0',
+                    'audited' => '1',
+                    'mass_update' => '0',
+                    'duplicate_merge' => '1',
+                    'reportable' => '1',
+                    'importable' => 'true',
+                    'ext1' => NULL,
+                    'ext2' => 6,
+                    'ext3' => 80,
+                    'ext4' => NULL,
+                ),
+            'Leadsgpa_c' =>
+                array (
+                    'id' => 'Leadsgpa_c',
+                    'name' => 'gpa_c',
+                    'label' => 'LBL_GPA',
+                    'comments' => NULL,
+                    'help' => NULL,
+                    'module' => 'Leads',
+                    'type' => 'decimal',
+                    'max_size' => '18',
+                    'precision' => '3',
+                    'require_option' => '0',
+                    'default_value' => NULL,
+                    'date_modified' => '2018-05-10 22:50:43',
+                    'deleted' => '0',
+                    'audited' => '1',
+                    'mass_update' => '0',
+                    'duplicate_merge' => '1',
+                    'reportable' => '1',
+                    'importable' => 'true',
+                    'ext1' => NULL,
+                    'ext2' => NULL,
+                    'ext3' => NULL,
+                    'ext4' => NULL,
+                ),
+            'Leadsprogramminglanguages_c' =>
+                array (
+                    'id' => 'Leadsprogramminglanguages_c',
+                    'name' => 'programminglanguages_c',
+                    'label' => 'LBL_PROGRAMMINGLANGUAGES',
+                    'comments' => NULL,
+                    'help' => NULL,
+                    'module' => 'Leads',
+                    'type' => 'multienum',
+                    'max_size' => '100',
+                    'require_option' => '0',
+                    'default_value' => NULL,
+                    'date_modified' => '2018-05-10 14:05:09',
+                    'deleted' => '0',
+                    'audited' => '0',
+                    'mass_update' => '1',
+                    'duplicate_merge' => '1',
+                    'reportable' => '1',
+                    'importable' => 'true',
+                    'ext1' => 'languages',
+                    'ext2' => NULL,
+                    'ext3' => NULL,
+                    'ext4' => NULL,
+                ),
+            'Leadsprogramming_score_c' =>
+                array (
+                    'id' => 'Leadsprogramming_score_c',
+                    'name' => 'programming_score_c',
+                    'label' => 'LBL_PROGRAMMING_SCORE_C',
+                    'comments' => NULL,
+                    'help' => NULL,
+                    'module' => 'Leads',
+                    'type' => 'float',
+                    'max_size' => '18',
+                    'require_option' => '0',
+                    'default_value' => NULL,
+                    'date_modified' => '2018-08-06 20:33:40',
+                    'deleted' => '0',
+                    'audited' => '0',
+                    'mass_update' => '0',
+                    'duplicate_merge' => '1',
+                    'reportable' => '1',
+                    'importable' => 'true',
+                    'ext1' => '8',
+                    'ext2' => NULL,
+                    'ext3' => NULL,
+                    'ext4' => NULL,
+                ),
+            'Leadsrating_c' =>
+                array (
+                    'id' => 'Leadsrating_c',
+                    'name' => 'rating_c',
+                    'label' => 'LBL_RATING',
+                    'comments' => NULL,
+                    'help' => NULL,
+                    'module' => 'Leads',
+                    'type' => 'Ratingfield',
+                    'max_size' => NULL,
+                    'require_option' => '0',
+                    'default_value' => NULL,
+                    'date_modified' => '2018-07-27 13:41:37',
+                    'deleted' => '0',
+                    'audited' => '0',
+                    'mass_update' => '0',
+                    'duplicate_merge' => '0',
+                    'reportable' => '1',
+                    'importable' => 'false',
+                    'ext1' => '#ffd203',
+                    'ext2' => NULL,
+                    'ext3' => NULL,
+                    'ext4' => NULL,
+                ),
         ),
+    'post_execute' => array(
+        'cleanup.php',
+    ),
 );
 
 /*
@@ -300,13 +437,17 @@ $installdefs = array(
 
 try {
     $isWindowsBuild = false;
+    $isProductionBuild = false;
     $lengthOfWindowsSugarDirectoryPath = null;
     if (array_key_exists('w', $options)){
         $isWindowsBuild = true;
         $lengthOfWindowsSugarDirectoryPath = (int)$options['w'];
     }
-    $zip = $pg -> generateZip($version, $packageID, $argv[0], "src", $manifest, $installdefs, $isWindowsBuild,
-        $lengthOfWindowsSugarDirectoryPath);
+    if (array_key_exists('p', $options)){
+        $isProductionBuild = true;
+    }
+    $zip = $pg -> generateZip($version, $packageID, $argv[0], "src", $manifest, $installdefs,
+        $isProductionBuild, $isWindowsBuild, $lengthOfWindowsSugarDirectoryPath);
 } catch (Exception $e) {
     die($e->getMessage());
 }

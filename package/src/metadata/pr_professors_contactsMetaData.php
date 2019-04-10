@@ -14,8 +14,8 @@ $dictionary["pr_professors_contacts"] = array (
                     'rhs_key' => 'id',
                     'relationship_type' => 'many-to-many',
                     'join_table' => 'pr_professors_contacts_c',
-                    'join_key_lhs' => 'pr_professors_contactspr_professors_ida',
-                    'join_key_rhs' => 'pr_professors_contactscontacts_idb',
+                    'join_key_lhs' => 'pr_prof_contactspr_prof_ida',
+                    'join_key_rhs' => 'pr_professors_contcont_idb',
                 ),
         ),
     'table' => 'pr_professors_contacts_c',
@@ -37,14 +37,14 @@ $dictionary["pr_professors_contacts"] = array (
                     'type' => 'bool',
                     'default' => 0,
                 ),
-            'pr_professors_contactspr_professors_ida' =>
+            'pr_prof_contactspr_prof_ida' =>
                 array (
-                    'name' => 'pr_professors_contactspr_professors_ida',
+                    'name' => 'pr_prof_contactspr_prof_ida',
                     'type' => 'id',
                 ),
-            'pr_professors_contactscontacts_idb' =>
+            'pr_professors_contcont_idb' =>
                 array (
-                    'name' => 'pr_professors_contactscontacts_idb',
+                    'name' => 'pr_professors_contcont_idb',
                     'type' => 'id',
                 ),
         ),
@@ -62,10 +62,10 @@ $dictionary["pr_professors_contacts"] = array (
             1 =>
                 array (
                     'name' => 'idx_pr_professors_contacts_ida1_deleted',
-                    'tyape' => 'index',
+                    'type' => 'index',
                     'fields' =>
                         array (
-                            0 => 'pr_professors_contactspr_professors_ida',
+                            0 => 'pr_prof_contactspr_prof_ida',
                             1 => 'deleted',
                         ),
                 ),
@@ -75,7 +75,7 @@ $dictionary["pr_professors_contacts"] = array (
                     'type' => 'index',
                     'fields' =>
                         array (
-                            0 => 'pr_professors_contactscontacts_idb',
+                            0 => 'pr_professors_contcont_idb',
                             1 => 'deleted',
                         ),
                 ),
@@ -85,8 +85,8 @@ $dictionary["pr_professors_contacts"] = array (
                     'type' => 'alternate_key',
                     'fields' =>
                         array (
-                            0 => 'pr_professors_contactspr_professors_ida',
-                            1 => 'pr_professors_contactscontacts_idb',
+                            0 => 'pr_prof_contactspr_prof_ida',
+                            1 => 'pr_professors_contcont_idb',
                         ),
                 ),
         ),

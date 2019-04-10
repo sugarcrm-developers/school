@@ -29,15 +29,18 @@ dockerDirectory=$2
 # Setup
 ######################################################################
 
-if [[ "$sugarVersion" == "8.0" ]]
+if [[ "$sugarVersion" == "8.3" ]]
+then
+    ymlPath=$dockerDirectory/stacks/sugar81/php71.yml
+elif [[ "$sugarVersion" == "8.2" ]]
+then
+    ymlPath=$dockerDirectory/stacks/sugar81/php71.yml
+elif [[ "$sugarVersion" == "8.1" ]]
+then
+    ymlPath=$dockerDirectory/stacks/sugar81/php71.yml
+elif [[ "$sugarVersion" == "8.0" ]]
 then
     ymlPath=$dockerDirectory/stacks/sugar8/php71.yml
-elif [[ "$sugarVersion" == "7.10" || "$sugarVersion" == "7.11" ]]
-then
-    ymlPath=$dockerDirectory/stacks/sugar710/php71.yml
-elif [[ "$sugarVersion" == "7.9" ]]
-then
-    ymlPath=$dockerDirectory/stacks/sugar79/php71.yml
 else
     echo "Unable to identify Docker Stack yml for Sugar version $sugarVersion"
     exit 1

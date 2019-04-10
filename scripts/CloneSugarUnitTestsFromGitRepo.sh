@@ -7,11 +7,10 @@
 if [[ -z "$1" ]] || [[ -z "$2" ]] || [[ -z "$3" ]]
 then
     echo "Not all required command line arguments were set. Please run the script again with the required arguments:
-        1: Sugar version (Example: 7.11)
+        1: Sugar version (Example: 8.0)
         2: GitHub username that has access to sugarcrm/unit-tests
         3: Password associated with the above account
-
-        For example: ./CloneSugarUnitTestsFromGitRepo.sh 7.11 mygithubusername mygithubpassword"
+        For example: ./CloneSugarUnitTestsFromGitRepo.sh 8.0 mygithubusername mygithubpassword"
     exit 1
 fi
 
@@ -29,14 +28,17 @@ gitHubPassword=$3
 # Determine which branch to clone
 ######################################################################
 
-if [[ "$sugarVersion" == "8.0" ]]
+if [[ "$sugarVersion" == "8.3" ]]
+then branch="8_3_0"
+
+elif [[ "$sugarVersion" == "8.2" ]]
+then branch="8_2_0"
+
+elif [[ "$sugarVersion" == "8.1" ]]
+then branch="8_1_0"
+
+elif [[ "$sugarVersion" == "8.0" ]]
 then branch="8_0_0"
-
-elif [[ "$sugarVersion" == "7.11" ]]
-then branch="7_11_0"
-
-elif [[ "$sugarVersion" == "7.10" ]]
-then branch="7_10_0"
 
 else
     echo "Unable to find Sugar unit tests for version $sugarVersion"

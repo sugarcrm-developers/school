@@ -259,7 +259,49 @@ array (
               ),
             ),
           ),
-          2 => 
+          2 =>
+            array (
+                'newTab' => false,
+                'panelDefault' => 'expanded',
+                'name' => 'LBL_RECORDVIEW_PANEL1',
+                'label' => 'LBL_RECORDVIEW_PANEL1',
+                'columns' => 2,
+                'labelsOnTop' => 1,
+                'placeholders' => 1,
+                'fields' =>
+                    array (
+                        0 =>
+                            array (
+                                'name' => 'highschool_c',
+                                'label' => 'LBL_HIGHSCHOOL',
+                            ),
+                        1 =>
+                            array (
+                                'name' => 'gpa_c',
+                                'label' => 'LBL_GPA',
+                            ),
+                        2 =>
+                            array (
+                                'name' => 'programminglanguages_c',
+                                'label' => 'LBL_PROGRAMMINGLANGUAGES',
+                            ),
+                        3 =>
+                            array (
+                                'name' => 'transcript_c',
+                                'studio' => 'visible',
+                                'label' => 'LBL_TRANSCRIPT',
+                            ),
+                        4 =>
+                            array (
+                                'name' => 'rating_c',
+                                'label' => 'LBL_RATING',
+                            ),
+                        5 =>
+                            array (
+                            ),
+                    ),
+          ),
+          3 =>
           array (
             'name' => 'panel_hidden',
             'label' => 'LBL_RECORD_SHOWMORE',

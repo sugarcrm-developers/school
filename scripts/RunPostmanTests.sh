@@ -11,18 +11,18 @@
 if [[ -z "$1" ]] || [[ -z "$2" ]]
 then
     echo "Not all required command line arguments were set. Please run the script again with the required arguments:
-        1: Sugar version (Example: 7.11)
-        2: Path to where the Sugar files are stored
+        1: Sugar version (Example: 8.0)
+        2: Sugar edition (Options: Ult, Ent, Pro)
 
-        For example: ./RunPostmanTests.sh 7.11 workspace/sugardocker/data/app/sugar"
+        For example: ./RunPostmanTests.sh 8.0 Ult"
     exit 1
 fi
 
 # The Sugar version
 sugarVersion=$1
 
-# The path to where the unzipped Sugar files are stored
-sugarDirectory=$2
+# The Sugar edition
+sugarEdition=$2
 
 
 ######################################################################
@@ -42,15 +42,12 @@ sudo chmod -R 777 . &> /dev/null
 currentDockerContainer="$(cat /etc/hostname)"
 if [[ -n $currentDockerContainer && $currentDockerContainer != *"travis-job"* ]]
 then
-    if [[ "$sugarVersion" == "8.0" ]]
+    if [[ "$sugarVersion" == "8.1" || "$sugarVersion" == "8.2" || "$sugarVersion" == "8.3" ]]
+    then
+        network="sugar81_default"
+    elif [[ "$sugarVersion" == "8.0" ]]
     then
         network="sugar8_default"
-    elif [[ "$sugarVersion" == "7.10" || "$sugarVersion" == "7.11" ]]
-    then
-        network="sugar710_default"
-    elif [[ "$sugarVersion" == "7.9" ]]
-    then
-        network="sugar79_default"
     else
         echo "Unable to identify network for Sugar version $sugarVersion"
         exit 1
@@ -77,7 +74,8 @@ fi
 # Run the Postman tests
 ######################################################################
 
-docker run -v $dataDirectoryPath:/etc/newman --net="host" -t postman/newman_ubuntu1404 run "ProfessorM_PostmanCollection.json" --environment="ProfessorM_PostmanEnvironment.json" --no-color
+# Run the tests that work with all editions of Sugar
+docker run -v $dataDirectoryPath:/etc/newman --net="host" -t postman/newman_ubuntu1404 run "ProfessorM_PostmanCollection.json" --environment="ProfessorM_PostmanEnvironment.json" --color off
 
 # If the tests return 1, at least one of the tests failed, so we will exit the script with error code 1.
 if [[ $? -eq 1 ]]
@@ -85,6 +83,16 @@ then
     exit 1
 fi
 
+# Run the Advanced Workflow tests, which only work with Ent and Ult
+#if [[ "$sugarEdition" == "Ent" || "$sugarEdition" == "Ult" ]]
+#    then
+#        docker run -v $dataDirectoryPath:/etc/newman --net="host" -t postman/newman_ubuntu1404 run "ProfessorM_PostmanCollection_AdvancedWorkflow.json" --environment="ProfessorM_PostmanEnvironment.json" --color off
+#
+#        if [[ $? -eq 1 ]]
+#        then
+#            exit 1
+#        fi
+#fi
 
 ######################################################################
 # Cleanup

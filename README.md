@@ -1,6 +1,7 @@
 # Professor M's School for Gifted Coders [![Build Status](https://travis-ci.org/sugarcrm/school.svg?branch=windows-build-pack-php)](https://travis-ci.org/sugarcrm/school)
 
-All of the tutorials at UnCon 2017 will be based on Professor M's School for Gifted Coders.  The following sections will explain more about the scenario and how to install the required modules and sample data.
+Professor M's School for Gifted Coders is a module loadable package that can be installed in Sugar.  The following 
+sections explain more about the scenario and how to install the package and sample data.
 
 ## Contents
 [About the scenario](#about-the-scenario) 
@@ -26,12 +27,10 @@ Professor M aka Professor Marum has created an exclusive not-for-profit school f
 
 Learn more about the implemented [Use Cases](docs/UseCases.md) in the [docs](docs/).
 
-Want a quick summary? Watch the video below we put together for SugarCon 2017.
+Want a quick summary? Watch the video below.
 [![The Professor M Scenario Part 1 - What is it and why should you care?](images/profmvideo1.png)](https://youtu.be/aKBTKcaney4 "The Professor M Scenario Part 1 - What is it and why should you care?")
 
 ## Installation instructions
-
-Before beginning any of the tutorials associated with UnCon 2017, you'll want to setup a Sugar instance that has the Professor M scenario installed.
 
 Watch the video below for instructions on how to install the scenario.  Text-based instructions follow.
 [![The Professor M Scenario Part 2 - How do you install it?](images/profmvideo2.png)](https://youtu.be/SO-Rav35X5U "The Professor M Scenario Part 2 - How do you install it?")
@@ -44,7 +43,10 @@ Watch the video below for instructions on how to install the scenario.  Text-bas
 
 ### Install the modules and customizations
 We've created a custom package you can install.  The package will create and customize the modules you'll need for the scenario.  The following instructions will walk you throw how to install the package.
-1. Download **sugarcrm-ProfessorM-standard.zip** from the latest [release](https://github.com/sugarcrm/school/releases)
+1. Download the appropriate zip file from the latest [release](https://github.com/sugarcrm/school/releases). If you are
+installing in Sugar Cloud, you will need to select the **production** version of the release.  If you are installing
+elsewhere, you can select the **production** release or the **standard** release.  The **standard** release includes 
+automated testing files while the **production** release does not.
 1. Login to Sugar as an Administrator
 1. Navigate to **Administration** > **Module Loader**
 1. Upload **sugarcrm-ProfessorM-standard.zip**
@@ -56,6 +58,10 @@ We've created a custom package you can install.  The package will create and cus
      1. Install the zip as a module loadable package using the steps above.
      1. Download **sugarcrm-ProfessorM-windows-manual-install.zip** from the latest [release](https://github.com/sugarcrm/school/releases).
      1. Unzip the file. Note that you'll find **ProfMForWindowsReadme.txt** and a set of directories inside of the zip.
+     If no directories are inside the zip, then all file paths in the `package/src` directory have been deemed short 
+     enough to be included in a typical Windows installation and you will need to generate the zips yourself locally 
+     on your own machine (see [Generating the Professor M module loadable packages locally](#generating-the-professor-m-module-loadable-packages-locally) 
+     for instructions on how to do so).
      1. Open **ProfMForWindowsReadme.txt**.
      1. Follow the instructions inside of the readme to manually copy the files from the zip to your Sugar instance.  You
      may need to create directories in your Sugar directory if they do not already exist.
@@ -77,12 +83,9 @@ Sugar will display many modules by default that you will not be using while work
    * Tasks
    * Notes
    * Emails
-   * Campaigns
    * Targets
    * Target Lists
    * Forecasts
-   * Processes
-   * Process Business Rules
    * Documents
    * Cases
    * Tags
@@ -95,13 +98,16 @@ Sugar will display many modules by default that you will not be using while work
    * Revenue Line Items
    * Quotes
    * Reports
+   * Campaigns
    * Process Email Templates
    * Process Definitions
+   * Process Business Rules
+   * Processes
 1. Click **Save**
 
 ### Use the Sugar REST API to create the Professor M sample data
 In order to create the Professor M sample data, you'll use Postman to run a collection of Sugar REST API calls.  Each call in the collection has one or more simple tests associated with it to ensure the call was successful.
-1. Save a copy of [ProfessorM_PostmanCollection.json](https://raw.githubusercontent.com/sugarcrm/uncon/2017/ProfessorM/ProfessorM_SampleData/ProfessorM_PostmanCollection.json)
+1. Save a copy of [ProfessorM_PostmanCollection.json](https://raw.githubusercontent.com/sugarcrm/school/master/data/ProfessorM_PostmanCollection.json)
 1. In Postman, click **Import**
 1. Click **Choose Files** and import **ProfessorM_PostmanCollection.json**
 1. Click the gear icon in the upper right corner and select **Manage Enviornments**
@@ -121,7 +127,9 @@ In order to create the Professor M sample data, you'll use Postman to run a coll
 1. Wait for the collection to finish running. All tests should pass.
    Hint:  If you see many failures, you may have forgotten to install the Professor M module loadable package.  See the 
    instructions in previous section for how to do the install.
-
+   
+If you are using an Enterprise or Ultimate edition of Sugar, you can use the features that leverage Advanced Workflow.
+Save a copy of [ProfessorM_PostmanCollection_AdvancedWorkflow.json](https://raw.githubusercontent.com/sugarcrm/school/master/data/ProfessorM_PostmanCollection_AdvancedWorkflow.json) and (https://raw.githubusercontent.com/sugarcrm/school/master/data/Application_Routing.bpm) to your local filesystem. Update the reference to Application_Routing.bpm in ProfessorM_PostmanCollection_AdvancedWorkflow.json to point to your local filesystem location for that file. Then follow the steps above to import the collection and run it.
 
 ## Setting up your development environment
 If you want to generate the Professor M module loadable packages yourself or make changes to the code in this repo, you
@@ -492,11 +500,11 @@ your `school/package` directory:
 
 The PHPUnit tests can be executed by running the following command from your `school/tests/phpunit` directory on macOS:
 ```
-../../vendor/bin/phpunit
+../../package/vendor/bin/phpunit
 ```
 or on Windows:
 ```
-..\..\vendor\bin\phpunit
+..\..\package\vendor\bin\phpunit
 ```
 
 ##### Automatic execution in Travis CI
@@ -569,9 +577,9 @@ tests.
 Install Yarn which is an NPM compatible package manager. See 
 [Yarn Installation Guide](https://yarnpkg.com/lang/en/docs/install/) for more details on how to install Yarn.
 
-Next navigate to your school directory and then execute the following commands. 
+Next navigate to your `school` directory and then execute the following commands. 
 
-Navigate to the tests/jasmine directory.
+Navigate to the `tests/jasmine` directory.
 ```
 cd tests/jasmine
 ```
@@ -653,7 +661,7 @@ Currently, we have PHPUnit tests and Postman tests.
 
 #### PHPUnit tests for the Professor M Module Loadable Package
 [PHPUnit](https://phpunit.de/) is a testing framework for PHP.  The PHPUnit test files are located in 
-[package/src/custom/tests/School/unit-php](package/src/custom/tests/School/unit-php).  
+[package/src/custom/tests/unit-php/School](package/src/custom/tests/unit-php/School).  
 
 ##### Manual execution
 
@@ -689,7 +697,7 @@ for instructions on setting up a development environment.
 You will also need to get a copy of the Sugar provided unit tests and put them in your Sugar source code directory. See
 the [SugarCRM unit tests GitHub repo](https://github.com/sugarcrm/unit-tests) for more information.  
 
-Prepare to run the Sugar provided PHPUnit tests by executing the following commands:
+Prepare to run the Sugar provided PHPUnit tests and the Professor M PHPUnit tests by executing the following commands:
 ```
 $ cd /path/to/sugar_source_dir
 $ composer install
@@ -703,22 +711,15 @@ Run the Sugar provided unit tests by executing the following command from the `t
 $ ../../vendor/bin/phpunit
 ```
 
-Install the Professor M Module Loadable Package using 
+Install the **standard** version of the Professor M Module Loadable Package using 
 [Module Loader](https://support.sugarcrm.com/SmartLinks/Administration_Guide/Developer_Tools/Module_Loader/index.html) 
 if you have not already done so.  The code for 
 Professor M and the associated tests will be installed in to the Sugar source directory.
 
-Prepare to run the Professor M PHPUnit tests by executing the following commands:
-```
-$ cd /path/to/sugar_source_dir
-$ cd custom/tests/School/unit-php
-$ chmod +x ../../../../vendor/bin/phpunit
-```
-
-Run the Professor M PHPUnit tests by executing the following command from the `/custom/tests/School/unit-php` directory:
+Run the Professor M PHPUnit tests by executing the following command from the `tests/unit-php` directory:
 
 ```
-$ ../../../../vendor/bin/phpunit
+$ ../../vendor/bin/phpunit --testsuite custom
 ```
 
 ##### Automatic execution in Travis CI
@@ -793,19 +794,22 @@ If a PHPUnit test fails, you'll see something like the following in the job log.
 
 #### Postman tests for the Professor M Module Loadable Package
 
-[Postman](https://www.getpostman.com/) is an API development environment.  We use a Postman Collection to insert our 
-sample data into Sugar via the REST API.  Each API call in the collection has one or more associated tests to ensure
+[Postman](https://www.getpostman.com/) is an API development environment.  We use Postman Collections to insert our 
+sample data into Sugar via the REST API.  Each API call in the collections has one or more associated tests to ensure
 the calls were successful.  
 
-The Postman Collection can be run via the Postman application as described 
+The Postman Collections can be run via the Postman application as described 
 [above](#use-the-sugar-rest-api-to-create-the-professor-m-sample-data) or the command line using 
 [Newman](https://www.getpostman.com/docs/v6/postman/collection_runs/command_line_integration_with_newman).
 
 ##### Manual execution using the command line interface
 
-You can execute the tests against any running instance of Sugar. The first step is to configure the Postman Environment 
-for your particular instance of Sugar.  Open [ProfessorM_PostmanEnvironment](data/ProfessorM_PostmanEnvironment.json) 
-and update the url, username, password, and rest_endpoint to reflect your instance.
+You can execute the tests against any running instance of Sugar. Note that the Postman tests will NOT be installed
+as part of the Professor M module loadable package.  The tests will only be available in your `school` repo.
+
+The first step is to configure the Postman Environment for your particular instance of Sugar.  Open 
+[ProfessorM_PostmanEnvironment](data/ProfessorM_PostmanEnvironment.json) and update the url, username, password, and 
+rest_endpoint to reflect your instance.
 
 Then you can choose to install Newman to execute the tests or use a Docker image to execute the tests.
 
@@ -821,6 +825,11 @@ Navigate to the `school/data` directory in your shell.  Execute the tests by run
 
 `newman run ProfessorM_PostmanCollection.json -e ProfessorM_PostmanEnvironment.json`
 
+You can execute the tests that leverage Advanced Workflow (only available in Enterprise and Ultimate editions of Sugar)
+by running the following:
+
+`newman run ProfessorM_PostmanCollection_AdvancedWorkflow.json -e ProfessorM_PostmanEnvironment.json`
+
 ###### Using Docker
 
 [Install Docker](https://docs.docker.com/install) if you haven't already.
@@ -834,6 +843,11 @@ Execute the tests by running the following:
 `docker run -v pathToTheDataDirectoryInYourSchoolRepo:/etc/newman -t postman/newman_ubuntu1404 run "ProfessorM_PostmanCollection.json" --environment="ProfessorM_PostmanEnvironment.json"`
 
 Be sure to replace `pathToTheDataDirectoryInYourSchoolRepo` with the path to the `data` directory in your school repo.
+
+You can execute the tests that leverage Advanced Workflow (only available in Enterprise and Ultimate editions of Sugar)
+by running the following:
+
+`docker run -v pathToTheDataDirectoryInYourSchoolRepo:/etc/newman -t postman/newman_ubuntu1404 run "ProfessorM_PostmanCollection_AdvancedWorkflow.json" --environment="ProfessorM_PostmanEnvironment.json"`
 
 Hint:  If your instance of Sugar is running inside a Docker container, you may need to add the `--net="host"` option:
 

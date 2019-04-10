@@ -28,7 +28,7 @@ sugarDirectory=$3
 ######################################################################
 # Copy Sugar Unit Tests to Sugar Directory
 ######################################################################
-
+echo "Copying unit tests from workspace/unit-tests/$sugarEdition/ to $sugarDirectory"
 cp -rf workspace/unit-tests/$sugarEdition/* $sugarDirectory
 
 
@@ -36,25 +36,12 @@ cp -rf workspace/unit-tests/$sugarEdition/* $sugarDirectory
 # Install dependencies needed to run unit tests
 ######################################################################
 
-# composer.json and composer.lock contain references to internal Sugar repositories. We'll remove the references
-# from composer.json and completely remove the composer.lock file.
-
-# Remove the repository matching the following pattern:
-#   {
-#       "packagist.org": false
-#   },
-perl -0777 -i -pe "s#{\n *\"packagist.org\"\: false\n *},##g" $sugarDirectory/composer.json
-
-# Remove the repository matching the following pattern:
-#   ,
-#   {
-#       "type": "composer",
-#       "url": "https://satis.sugardev.team"
-#   }
-perl -0777 -i -pe "s#,\n *{\n *\"type\"\: \"composer\",\n *\"url\"\: \"https:\/\/satis.sugardev.team\"\n *}##g" $sugarDirectory/composer.json
-
-# Remove the composer.lock file
-rm $sugarDirectory/composer.lock
-
+# Install git so composer will be able to pull files from git repos
+docker exec sugar-web1 bash -c "apt-get update"
+echo "Installing git on sugar-web1"
+docker exec sugar-web1 bash -c "apt-get install -y git wget"
+echo "Installing composer on sugar-web1"
+docker exec sugar-web1 bash -c "wget https://raw.githubusercontent.com/composer/getcomposer.org/d3e09029468023aa4e9dcd165e9b6f43df0a9999/web/installer -O - -q | php --"
+echo "Installing php dependencies (via composer)"
 # Install the dependencies
-docker exec sugar-web1 bash -c "composer install"
+docker exec sugar-web1 bash -c "php composer.phar install --profile --prefer-source --ignore-platform-reqs"
