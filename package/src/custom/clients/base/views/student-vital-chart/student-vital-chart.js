@@ -37,11 +37,11 @@
                 (total == 0) ? total = 1 : '';
                 var percentage = value/total * 100;
                 return '<h3>' + this.chart.fmtKey()(eo) + '</h3>' +
-                    '<p>' + value + ' days</p>' +
+                    '<p>' + value + '</p>' +
                     '<p>' + percentage.toFixed(2) + '%</p>';
             }, this))
             .strings({
-                noData: app.lang.get('LBL_CHART_NO_DATA')
+                noData: app.lang.get('No Problems')
             });
     },
 
@@ -80,13 +80,12 @@
     renderChart: function() {
         var self = this;
         if (!self.isChartReady()) {
-
             return;
         }
 
-
         d3sugar.select(this.el).select('svg#' + this.cid)
             .datum(self.chartCollection)
+            .transition().duration(500)
             .call(self.chart);
 
         this.chart_loaded = _.isFunction(this.chart.update);
@@ -123,7 +122,7 @@
 
         this.total = 1;
         this.hasData = true;
-        this.chartCollection = $.parseJSON(data);
+        this.chartCollection = data;
 
     },
 

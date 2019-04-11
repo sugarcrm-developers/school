@@ -6,7 +6,6 @@ $viewdefs['base']['view']['student-vital-chart'] = array(
             'label' => 'LBL_STUDENT_VITAL_CHART',
             'description' => 'LBL_STUDENT_VITAL_CHART_DESC',
             'config' => array(
-                'date_range' => 'all',
                 'supergroup' => 'all',
             ),
             'preview' => array(
@@ -35,13 +34,6 @@ $viewdefs['base']['view']['student-vital-chart'] = array(
                     'type' => 'enum',
                     'span' => 6,
                     'options' => array('all' => 'All'),
-                ),
-                array(
-                    'name' => 'vitals_dashlet_date_range',
-                    'label' => 'LBL_VITALS_DASHLET_SELECT_DATE_RANGE',
-                    'type' => 'enum',
-                    'span' => 6,
-                    'options' => array('all' => 'All Time', 'ThisYear' => 'This Year', 'LastYear' => 'Last Year'),
                 ),
             ),
         ),
