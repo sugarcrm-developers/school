@@ -30,7 +30,7 @@ jobs:
     services:
     - docker
     env:
-    - SUGAR_VERSION=8.3 SUGAR_EDITION=Ent
+    - SUGAR_VERSION=9.0 SUGAR_EDITION=Ent
     before_script:
     - cd package
     - composer install
@@ -47,24 +47,7 @@ jobs:
     services:
     - docker
     env:
-    - SUGAR_VERSION=8.3 SUGAR_EDITION=Pro
-    before_script:
-    - cd package
-    - composer install
-    - "./pack.php -v $(date +'%Y%m%d-%H.%M.%S')"
-    - cd ../scripts
-    - sudo service mysql stop
-    script:
-    - "./SetupEnvAndRunTests.sh $SUGARCRM_USERNAME $SUGARCRM_PASSWORD $SUGAR_VERSION
-      $SUGAR_EDITION $GITHUB_USERNAME $GITHUB_PASSWORD workspace/sugardocker"
-  - stage: Run Tests
-    sudo: required
-    language: php
-    php: '7.1'
-    services:
-    - docker
-    env:
-    - SUGAR_VERSION=8.3 SUGAR_EDITION=Ult
+    - SUGAR_VERSION=9.0 SUGAR_EDITION=Pro
     before_script:
     - cd package
     - composer install
