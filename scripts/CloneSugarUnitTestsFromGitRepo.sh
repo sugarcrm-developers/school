@@ -28,6 +28,9 @@ gitHubPassword=$3
 # Determine which branch to clone
 ######################################################################
 
+if [[ "$sugarVersion" == "9.0" ]]
+then branch="9_0_0"
+
 if [[ "$sugarVersion" == "8.3" ]]
 then branch="8_3_0"
 
