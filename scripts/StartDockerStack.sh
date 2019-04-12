@@ -32,13 +32,13 @@ dockerGitRepo="https://github.com/esimonetti/SugarDockerized.git"
 # Setup
 ######################################################################
 
-if [[ "$sugarVersion" == "8.3" ]]
+if [[ "$sugarVersion" == "9.0" ]]
+then
+    ymlPath=$dockerDirectory/stacks/sugar81/php71.yml
+elif [[ "$sugarVersion" == "8.3" ]]
 then
     ymlPath=$dockerDirectory/stacks/sugar81/php71.yml
 elif [[ "$sugarVersion" == "8.2" ]]
-then
-    ymlPath=$dockerDirectory/stacks/sugar81/php71.yml
-elif [[ "$sugarVersion" == "8.1" ]]
 then
     ymlPath=$dockerDirectory/stacks/sugar81/php71.yml
 elif [[ "$sugarVersion" == "8.0" ]]
