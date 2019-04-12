@@ -31,7 +31,7 @@ dockerDirectory=$2
 
 if [[ "$sugarVersion" == "9.0" ]]
 then
-    ymlPath=$dockerDirectory/stacks/sugar81/php71.yml
+    ymlPath=$dockerDirectory/stacks/sugar83/php71.yml
 elif [[ "$sugarVersion" == "8.3" ]]
 then
     ymlPath=$dockerDirectory/stacks/sugar81/php71.yml

@@ -246,7 +246,7 @@ then
     downloadUrl="$(authenticateToSugarStoreAndGetDownloadUrl "SugarPro-8.0.0.zip")"
     expectedChecksum="418c4b23f6fc6db969dd132722f665d7e5426ed4"
 
-if [[ "$sugarName" == "Sugar$sugarEdition_Ent-$sugarVersion_9_0" ]]
+elif [[ "$sugarName" == "Sugar$sugarEdition_Ent-$sugarVersion_9_0" ]]
 then
     downloadUrl="$(authenticateToSugarStoreAndGetDownloadUrl "SugarEnt-9.0.0.zip")"
     expectedChecksum="918b87f809e9afef54d9d2275cb3a0c7644be92c"
@@ -255,7 +255,6 @@ elif [[ "$sugarName" == "Sugar$sugarEdition_Pro-$sugarVersion_9_0" ]]
 then
     downloadUrl="$(authenticateToSugarStoreAndGetDownloadUrl "SugarPro-9.0.0.zip")"
     expectedChecksum="4fa5ed11a579b054a3392d1e91d23d5546a90e02"
-
 
 elif [[ "$sugarName" == "Sugar$sugarEdition_Ent-$sugarVersion_8_2" ]]
 then
