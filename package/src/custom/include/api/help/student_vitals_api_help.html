@@ -18,8 +18,8 @@
 <h2>
     <span class="lead">
         This endpoint is used for by the Student Vitals dashlet to poll the audit table on the Contacts table
-        for changes in the vitals_c field. The output is a summary of the number of days in each status the Students
-        in a given Super Group are in. The results are formatted to the expected input for a pie chart dashlet.
+        for changes in the vitals_c field. The output is a summary of the number of problems encountered by Students
+        in a given Super Group over time. The results are formatted to the expected input for the Sucrose pie chart dashlet.
     </span>
 </h2>
 
@@ -98,47 +98,26 @@
 <h3>Response</h3>
 <pre class="pre-scrollable">
 {
-  "properties": {
-    "title": "Student Vitals Days Count"
-  },
-  "data": [
-    {
-      "key": "Active",
-      "values": [
-        {
-          "x": 1,
-          "y": 58
-        }
-      ]
-    },
-    {
-      "key": "Injured",
-      "values": [
-        {
-          "x": 1,
-          "y": 43
-        }
-      ]
-    },
-    {
-      "key": "Deceased",
-      "values": [
-        {
-          "x": 1,
-          "y": 15
-        }
-      ]
-    },
-    {
-      "key": "Comatose",
-      "values": [
-        {
-          "x": 1,
-          "y": 12
-        }
-      ]
-    }
-  ]
+	"properties": {
+		"title": "All Student Problems",
+		"seriesName": "Problems"
+	},
+	"data": [{
+		"key": "Injuries",
+		"value": 5,
+		"total": 5,
+		"seriesIndex": 1
+	}, {
+		"key": "Comas",
+		"value": 3,
+		"total": 3,
+		"seriesIndex": 2
+	}, {
+		"key": "Deaths",
+		"value": 3,
+		"total": 3,
+		"seriesIndex": 3
+	}]
 }
 </pre>
 
