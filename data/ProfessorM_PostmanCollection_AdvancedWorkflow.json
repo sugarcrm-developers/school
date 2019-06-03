@@ -1,15 +1,13 @@
 {
-	"variables": [],
 	"info": {
+		"_postman_id": "5bf148cf-4d0a-42c9-9e6a-f85188f8f817",
 		"name": "ProfessorM Sample Data - Advanced Workflow",
-		"_postman_id": "25243b31-94c2-10c2-4941-23034b34f669",
 		"description": "See https://github.com/sugarcrm/school for more information. Note: Advanced Workflow is exclusive to Enterprise and Ultimate editions of Sugar 7.6.x and later",
-		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
 			"name": "Authenticate",
-			"description": "",
 			"item": [
 				{
 					"name": "Authenticate",
@@ -32,14 +30,57 @@
 						}
 					],
 					"request": {
-						"url": "{{url}}{{rest_endpoint}}/oauth2/token",
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n   \"grant_type\":\"password\",\n   \"client_id\":\"sugar\",\n   \"client_secret\":\"\",\n   \"username\":\"{{username}}\",\n   \"password\":\"{{password}}\",\n   \"platform\":\"profm_import\"\n}"
 						},
-						"description": ""
+						"url": {
+							"raw": "{{url}}{{rest_endpoint}}/oauth2/token",
+							"host": [
+								"{{url}}{{rest_endpoint}}"
+							],
+							"path": [
+								"oauth2",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Public Metadata",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "68a8d9d1-5277-476b-99a5-cc7f97efa3af",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"tests[\"Successful GET request\"] = responseCode.code === 200;",
+									"pm.globals.set(\"idmModeEnabled\", jsonData.config.idmModeEnabled);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}{{rest_endpoint}}/metadata/public",
+							"host": [
+								"{{url}}{{rest_endpoint}}"
+							],
+							"path": [
+								"metadata",
+								"public"
+							]
+						},
+						"description": "A call to get the public metadata. This will be initially used to determine if IDM is enabled."
 					},
 					"response": []
 				}
@@ -47,7 +88,6 @@
 		},
 		{
 			"name": "Create Admissions Advisors",
-			"description": "",
 			"item": [
 				{
 					"name": "Create Admissions Advisor Matthew",
@@ -55,16 +95,20 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "a6107025-1a29-496e-b8c0-0ca178f7e0f0",
-								"type": "text/javascript",
+								"id": "b1e9741c-a534-4bff-a31d-931324771f1d",
 								"exec": [
 									"var jsonData = JSON.parse(responseBody);",
 									"var idOfAdmissionsAdvisor = jsonData.id;",
 									"",
-									"tests[\"Successful POST request\"] = responseCode.code === 200;",
-									"tests[\"id is correct\"] = \"matthew-id\" === idOfAdmissionsAdvisor;",
-									"tests[\"user_name is correct\"] = \"matthew\" === jsonData.user_name;"
-								]
+									"if (pm.globals.get(\"idmModeEnabled\")) {",
+									"    tests[\"Successful POST request\"] = responseCode.code === 200;",
+									"    tests[\"id is correct\"] = \"matthew-id\" === idOfAdmissionsAdvisor;",
+									"    tests[\"user_name is correct\"] = \"matthew\" === jsonData.user_name;",
+									"} else {",
+									"    tests[\"IDM not enabled\"] = pm.globals.get(\"idmModeEnabled\") === false;",
+									"}"
+								],
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -99,15 +143,19 @@
 							"listen": "test",
 							"script": {
 								"id": "d90b0950-0d7f-415b-9422-97f6c6b17063",
-								"type": "text/javascript",
 								"exec": [
 									"var jsonData = JSON.parse(responseBody);",
 									"var idOfAdmissionsAdvisor = jsonData.id;",
 									"",
-									"tests[\"Successful POST request\"] = responseCode.code === 200;",
-									"tests[\"id is correct\"] = \"ackburr-id\" === idOfAdmissionsAdvisor;",
-									"tests[\"user_name is correct\"] = \"ackburr\" === jsonData.user_name;"
-								]
+									"if (pm.globals.get(\"idmModeEnabled\")) {",
+									"    tests[\"Successful POST request\"] = responseCode.code === 200;",
+									"    tests[\"id is correct\"] = \"ackburr-id\" === idOfAdmissionsAdvisor;",
+									"    tests[\"user_name is correct\"] = \"ackburr\" === jsonData.user_name;",
+									"} else {",
+									"    tests[\"IDM not enabled\"] = pm.globals.get(\"idmModeEnabled\") === false;",
+									"}"
+								],
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -139,7 +187,6 @@
 		},
 		{
 			"name": "Create Process Definitions",
-			"description": "",
 			"item": [
 				{
 					"name": "Import Application Routing Process Definition",
@@ -177,14 +224,12 @@
 							"formdata": [
 								{
 									"key": "file",
-									"description": "",
 									"type": "file",
 									"src": "Application_Routing.bpm"
 								},
 								{
 									"key": "selectedIds",
 									"value": "[\"7399b17c-9996-11e8-84ef-7200080cd7d0\"]",
-									"description": "",
 									"type": "text"
 								}
 							]
