@@ -6,7 +6,7 @@
     "test": "grunt test-js --verbose"
   },
   "devDependencies": {
-    "grunt": "^1.0.3",
+    "grunt": "^1.0.4",
     "grunt-contrib-jasmine": "^2.0.3"
   },
   "repository": {
