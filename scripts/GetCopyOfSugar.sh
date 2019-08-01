@@ -312,14 +312,17 @@ echo "Download complete"
 
 #Verify the checksum is correct
 checksumOutput="$(sha1sum $sugarName.zip)"
+FILESIZE="$(stat -c%s $sugarName.zip)"
 checksumOutput=($checksumOutput)
 checksumOfDownload=${checksumOutput[0]}
+
 
 if [[ $expectedChecksum != $checksumOfDownload ]]
 then
     echo "The checksum of the downloaded file did not match the expected checksum"
     echo "Expected: $expectedChecksum"
     echo "Actual:   $checksumOfDownload"
+    echo "FILESIZE: $FILESIZE"
     exit 1
 fi
 
