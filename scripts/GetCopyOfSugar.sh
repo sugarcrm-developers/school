@@ -183,10 +183,17 @@ function authenticateToDevBuildsCommunity(){
     response="$(curl -v -L -c $cookieFile -b $cookieFile 'https://community.sugarcrm.com/login.jspa?ssologin=true&fragment=&referer=%2Fcommunity%2Fdeveloper%2Fdeveloper-builds' 2>&1)"
     checkStatusCode "200" "$response"
     token="$(getHiddenFormFieldValue "_token" "$response")"
-
+echo "_token: $token"
+echo "email: $email"
+echo "password: $password"
     response="$(curl -v -L -c $cookieFile -b $cookieFile --data "_token=$token&email=$email&password=$password" https://auth.sugarcrm.com/saml2/idp/authpage?ReturnTo=https%3A%2F%2Fauth.sugarcrm.com%2Fsaml2%2Fidp%2FSSOService%3Fspentityid%3Dhttps%253A%252F%252Fcommunity.sugarcrm.com%26RelayState%3DL2NvbW11bml0eS9kZXZlbG9wZXIvZGV2ZWxvcGVyLWJ1aWxkcw%253D%253D 2>&1)"
     checkStatusCode "200" "$response"
     samlResponse="$(getHiddenFormFieldValue "SAMLResponse" "$response")"
+    # so it seems that it isnt finding a hidden form field called "SAMLResponse"
+    echo "---------------"
+echo "response: $response"
+    echo "---------------"
+echo "SAMLResponse: $samlResponse"
 
     response="$(curl -v -L -c $cookieFile -b $cookieFile --data-urlencode "SAMLResponse=$samlResponse" --data-urlencode "RelayState=L2NvbW11bml0eS9kZXZlbG9wZXIvZGV2ZWxvcGVyLWJ1aWxkcw==" 'https://community.sugarcrm.com/saml/sso' 2>&1)"
     checkStatusCode "200" "$response"
@@ -306,13 +313,15 @@ fi
 ######################################################################
 
 echo "Beginning download of $sugarName from $downloadUrl"
+# response="$(curl -v -L -o $sugarName.zip $downloadUrl 2>&1)"
 response="$(curl -v -L -c ./mycookie -b ./mycookie -o $sugarName.zip $downloadUrl 2>&1)"
+# response="$(curl -v -L -c ./mycookie -b ./mycookie -o $downloadUrl 1> $sugarName.zip 2> $sugarName.txt)"
 checkStatusCode "200" "$response"
 echo "Download complete"
 
 #Verify the checksum is correct
 checksumOutput="$(sha1sum $sugarName.zip)"
-FILESIZE="$(stat -c%s $sugarName.zip)"
+FILESIZE="$(stat -f%z $sugarName.zip)"
 checksumOutput=($checksumOutput)
 checksumOfDownload=${checksumOutput[0]}
 
