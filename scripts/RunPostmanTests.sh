@@ -42,16 +42,16 @@ sudo chmod -R 777 . &> /dev/null
 currentDockerContainer="$(cat /etc/hostname)"
 if [[ -n $currentDockerContainer && $currentDockerContainer != *"travis-job"* ]]
 then
-    if [[ "$sugarVersion" == "8.2" || "$sugarVersion" == "8.3" || "$sugarVersion" == "9.0" || "$sugarVersion" == "9.1" ]]
-    then
+#    if [[ "$sugarVersion" == "8.2" || "$sugarVersion" == "8.3" || "$sugarVersion" == "9.0" || "$sugarVersion" == "9.1" ]]
+#    then
         network="sugar81_default"
 #    elif [[ "$sugarVersion" == "8.0" ]]
 #    then
 #        network="sugar8_default"
-    else
-        echo "Unable to identify network for Sugar version $sugarVersion"
-        exit 1
-    fi
+#    else
+#        echo "Unable to identify network for Sugar version $sugarVersion"
+#        exit 1
+#    fi
 
     echo "Updating the Docker network ($network)..."
     docker network connect $network $currentDockerContainer
