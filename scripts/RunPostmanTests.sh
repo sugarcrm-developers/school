@@ -45,9 +45,9 @@ then
     if [[ "$sugarVersion" == "8.2" || "$sugarVersion" == "8.3" || "$sugarVersion" == "9.0" || "$sugarVersion" == "9.1" ]]
     then
         network="sugar81_default"
-    elif [[ "$sugarVersion" == "8.0" ]]
-    then
-        network="sugar8_default"
+#    elif [[ "$sugarVersion" == "8.0" ]]
+#    then
+#        network="sugar8_default"
     else
         echo "Unable to identify network for Sugar version $sugarVersion"
         exit 1
