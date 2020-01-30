@@ -239,6 +239,7 @@ sugarEdition_Pro="Pro"
 
 # Get the url for the appropriate Sugar version and edition as well as
 # authenticate to the appropriate location (Sugar Store or Developer Builds Community)
+
 if [[ "$sugarName" == "Sugar$sugarEdition_Ent-$sugarVersion_8_0" ]]
 then
     downloadUrl="$(authenticateToSugarStoreAndGetDownloadUrl "SugarEnt-8.0.0.zip")"
