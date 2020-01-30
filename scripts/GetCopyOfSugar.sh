@@ -226,9 +226,6 @@ sudo chmod -R 777 . &> /dev/null
 # Get the URL to download and authenticate to the appropriate location
 #######################################################################
 
-sugarVersion_8_0="8.0"
-sugarVersion_8_2="8.2"
-sugarVersion_8_3="8.3"
 sugarVersion_9_0="9.0"
 sugarVersion_9_1="9.1"
 sugarVersion_9_2="9.2"
@@ -242,34 +239,39 @@ sugarEdition_Pro="Pro"
 
 if [[ "$sugarName" == "Sugar$sugarEdition_Ent-$sugarVersion_9_0" ]]
 then
-    downloadUrl="$(authenticateToSugarStoreAndGetDownloadUrl "SugarEnt-9.0.0.zip")"
-    expectedChecksum="918b87f809e9afef54d9d2275cb3a0c7644be92c"
+    authenticateToDevBuildsCommunity
+    downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/6572-102-1-9581/SugarEnt-9.0.0-dev.1.zip"
+    expectedChecksum="895f5662ebb21f49a74a3fbc6966f1b30507ef3c"
 
 elif [[ "$sugarName" == "Sugar$sugarEdition_Pro-$sugarVersion_9_0" ]]
 then
-    downloadUrl="$(authenticateToSugarStoreAndGetDownloadUrl "SugarPro-9.0.0.zip")"
-    expectedChecksum="4fa5ed11a579b054a3392d1e91d23d5546a90e02"
-
+    authenticateToDevBuildsCommunity
+    downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/6576-102-1-9585/SugarPro-9.0.0-dev.1.zip"
+    expectedChecksum="e8d8fac1405912e869fcab539c33d5b5327d2c3d"
 
 elif [[ "$sugarName" == "Sugar$sugarEdition_Ent-$sugarVersion_9_1" ]]
 then
-    downloadUrl="$(authenticateToSugarStoreAndGetDownloadUrl "SugarEnt-9.1.0.zip")"
+    authenticateToDevBuildsCommunity
+    downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/6776-102-1-10116/SugarEnt-9.1.0-dev.1.zip"
     expectedChecksum="b76a0470a164a776b806ec843894b4de3b1c8e64"
 
 elif [[ "$sugarName" == "Sugar$sugarEdition_Pro-$sugarVersion_9_1" ]]
 then
-    downloadUrl="$(authenticateToSugarStoreAndGetDownloadUrl "SugarPro-9.1.0.zip")"
+    authenticateToDevBuildsCommunity
+    downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/6777-102-1-10117/SugarPro-9.1.0-dev.1.zip"
     expectedChecksum="5d761d8572b16fac4d83991c3dd74b508f70fba0"
 
 elif [[ "$sugarName" == "Sugar$sugarEdition_Ent-$sugarVersion_9_2" ]]
 then
-    downloadUrl="$(authenticateToSugarStoreAndGetDownloadUrl "SugarEnt-9.2.0.zip")"
-    expectedChecksum="253bb0785ce5f5f7f398886e1972d46c8e2b6dd4"
+    authenticateToDevBuildsCommunity
+    downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/6932-102-1-10518/SugarEnt-9.2.0-dev.1.zip"
+    expectedChecksum="ec3a758b2e5e81a38f743dc760c8815451972387"
 
 elif [[ "$sugarName" == "Sugar$sugarEdition_Pro-$sugarVersion_9_2" ]]
 then
-    downloadUrl="$(authenticateToSugarStoreAndGetDownloadUrl "SugarPro-9.2.0.zip")"
-    expectedChecksum="c9cfd16709bc0ee7ebcf10803beca2d0d3bc6f7f"
+    authenticateToDevBuildsCommunity
+    downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/6936-102-1-10522/SugarPro-9.2.0-dev.1.zip"
+    expectedChecksum="a692a47d20f48034673c82c341b1953535255e47"
 
 elif [[ "$sugarName" == "Sugar$sugarEdition_Ent-$sugarVersion_9_3" ]]
 then
