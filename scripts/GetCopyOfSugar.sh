@@ -231,6 +231,8 @@ sugarVersion_8_2="8.2"
 sugarVersion_8_3="8.3"
 sugarVersion_9_0="9.0"
 sugarVersion_9_1="9.1"
+sugarVersion_9_2="9.2"
+sugarVersion_9_3="9.3"
 
 sugarEdition_Ent="Ent"
 sugarEdition_Pro="Pro"
@@ -246,17 +248,6 @@ elif [[ "$sugarName" == "Sugar$sugarEdition_Pro-$sugarVersion_8_0" ]]
 then
     downloadUrl="$(authenticateToSugarStoreAndGetDownloadUrl "SugarPro-8.0.0.zip")"
     expectedChecksum="418c4b23f6fc6db969dd132722f665d7e5426ed4"
-
-elif [[ "$sugarName" == "Sugar$sugarEdition_Ent-$sugarVersion_9_0" ]]
-then
-    downloadUrl="$(authenticateToSugarStoreAndGetDownloadUrl "SugarEnt-9.0.0.zip")"
-    expectedChecksum="918b87f809e9afef54d9d2275cb3a0c7644be92c"
-
-elif [[ "$sugarName" == "Sugar$sugarEdition_Pro-$sugarVersion_9_0" ]]
-then
-    downloadUrl="$(authenticateToSugarStoreAndGetDownloadUrl "SugarPro-9.0.0.zip")"
-    expectedChecksum="4fa5ed11a579b054a3392d1e91d23d5546a90e02"
-
 
 elif [[ "$sugarName" == "Sugar$sugarEdition_Ent-$sugarVersion_8_2" ]]
 then
@@ -283,17 +274,47 @@ then
     downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/6424-102-2-9143/SugarPro-8.3.0-dev.1.zip"
     expectedChecksum="dd86eae22838862510d2044614d1f1b2df915f82"
 
+
+elif [[ "$sugarName" == "Sugar$sugarEdition_Ent-$sugarVersion_9_0" ]]
+then
+    downloadUrl="$(authenticateToSugarStoreAndGetDownloadUrl "SugarEnt-9.0.0.zip")"
+    expectedChecksum="918b87f809e9afef54d9d2275cb3a0c7644be92c"
+
+elif [[ "$sugarName" == "Sugar$sugarEdition_Pro-$sugarVersion_9_0" ]]
+then
+    downloadUrl="$(authenticateToSugarStoreAndGetDownloadUrl "SugarPro-9.0.0.zip")"
+    expectedChecksum="4fa5ed11a579b054a3392d1e91d23d5546a90e02"
+
+
 elif [[ "$sugarName" == "Sugar$sugarEdition_Ent-$sugarVersion_9_1" ]]
 then
-    authenticateToDevBuildsCommunity
-    downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/6776-102-1-10116/SugarEnt-9.1.0-dev.1.zip"
+    downloadUrl="$(authenticateToSugarStoreAndGetDownloadUrl "SugarEnt-9.1.0.zip")"
     expectedChecksum="b76a0470a164a776b806ec843894b4de3b1c8e64"
 
 elif [[ "$sugarName" == "Sugar$sugarEdition_Pro-$sugarVersion_9_1" ]]
 then
-    authenticateToDevBuildsCommunity
-    downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/6777-102-1-10117/SugarPro-9.1.0-dev.1.zip"
+    downloadUrl="$(authenticateToSugarStoreAndGetDownloadUrl "SugarPro-9.1.0.zip")"
     expectedChecksum="5d761d8572b16fac4d83991c3dd74b508f70fba0"
+
+elif [[ "$sugarName" == "Sugar$sugarEdition_Ent-$sugarVersion_9_2" ]]
+then
+    downloadUrl="$(authenticateToSugarStoreAndGetDownloadUrl "SugarEnt-9.2.0.zip")"
+    expectedChecksum="253bb0785ce5f5f7f398886e1972d46c8e2b6dd4"
+
+elif [[ "$sugarName" == "Sugar$sugarEdition_Pro-$sugarVersion_9_2" ]]
+then
+    downloadUrl="$(authenticateToSugarStoreAndGetDownloadUrl "SugarPro-9.2.0.zip")"
+    expectedChecksum="c9cfd16709bc0ee7ebcf10803beca2d0d3bc6f7f"
+
+elif [[ "$sugarName" == "Sugar$sugarEdition_Ent-$sugarVersion_9_3" ]]
+then
+    downloadUrl="$(authenticateToSugarStoreAndGetDownloadUrl "SugarEnt-9.3.0.zip")"
+    expectedChecksum="1f31bcded1cb8ad497e1a4334312b47e8892a89a"
+
+elif [[ "$sugarName" == "Sugar$sugarEdition_Pro-$sugarVersion_9_3" ]]
+then
+    downloadUrl="$(authenticateToSugarStoreAndGetDownloadUrl "SugarPro-9.3.0.zip")"
+    expectedChecksum="529e38cbfde0d415f4d020ba2ac3efd04f4b630e"
 
 else
     echo "Unable to find Sugar download URL for $sugarName"
