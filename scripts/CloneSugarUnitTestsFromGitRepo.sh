@@ -37,35 +37,6 @@ else
     exit 1
 fi
 
-# if [[ "$sugarVersion" == "9.3" ]]
-# then branch="9_3_0"
-
-# elif [[ "$sugarVersion" == "9.2" ]]
-# then branch="9_2_0"
-
-# elif [[ "$sugarVersion" == "9.1" ]]
-# then branch="9_1_0"
-
-# elif [[ "$sugarVersion" == "9.0" ]]
-# then branch="9_0_0"
-
-# elif [[ "$sugarVersion" == "8.3" ]]
-# then branch="8_3_0"
-
-# elif [[ "$sugarVersion" == "8.2" ]]
-# then branch="8_2_0"
-
-# elif [[ "$sugarVersion" == "8.1" ]]
-# then branch="8_1_0"
-
-# elif [[ "$sugarVersion" == "8.0" ]]
-# then branch="8_0_0"
-
-# else
-#     echo "Unable to find Sugar unit tests for version $sugarVersion"
-#     exit 1
-# fi
-
 
 ######################################################################
 # Clone the Sugar unit test repo
