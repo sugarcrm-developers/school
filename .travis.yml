@@ -7,7 +7,7 @@ jobs:
   include:
   - stage: Test PackageGenerator
     language: php
-    php: '7.1'
+    php: '7.3'
     os: linux
     before_script:
     - cd package
@@ -26,11 +26,11 @@ jobs:
   - stage: Run Tests
     sudo: required
     language: php
-    php: '7.1'
+    php: '7.3'
     services:
     - docker
     env:
-    - SUGAR_VERSION=9.0 SUGAR_EDITION=Ent
+    - SUGAR_VERSION=9.3 SUGAR_EDITION=Ent
     before_script:
     - cd package
     - composer install
@@ -43,11 +43,11 @@ jobs:
   - stage: Run Tests
     sudo: required
     language: php
-    php: '7.1'
+    php: '7.3'
     services:
     - docker
     env:
-    - SUGAR_VERSION=9.0 SUGAR_EDITION=Pro
+    - SUGAR_VERSION=9.3 SUGAR_EDITION=Pro
     before_script:
     - cd package
     - composer install
@@ -59,7 +59,7 @@ jobs:
       $SUGAR_EDITION $GITHUB_USERNAME $GITHUB_PASSWORD workspace/sugardocker"
   - stage: Build & Post on GitHub
     language: php
-    php: '7.1'
+    php: '7.3'
     before_script:
     - cd package
     - composer install
