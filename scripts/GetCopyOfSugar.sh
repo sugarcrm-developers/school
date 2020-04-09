@@ -296,7 +296,7 @@ elif [[ "$sugarName" == "Sugar$sugarEdition_Pro-$sugarVersion_10_0" ]]
 then
     authenticateToDevBuildsCommunity
     downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/7273-102-1-11297/SugarPro-10.0.0-dev.1.zip"
-    expectedChecksum="5764737da95bf5f79786345c4496850b2e314712"
+    expectedChecksum="8a2d6ca94d07333ee22143627f2a72edb867683e"
 
 else
     echo "Unable to find Sugar download URL for $sugarName"
