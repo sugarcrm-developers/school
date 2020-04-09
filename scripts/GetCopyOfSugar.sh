@@ -290,7 +290,7 @@ elif [[ "$sugarName" == "Sugar$sugarEdition_Ent-$sugarVersion_10_0" ]]
 then
     authenticateToDevBuildsCommunity
     downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/7250-102-1-11294/SugarEnt-10.0.0-dev.1.zip"
-    expectedChecksum="785df2d34cf455e3de4f5a9a1b8ccee1796d9d6b"
+    expectedChecksum="dae58ae7423d6efb8f40f233e7b262b0ece91bc1"
 
 elif [[ "$sugarName" == "Sugar$sugarEdition_Pro-$sugarVersion_10_0" ]]
 then
