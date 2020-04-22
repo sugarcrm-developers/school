@@ -23,6 +23,7 @@ use Sugarcrm\ProfessorM\PackageGenerator;
 $packageID = "ProfessorM";
 $packageLabel = "Professor M School for Gifted Coders";
 $supportedVersionRegex = '((8|9)\..*|7\.(9|10|11)\..*)';
+$supportedVersionsAry = array('9.*.*','10.*.*');
 
 /*
  * Determine the version of the zip
@@ -51,9 +52,7 @@ $manifest = array(
     'acceptable_sugar_versions' => array(
         'exact_matches' => array(
         ),
-        'regex_matches' => array(
-            $supportedVersionRegex,
-        ),
+        'regex_matches' => $supportedVersionsAry,
     ),
 );
 $installdefs = array(
