@@ -62,3 +62,15 @@ sent.
 
 View the **Cause of Death Report** and the **Student Health Report** by navigating to the Reports module and clicking 
 on the appropriate report title.
+
+## Student Vitals Dashlet
+A new dashlet is available to track the number of days students are in a given Vitals status. This dashlet leverages 
+the Contacts Audit table to populate a pie chart summarizing the number of days all Students in a given Super Group (or all Super Groups) 
+are in each Vital status.
+
+This dashlet displays use of the Sucrose charts in a custom dashlet and is available in Home, List Views, and Record Views.
+
+There is also an accompanying API enpoint for retrieve the data from the Student records and shows use of Sugar Query in joins
+and union queries. For more information on the endpoint see <instnace>/rest/v11/help.
+
+The pull request for the Student vitals dashlet can be viewed in [#27](https://github.com/sugarcrm/school/pull/27).
