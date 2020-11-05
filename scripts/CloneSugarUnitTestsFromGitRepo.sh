@@ -43,4 +43,4 @@ fi
 ######################################################################
 
 cd workspace
-git clone https://$gitHubUsername:$gitHubPassword@github.com/sugarcrm/unit-tests.git -b $branch
+git clone https://$gitHubUsername:$gitHubPassword@github.com/sugarcrm-developers/unit-tests.git -b $branch
