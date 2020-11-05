@@ -54,7 +54,7 @@ cookieFile="./mycookie"
 # $1: expected status code
 # $2: response from curl command
 checkStatusCode(){
-    regexStatusCode=".*HTTP/2 ([^[:space:]]*).*"
+    regexStatusCode=".*HTTP/1.1 ([^[:space:]]*).*"
 
     if [[ $2 =~ $regexStatusCode ]]
     then
