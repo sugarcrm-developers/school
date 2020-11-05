@@ -30,7 +30,7 @@ jobs:
     services:
     - docker
     env:
-    - SUGAR_VERSION=10.0 SUGAR_EDITION=Ent
+    - SUGAR_VERSION=10.2 SUGAR_EDITION=Ent
     before_script:
     - cd package
     - composer install
@@ -38,7 +38,7 @@ jobs:
     - cd ../scripts
     - sudo service mysql stop
     script:
-    - "./SetupEnvAndRunTests.sh $SUGARCRM_USERNAME $SUGARCRM_PASSWORD $SUGAR_VERSION
+    - "./SetupEnvAndRunTests.sh $SUGARCLUB_USERNAME $SUGARCLUB_PASSWORD $SUGAR_VERSION
       $SUGAR_EDITION $GITHUB_USERNAME $GITHUB_PASSWORD workspace/sugardocker"
   - stage: Run Tests
     sudo: required
@@ -47,7 +47,7 @@ jobs:
     services:
     - docker
     env:
-    - SUGAR_VERSION=10.0 SUGAR_EDITION=Pro
+    - SUGAR_VERSION=10.2 SUGAR_EDITION=Pro
     before_script:
     - cd package
     - composer install
@@ -55,7 +55,7 @@ jobs:
     - cd ../scripts
     - sudo service mysql stop
     script:
-    - "./SetupEnvAndRunTests.sh $SUGARCRM_USERNAME $SUGARCRM_PASSWORD $SUGAR_VERSION
+    - "./SetupEnvAndRunTests.sh $SUGARCLUB_USERNAME $SUGARCLUB_PASSWORD $SUGAR_VERSION
       $SUGAR_EDITION $GITHUB_USERNAME $GITHUB_PASSWORD workspace/sugardocker"
   - stage: Build & Post on GitHub
     language: php
