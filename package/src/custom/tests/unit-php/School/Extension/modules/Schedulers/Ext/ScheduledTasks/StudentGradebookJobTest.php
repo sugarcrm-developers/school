@@ -31,7 +31,7 @@ class StudentGradebookJobTest extends \PHPUnit\Framework\TestCase
      */
     private $sgJob;
 
-    protected function setUp()
+    protected function setUp() :void
     {
         parent::setUp();
 
