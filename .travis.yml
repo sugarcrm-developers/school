@@ -24,13 +24,12 @@ jobs:
     script:
     - grunt test-js
   - stage: Run Tests
-    sudo: required
     language: php
     php: '7.3'
     services:
     - docker
     env:
-    - SUGAR_VERSION=10.2 SUGAR_EDITION=Ent
+    - SUGAR_VERSION=10.1 SUGAR_EDITION=Ent
     before_script:
     - cd package
     - composer install
@@ -41,13 +40,12 @@ jobs:
     - "./SetupEnvAndRunTests.sh $SUGARCLUB_USERNAME $SUGARCLUB_PASSWORD $SUGAR_VERSION
       $SUGAR_EDITION $GITHUB_USERNAME $GITHUB_PASSWORD workspace/sugardocker"
   - stage: Run Tests
-    sudo: required
     language: php
     php: '7.3'
     services:
     - docker
     env:
-    - SUGAR_VERSION=10.2 SUGAR_EDITION=Pro
+    - SUGAR_VERSION=10.1 SUGAR_EDITION=Pro
     before_script:
     - cd package
     - composer install
@@ -74,4 +72,3 @@ jobs:
         secure: g7rSPc/6JshbI/tkQG0jTIUaVGh0TjtNfPC5qTs6GK5e2Kg4qHHVkXxJ1B2btlJoRmgRsCn5eY17gbjQC7OMxbl2t47Niy18E6eHIFjsAdNRL4eB1yR+hYOpGrzq9ediOJMj+QMSZzjyYllAIMZ2FwMiE6K95WLzz+QxFFe9zaoDski5B1ttveljk/5e/9CxOQn/TptRgf35as5+DtqbNk1Bn5Y59dDTHGqVAHH87Hkf+uQLUv9SABW+Q0f3ntBCf7P/p3/Yq0K+/FF39+qxdDtHwxTMORlybBS6F+B7yUekyI7RywMsP46VH0r0jHyvOp+zy8i7F2oLn7qIF7pgwQbLoZP12nRI68Bpa6rCg1mx6UUge3Kt51PkY09vpP4x2Tx3xlRV/PTtbfWOiHrX1DxW703/ZzN5kjhr0G6HTMcZXP1Npcws1s1ya6c/5rNr7L4kpwyqTjrEEKoXRsz9usvaroR0m0qVAoeSIs09+vFvkAkyXM7w8+eUiXIXdlic9wA6/xyELN0B6szOjy3SGO0CUaVH9RjkB0v4nF04I9FcUG4eHandCDs6sZFqf+0KgCoMFXK7lhfkNrI+14Re3z3BRt+209nT+kKZ1WGV/31Sc3lZJ08xubVasv9onMQ8EqKu3t3Ep/pNER0Z8Hr/fXJb9FKGAboJU35QW6jcDqg=
       file_glob: true
       file: releases/sugarcrm-ProfessorM-*.zip
-      skip_cleanup: true
