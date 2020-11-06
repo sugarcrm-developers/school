@@ -31,7 +31,7 @@ class Student_GradebookTest extends \PHPUnit\Framework\TestCase
      */
     private $student;
 
-    protected function setUp()
+    protected function setUp() :void
     {
         parent::setUp();
         $GLOBALS['current_user'] = $this->createPartialMock('\\User', []);

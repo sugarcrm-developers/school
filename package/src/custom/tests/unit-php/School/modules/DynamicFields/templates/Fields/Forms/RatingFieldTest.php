@@ -12,7 +12,7 @@ class RatingFieldTest extends \PHPUnit\Framework\TestCase {
     // The default color for the Rating field
     private $defaultColor;
 
-    protected function setUp()
+    protected function setUp() :void
     {
         parent::setUp();
 
