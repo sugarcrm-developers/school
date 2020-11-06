@@ -52,7 +52,7 @@ class Student_GradebookTest extends \PHPUnit\Framework\TestCase
         $this->student->email1 = 'jdoe@example.com';
     }
 
-    protected function tearDown()
+    protected function tearDown() :void
     {
         unset($GLOBALS['current_user']);
         parent::tearDown();
