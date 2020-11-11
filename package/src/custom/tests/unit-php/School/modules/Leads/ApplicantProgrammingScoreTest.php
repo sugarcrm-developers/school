@@ -69,7 +69,7 @@ class ApplicantProgrammingScoreTest extends \PHPUnit\Framework\TestCase
     {
         $levels = \LoggerManager::getLoggerLevels();
         $levels = array_keys($levels);
-        $GLOBALS['log'] = $this->createPartialMock(\stdClass::class, $levels);
+       // $GLOBALS['log'] = $this->createPartialMock(\stdClass::class, $levels);
        // $GLOBALS['log']->expects($this->once())->method('warn');
 
         $aps = new ApplicantProgrammingScore();
