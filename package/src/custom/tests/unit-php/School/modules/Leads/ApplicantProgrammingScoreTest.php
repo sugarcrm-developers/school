@@ -62,18 +62,4 @@ class ApplicantProgrammingScoreTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(60, $aps -> getProgrammingScore(['^php^', '^javascript^', '^net^', '^java^', '^c^', '^go^', '^python^', '^ruby^']));
     }
 
-    /**
-     * @covers ::getProgrammingScore
-     */
-    public function testGetProgrammingScoreUnknownLangugages()
-    {
-       // $levels = \LoggerManager::getLoggerLevels();
-       // $levels = array_keys($levels);
-       // $GLOBALS['log'] = $this->createPartialMock(\stdClass::class, $levels);
-       // $GLOBALS['log']->expects($this->once())->method('warn');
-
-       // $aps = new ApplicantProgrammingScore();
-       // $this->assertEquals(5, $aps -> getProgrammingScore(['^unknown^', '^java^']));
-    }
-
 }
