@@ -14,9 +14,6 @@ docker exec sugar-web1 bash -c "cd tests/unit-php/ && chmod +x ../../vendor/bin/
 ######################################################################
 # Run the Professor M PHPUnit tests
 ######################################################################
-echo "--------------------------"
-node --version
-echo "--------------------------"
 
 
 echo "Running the PHPUnit tests for the Professor M Module Loadable Package..."
