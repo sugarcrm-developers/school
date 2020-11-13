@@ -31,7 +31,7 @@ class Student_GradebookTest extends \PHPUnit\Framework\TestCase
      */
     private $student;
 
-    protected function setUp()
+    protected function setUp() :void
     {
         parent::setUp();
         $GLOBALS['current_user'] = $this->createPartialMock('\\User', []);
@@ -52,7 +52,7 @@ class Student_GradebookTest extends \PHPUnit\Framework\TestCase
         $this->student->email1 = 'jdoe@example.com';
     }
 
-    protected function tearDown()
+    protected function tearDown() :void
     {
         unset($GLOBALS['current_user']);
         parent::tearDown();
