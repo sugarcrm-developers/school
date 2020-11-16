@@ -15,7 +15,7 @@
 if [[ -z "$1" ]] || [[ -z "$2" ]] || [[ -z "$3" ]] || [[ -z "$4" ]]
 then
     echo "Not all required command line arguments were set. Please run the script again with the required arguments:
-        1: Email address associated with your SugarCRM account
+        1: Username (not e-mail address) associated with your SugarClub account
         2: Password associated with the above account
         3: Sugar name (For example: SugarEnt-7.11)
         4. The path to where the Sugar download should be stored
@@ -23,12 +23,12 @@ then
            source zip files will be downloaded from the SugarCRM Developer Builds Community.  The Sugar source zip files
            should be named with the following pattern: Sugar$sugarEdition-$sugarVersion. For example: SugarEnt-7.11
 
-        For example: ./GetCopyOfSugar.sh email@example.com mypassword SugarEnt-7.11 workspace/sugardocker/data/app ../sugar_source_zips"
+        For example: ./GetCopyOfSugar.sh sugardevelopers mypassword SugarEnt-10.1 workspace/sugardocker/data/app ../sugar_source_zips"
     exit 1
 fi
 
-# Email address associated with your SugarCRM account
-email=$1
+# Username address associated with your SugarCRM account
+username=$1
 
 # Password associated with your SugarCRM account
 password=$2
@@ -64,7 +64,7 @@ checkStatusCode(){
             return
         else
             echo "Status code is not the expected $1: $statusCode"
-            echo "$2"
+            #echo "$2"
             exit 1
         fi
     else
@@ -73,125 +73,28 @@ checkStatusCode(){
     fi
 }
 
-# Print the value of the Location included in the response
-# $1: response from curl command
-getLocationFromResponse(){
-    regexLocation=".*Location: ([^[:space:]]*).*"
 
-    if [[ $1 =~ $regexLocation ]]
-    then
-        location="${BASH_REMATCH[1]}"
-        echo "$location"
-    else
-        echo "Unable to find location in response"
-        exit 1
-    fi
+getFileUrlFromResponse() {
+    # made 2 passes at the regex. first one grabs everything from after FileUrl":" then the second grabs everything before the next ","
+    myvar=$(sed 's/\(^.*FileUrl\"\:\"\)\(.*\)\(zip\".*\)/\2/' <<< $1)
+    regexFileUrl=$(sed 's/\"\,\".*//' <<< $myvar)
+     if [[ $1 =~ $regexFileUrl ]]
+     then
+         fileUrl=$regexFileUrl
+         echo "$fileUrl"
+     else
+         echo "Unable to find fileUrl in response"
+         exit 1
+     fi
 }
 
-# Print the value associated with a given key for a JSON response
-# $1: The key associated with the JSON value you want to parse
-# $2: response from curl command
-getJsonValueFromResponse(){
-    regexJsonValue="$1\":\"([^\"]*)\""
-
-    if [[ $2 =~ $regexJsonValue ]]
-    then
-        value="${BASH_REMATCH[1]}"
-        echo "$value"
-    else
-        echo "Unable to find the value of $1 in response"
-        echo $2
-        exit 1
-    fi
-}
-
-# Print the Sugar Download ID associated with the given Sugar zip file
-# $1: The name of the Sugar zip file to search for in the response
-# $2: response from curl command
-getSugarDownloadIdFromResponse(){
-    # This regex parses a string similar to
-    # "id":"download-id-we-are-trying-to-get","name":"SugarEnt-7.9.3.0.zip"
-    regexJasonValue="\"id\":\"([^\"]*)\",\"name\":\"$1\""
-
-    if [[ $2 =~ $regexJasonValue ]]
-    then
-        value="${BASH_REMATCH[1]}"
-        echo "$value"
-    else
-        echo "Unable to find the value of $1 in response"
-        echo $2
-        exit 1
-    fi
-}
-
-# Print the value associated with a hidden form field
-# $1: name of the hidden form field
-# $2: response from curl command
-getHiddenFormFieldValue(){
-    regexToken=".*name=\"$1\" value=\"([^\"]*).*"
-
-    if [[ $response =~ $regexToken ]]
-    then
-        value="${BASH_REMATCH[1]}"
-
-        # This is a hack specifically for Travis CI.  Travis CI outputs a string like the following in the middle
-        # of the SAML Response:
-        #
-        #   0     0    0 12608    0     0   6973      0 --:--:--  0:00:01 --:--:--  6973
-        #   0     0    0 12608    0     0   6973      0 --:--:--  0:00:01 --:--:--     0
-        # * Connection #0 to host auth.sugarcrm.com left intact
-        #
-        # This Regex Token pulls this junk out of the SAML Response
-        newLineRegexToken="([^[:space:]]*).*intact[[:space:]]*(.*)"
-        if [[ $1 == 'SAMLResponse' && $value =~ $newLineRegexToken ]]
-        then
-            value="${BASH_REMATCH[1]}${BASH_REMATCH[2]}"
-        fi
-
-        echo $value
-    else
-        echo "Unable to find $2 in response"
-        echo "$2"
-        exit 1
-    fi
-}
-
-# Authenticate to the Sugar Store and print the URL to download the given Sugar zip
-# $1: The name of zip to download (for example: SugarEnt-7.9.3.0.zip)
-function authenticateToSugarStoreAndGetDownloadUrl(){
-
-    response="$(curl -v -L -c $cookieFile -b $cookieFile 'https://store.sugarcrm.com/download' 2>&1)"
-    checkStatusCode "200" "$response"
-    token="$(getHiddenFormFieldValue "_token" "$response")"
-
-    response="$(curl -v -L -c $cookieFile -b $cookieFile --data "_token=$token&email=$email&password=$password" https://auth.sugarcrm.com/auth/login 2>&1)"
-    checkStatusCode "200" "$response"
-    accountId="$(getJsonValueFromResponse "id" "$response")"
-
-    response="$(curl -v -L -c $cookieFile -b $cookieFile "https://store.sugarcrm.com/api/v1/accounts/$accountId/downloads" 2>&1)"
-    checkStatusCode "200" "$response"
-    downloadId="$(getSugarDownloadIdFromResponse $1 "$response")"
-    hash="$(getJsonValueFromResponse "hash" "$response")"
-
-    downloadUrl="https://store.sugarcrm.com/download/$downloadId/$hash"
-    echo $downloadUrl
-}
-
-# Authenticate to the Developer Builds Community
-function authenticateToDevBuildsCommunity(){
-
-    response="$(curl -v -L -c $cookieFile -b $cookieFile 'https://community.sugarcrm.com/login.jspa?ssologin=true&fragment=&referer=%2Fcommunity%2Fdeveloper%2Fdeveloper-builds' 2>&1)"
-    checkStatusCode "200" "$response"
-    token="$(getHiddenFormFieldValue "_token" "$response")"
-
-    response="$(curl -v -L -c $cookieFile -b $cookieFile --data "_token=$token&email=$email&password=$password" https://auth.sugarcrm.com/saml2/idp/authpage?ReturnTo=https%3A%2F%2Fauth.sugarcrm.com%2Fsaml2%2Fidp%2FSSOService%3Fspentityid%3Dhttps%253A%252F%252Fcommunity.sugarcrm.com%26RelayState%3DL2NvbW11bml0eS9kZXZlbG9wZXIvZGV2ZWxvcGVyLWJ1aWxkcw%253D%253D 2>&1)"
-    checkStatusCode "200" "$response"
-    samlResponse="$(getHiddenFormFieldValue "SAMLResponse" "$response")"
-
-    response="$(curl -v -L -c $cookieFile -b $cookieFile --data-urlencode "SAMLResponse=$samlResponse" --data-urlencode "RelayState=L2NvbW11bml0eS9kZXZlbG9wZXIvZGV2ZWxvcGVyLWJ1aWxkcw==" 'https://community.sugarcrm.com/saml/sso' 2>&1)"
+# Authenticate to SugarClub 
+function getFileDetailsFromSugarClub() {
+    token=$(echo -n "$password:$username" | base64);
+    filecontentid=$1
+    response="$(curl -v -L -c $cookieFile -b $cookieFile -H "Rest-User-Token:$token" https://sugarclub.sugarcrm.com/api.ashx/v2/media/30/files/$filecontentid.json 2>&1)"
     checkStatusCode "200" "$response"
 }
-
 
 ######################################################################
 # Check if we have a copy of the Sugar source zip already downloaded
@@ -226,69 +129,81 @@ sudo chmod -R 777 . &> /dev/null
 # Get the URL to download and authenticate to the appropriate location
 #######################################################################
 
-sugarVersion_9_0="9.0"
-sugarVersion_9_1="9.1"
-sugarVersion_9_2="9.2"
-sugarVersion_9_3="9.3"
+strippedName="${sugarName//./}"
+strippedName="${strippedName//-/}"
 
-sugarEdition_Ent="Ent"
-sugarEdition_Pro="Pro"
+# define the file ID and the expected Checksum for each flavor and version combination
+id_SugarEnt90="097c6456-c4d2-450a-99ba-9c16371c1e39"
+cs_SugarEnt90="895f5662ebb21f49a74a3fbc6966f1b30507ef3c"
+id_SugarPro90="30a7ec5b-cd71-4ffd-8536-164299a08526"
+cs_SugarPro90="e8d8fac1405912e869fcab539c33d5b5327d2c3d"
 
-# Get the url for the appropriate Sugar version and edition as well as
-# authenticate to the appropriate location (Sugar Store or Developer Builds Community)
+id_SugarEnt91="924c90f4-ffee-45d7-8732-043e13ba606b"
+cs_SugarEnt91="b76a0470a164a776b806ec843894b4de3b1c8e64"
+id_SugarPro91="b634ced8-9de5-4630-a654-76820e5e94ca"
+cs_SugarPro91="5d761d8572b16fac4d83991c3dd74b508f70fba0"
 
-if [[ "$sugarName" == "Sugar$sugarEdition_Ent-$sugarVersion_9_0" ]]
-then
-    authenticateToDevBuildsCommunity
-    downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/6572-102-1-9581/SugarEnt-9.0.0-dev.1.zip"
-    expectedChecksum="895f5662ebb21f49a74a3fbc6966f1b30507ef3c"
+id_SugarEnt92="a038a91e-b3ca-4c01-b752-f156aeb3ad34"
+cs_SugarEnt92="ec3a758b2e5e81a38f743dc760c8815451972387"
+id_SugarPro92="e546cf45-2773-4a71-b15a-85b5687af63a"
+cs_SugarPro92="a692a47d20f48034673c82c341b1953535255e47"
 
-elif [[ "$sugarName" == "Sugar$sugarEdition_Pro-$sugarVersion_9_0" ]]
-then
-    authenticateToDevBuildsCommunity
-    downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/6576-102-1-9585/SugarPro-9.0.0-dev.1.zip"
-    expectedChecksum="e8d8fac1405912e869fcab539c33d5b5327d2c3d"
+id_SugarEnt93="0605d7ff-59e6-4c69-81e9-7a5481bb800e"
+cs_SugarEnt93="e93eac01f650469dfddcb895f5c143b84c8ddac2"
+id_SugarPro93="796818ed-2976-4e11-ba19-60631d66ec53"
+cs_SugarPro93="de364d6025ae6697ee6931dbc0e2fff030b2c396"
 
-elif [[ "$sugarName" == "Sugar$sugarEdition_Ent-$sugarVersion_9_1" ]]
-then
-    authenticateToDevBuildsCommunity
-    downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/6776-102-1-10116/SugarEnt-9.1.0-dev.1.zip"
-    expectedChecksum="b76a0470a164a776b806ec843894b4de3b1c8e64"
+id_SugarEnt100="1e8c51f4-b2d7-4ab6-8a0c-a7a9690875b8"
+cs_SugarEnt100="dae58ae7423d6efb8f40f233e7b262b0ece91bc1"
+id_SugarPro100="a56dedbf-25db-4242-8598-749f640c4688"
+cs_SugarPro100="8a2d6ca94d07333ee22143627f2a72edb867683e"
 
-elif [[ "$sugarName" == "Sugar$sugarEdition_Pro-$sugarVersion_9_1" ]]
-then
-    authenticateToDevBuildsCommunity
-    downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/6777-102-1-10117/SugarPro-9.1.0-dev.1.zip"
-    expectedChecksum="5d761d8572b16fac4d83991c3dd74b508f70fba0"
+id_SugarEnt101="c6f806f0-1dfc-4a5d-97a3-f89ca9b57de5"
+cs_SugarEnt101="65150251d0780f1ed1e4cb2f19c92fb61a91ba19"
+id_SugarPro101="878db074-69e3-4372-a800-7112e397af8f"
+cs_SugarPro101="aa84273663accbca19512d6d33589b39147dbd99"
 
-elif [[ "$sugarName" == "Sugar$sugarEdition_Ent-$sugarVersion_9_2" ]]
-then
-    authenticateToDevBuildsCommunity
-    downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/6932-102-1-10518/SugarEnt-9.2.0-dev.1.zip"
-    expectedChecksum="ec3a758b2e5e81a38f743dc760c8815451972387"
+id_SugarEnt102="ea3ec8fe-eb1a-4ef9-bbd7-9ddb096433f3"
+cs_SugarEnt102="10162ed696fa0ebf19847fa3bb39b7c80d0fa47b"
+id_SugarPro102="f7d3a541-2f96-422d-9008-337f773e14e5"
+cs_SugarPro102="6d27bbabe86c8d059bd301bc1fc34f0251d8b939"
 
-elif [[ "$sugarName" == "Sugar$sugarEdition_Pro-$sugarVersion_9_2" ]]
-then
-    authenticateToDevBuildsCommunity
-    downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/6936-102-1-10522/SugarPro-9.2.0-dev.1.zip"
-    expectedChecksum="a692a47d20f48034673c82c341b1953535255e47"
+# id_SugarEnt103="xxxxxxxx"
+# cs_SugarEnt103="yyyyyyyy"
+# id_SugarPro103="xxxxxxxx"
+# cs_SugarPro103="yyyyyyyy"
 
-elif [[ "$sugarName" == "Sugar$sugarEdition_Ent-$sugarVersion_9_3" ]]
-then
-    authenticateToDevBuildsCommunity
-    downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/7072-102-1-10845/SugarEnt-9.3.0-dev.1.zip"
-    expectedChecksum="e93eac01f650469dfddcb895f5c143b84c8ddac2"
+# id_SugarEnt110="xxxxxxxx"
+# cs_SugarEnt110="yyyyyyyy"
+# id_SugarPro110="xxxxxxxx"
+# cs_SugarPro110="yyyyyyyy"
 
-elif [[ "$sugarName" == "Sugar$sugarEdition_Pro-$sugarVersion_9_3" ]]
-then
-    authenticateToDevBuildsCommunity
-    downloadUrl="https://community.sugarcrm.com/servlet/JiveServlet/downloadBody/7075-102-1-10848/SugarPro-9.3.0-dev.1.zip"
-    expectedChecksum="de364d6025ae6697ee6931dbc0e2fff030b2c396"
+# id_SugarEnt111="xxxxxxxx"
+# cs_SugarEnt111="yyyyyyyy"
+# id_SugarPro111="xxxxxxxx"
+# cs_SugarPro111="yyyyyyyy"
 
-else
-    echo "Unable to find Sugar download URL for $sugarName"
+# id_SugarEnt112="xxxxxxxx"
+# cs_SugarEnt112="yyyyyyyy"
+# id_SugarPro112="xxxxxxxx"
+# cs_SugarPro112="yyyyyyyy"
+
+# id_SugarEnt113="xxxxxxxx"
+# cs_SugarEnt113="yyyyyyyy"
+# id_SugarPro113="xxxxxxxx"
+# cs_SugarPro113="yyyyyyyy"
+
+
+idVar="id_$strippedName"
+csVar="cs_$strippedName"
+
+if [ ! -n "${!idVar}" ]; then
+    echo "The requested flavor and/or version is not supported ($sugarName)"
     exit 1
 fi
+getFileDetailsFromSugarClub ${!idVar}
+downloadUrl=$(getFileUrlFromResponse "$response")
+expectedChecksum=${!csVar}
 
 
 ######################################################################
@@ -296,15 +211,12 @@ fi
 ######################################################################
 
 echo "Beginning download of $sugarName from $downloadUrl"
-# response="$(curl -v -L -o $sugarName.zip $downloadUrl 2>&1)"
-response="$(curl -v -L -c ./mycookie -b ./mycookie -o $sugarName.zip $downloadUrl 2>&1)"
-# response="$(curl -v -L -c ./mycookie -b ./mycookie -o $downloadUrl 1> $sugarName.zip 2> $sugarName.txt)"
+response="$(curl -v -L -c $cookieFile -b $cookieFile -H "Rest-User-Token:$token" -o $sugarName.zip $downloadUrl 2>&1)"
 checkStatusCode "200" "$response"
 echo "Download complete"
 
 #Verify the checksum is correct
 checksumOutput="$(sha1sum $sugarName.zip)"
-# FILESIZE="$(stat -f%z $sugarName.zip)"
 checksumOutput=($checksumOutput)
 checksumOfDownload=${checksumOutput[0]}
 
@@ -314,7 +226,6 @@ then
     echo "The checksum of the downloaded file did not match the expected checksum"
     echo "Expected: $expectedChecksum"
     echo "Actual:   $checksumOfDownload"
-#    echo "FILESIZE: $FILESIZE"
     exit 1
 fi
 
