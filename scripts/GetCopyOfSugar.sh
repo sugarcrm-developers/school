@@ -133,6 +133,9 @@ strippedName="${sugarName//./}"
 strippedName="${strippedName//-/}"
 
 # define the file ID and the expected Checksum for each flavor and version combination
+# grab the id from the ContentId field in https://sugarclub.sugarcrm.com/api.ashx/v2/media/30/files/1410.json where 1410 is the id in the url for this file in DevClub
+# grab the checksum from honeycomb
+
 id_SugarEnt90="097c6456-c4d2-450a-99ba-9c16371c1e39"
 cs_SugarEnt90="895f5662ebb21f49a74a3fbc6966f1b30507ef3c"
 id_SugarPro90="30a7ec5b-cd71-4ffd-8536-164299a08526"
@@ -168,10 +171,10 @@ cs_SugarEnt102="10162ed696fa0ebf19847fa3bb39b7c80d0fa47b"
 id_SugarPro102="f7d3a541-2f96-422d-9008-337f773e14e5"
 cs_SugarPro102="6d27bbabe86c8d059bd301bc1fc34f0251d8b939"
 
-# id_SugarEnt103="xxxxxxxx"
-# cs_SugarEnt103="yyyyyyyy"
-# id_SugarPro103="xxxxxxxx"
-# cs_SugarPro103="yyyyyyyy"
+id_SugarEnt103="efb60d0d-4253-4ad6-8091-8fea06dac868"
+cs_SugarEnt103="f74d4ec245902a63d4bd91d3bc0d928d113a72d6"
+id_SugarPro103="02a7e3cc-e621-4729-88a8-0b355376df88"
+cs_SugarPro103="36dc42930f0928ff8b7d70e10c7724e0aac053db"
 
 # id_SugarEnt110="xxxxxxxx"
 # cs_SugarEnt110="yyyyyyyy"
