@@ -16,7 +16,7 @@ jobs:
     - vendor/bin/phpunit --configuration ../tests/phpunit/phpunit.xml
   - stage: Test PackageGenerator
     language: node_js
-    node_js: '8.15.0'
+    node_js: '12.22.0'
     before_script:
     - cd tests/jasmine
     - yarn install
