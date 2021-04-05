@@ -7,7 +7,7 @@ jobs:
   include:
   - stage: Test PackageGenerator
     language: php
-    php: '7.3'
+    php: '7.4'
     os: linux
     before_script:
     - cd package
@@ -25,7 +25,7 @@ jobs:
     - grunt test-js
   - stage: Run Tests
     language: php
-    php: '7.3'
+    php: '7.4'
     services:
     - docker
     env:
@@ -41,7 +41,7 @@ jobs:
       $SUGAR_EDITION $GITHUB_USERNAME $GITHUB_PASSWORD workspace/sugardocker"
   - stage: Run Tests
     language: php
-    php: '7.3'
+    php: '7.4'
     services:
     - docker
     env:
@@ -57,7 +57,7 @@ jobs:
       $SUGAR_EDITION $GITHUB_USERNAME $GITHUB_PASSWORD workspace/sugardocker"
   - stage: Build & Post on GitHub
     language: php
-    php: '7.3'
+    php: '7.4'
     before_script:
     - cd package
     - composer install
