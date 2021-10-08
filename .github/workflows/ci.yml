@@ -97,14 +97,7 @@ jobs:
         GTB_PASSWORD: ${{ secrets.GTB_PASSWORD }}
         SUGAR_LICENSE_KEY: ${{ secrets.SUGAR_ENTERPRISE_LICENSE_KEY }}
       run: |
-        ./SetupEnvAndRunTests.sh 
-          $SUGARCLUB_USERNAME 
-          $SUGARCLUB_PASSWORD 
-          $SUGAR_VERSION 
-          $SUGAR_EDITION 
-          $GTB_USERNAME 
-          $GTB_PASSWORD 
-          workspace/sugardocker
+        ./SetupEnvAndRunTests.sh $SUGARCLUB_USERNAME $SUGARCLUB_PASSWORD $SUGAR_VERSION $SUGAR_EDITION $GTB_USERNAME $GTB_PASSWORD workspace/sugardocker
 
   Run-Tests-Professional:
     runs-on: ubuntu-latest
@@ -128,11 +121,4 @@ jobs:
         GTB_PASSWORD: ${{ secrets.GTB_PASSWORD }}
         SUGAR_LICENSE_KEY: ${{ secrets.SUGAR_PROFESSIONAL_LICENSE_KEY }}
       run: |
-        ./SetupEnvAndRunTests.sh 
-          $SUGARCLUB_USERNAME 
-          $SUGARCLUB_PASSWORD 
-          $SUGAR_VERSION 
-          $SUGAR_EDITION 
-          $GTB_USERNAME 
-          $GTB_PASSWORD 
-          workspace/sugardocker
+        ./SetupEnvAndRunTests.sh $SUGARCLUB_USERNAME $SUGARCLUB_PASSWORD $SUGAR_VERSION $SUGAR_EDITION $GTB_USERNAME $GTB_PASSWORD workspace/sugardocker
