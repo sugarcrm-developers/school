@@ -93,6 +93,10 @@ function getFileDetailsFromSugarClub() {
     token=$(echo -n "$password:$username" | base64);
     filecontentid=$1
     response="$(curl -v -L -c $cookieFile -b $cookieFile -H "Rest-User-Token:$token" https://sugarclub.sugarcrm.com/api.ashx/v2/media/30/files/$filecontentid.json 2>&1)"
+
+    echo ">>> curl -v -L -c $cookieFile -b $cookieFile -H "Rest-User-Token:$token" https://sugarclub.sugarcrm.com/api.ashx/v2/media/30/files/$filecontentid.json"
+    echo ">>>> $response"
+
     checkStatusCode "200" "$response"
 }
 
