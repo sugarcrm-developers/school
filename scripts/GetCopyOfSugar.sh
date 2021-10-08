@@ -83,6 +83,8 @@ getFileUrlFromResponse() {
          fileUrl=$regexFileUrl
          echo "$fileUrl"
      else
+        echo ">>>>>> myvar = $myvar"
+        echo ">>>>>> regexFileUrl = $regexFileUrl"
          echo "Unable to find fileUrl in response"
          exit 1
      fi
