@@ -70,6 +70,10 @@ jobs:
       run: composer install --prefer-dist --no-progress
     - name: Package Professor-M
       run: ./pack.php -v $(date +'%Y%m%d-%H.%M.%S')
+    - uses: actions/upload-artifact@master
+      with:
+        name: professorM-artifact
+        path: releases
 
   Run-Tests-Enterprise:
     runs-on: ubuntu-latest
@@ -78,6 +82,11 @@ jobs:
       run:
         working-directory: scripts
     steps:
+    - uses: actions/checkout@v2
+    - uses: actions/download-artifact@master
+      with:
+        name: professorM-artifact
+        path: package/releases
     - name: Run test suite
       env:
         SUGAR_EDITION: Ent
@@ -104,6 +113,11 @@ jobs:
       run:
         working-directory: scripts
     steps:
+    - uses: actions/checkout@v2
+    - uses: actions/download-artifact@master
+      with:
+        name: professorM-artifact
+        path: package/releases
     - name: Run test suite
       env:
         SUGAR_EDITION: Ent
