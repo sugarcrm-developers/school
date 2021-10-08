@@ -35,7 +35,7 @@ jobs:
     strategy:
       matrix:
         node: [ '12', '14', '16' ]
-    name: Node ${{ matrix.node }} sample
+    name: Testing Jasmin on Node ${{ matrix.node }}
     steps:
       - uses: actions/checkout@v2
       - name: Setup node
@@ -73,7 +73,7 @@ jobs:
     - uses: actions/upload-artifact@master
       with:
         name: professorM-artifact
-        path: releases
+        path: package/releases/
 
   Run-Tests-Enterprise:
     runs-on: ubuntu-latest
