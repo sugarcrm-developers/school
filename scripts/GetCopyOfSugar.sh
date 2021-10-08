@@ -54,7 +54,7 @@ cookieFile="./mycookie"
 # $1: expected status code
 # $2: response from curl command
 checkStatusCode(){
-    regexStatusCode=".*HTTP/1.1 ([^[:space:]]*).*"
+    regexStatusCode=".*HTTP/2 ([^[:space:]]*).*"
 
     if [[ $2 =~ $regexStatusCode ]]
     then
@@ -68,6 +68,7 @@ checkStatusCode(){
             exit 1
         fi
     else
+        echo ">>> status code = $regexStatusCode"
         echo "Unable to find status code in response: $2"
         exit 1
     fi
