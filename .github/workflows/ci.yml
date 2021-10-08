@@ -78,8 +78,6 @@ jobs:
       run:
         working-directory: scripts
     steps:
-    - name: Install dependencies
-      run: composer install --prefer-dist --no-progress
     - name: Run test suite
       env:
         SUGAR_EDITION: Ent
@@ -106,8 +104,6 @@ jobs:
       run:
         working-directory: scripts
     steps:
-    - name: Install dependencies
-      run: composer install --prefer-dist --no-progress
     - name: Run test suite
       env:
         SUGAR_EDITION: Ent
