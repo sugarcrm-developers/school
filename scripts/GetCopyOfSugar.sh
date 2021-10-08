@@ -17,13 +17,13 @@ then
     echo "Not all required command line arguments were set. Please run the script again with the required arguments:
         1: Username (not e-mail address) associated with your SugarClub account
         2: Password associated with the above account
-        3: Sugar name (For example: SugarEnt-7.11)
+        3: Sugar name (For example: SugarEnt-11.0)
         4. The path to where the Sugar download should be stored
         5. (Optional) Path to where Sugar source zip files are stored. If this param is not provided, the Sugar
            source zip files will be downloaded from the SugarCRM Developer Builds Community.  The Sugar source zip files
-           should be named with the following pattern: Sugar$sugarEdition-$sugarVersion. For example: SugarEnt-7.11
+           should be named with the following pattern: Sugar$sugarEdition-$sugarVersion. For example: SugarEnt-11.0
 
-        For example: ./GetCopyOfSugar.sh sugardevelopers mypassword SugarEnt-10.1 workspace/sugardocker/data/app ../sugar_source_zips"
+        For example: ./GetCopyOfSugar.sh sugardevelopers mypassword SugarEnt-11.0 workspace/sugardocker/data/app ../sugar_source_zips"
     exit 1
 fi
 
@@ -33,7 +33,7 @@ username=$1
 # Password associated with your SugarCRM account
 password=$2
 
-# The Sugar name (For example: SugarEnt-7.11)
+# The Sugar name (For example: SugarEnt-11.0)
 sugarName=$3
 
 # The path to where the Sugar download should be stored
@@ -54,7 +54,7 @@ cookieFile="./mycookie"
 # $1: expected status code
 # $2: response from curl command
 checkStatusCode(){
-    regexStatusCode=".*HTTP/1.1 ([^[:space:]]*).*"
+    regexStatusCode=".*HTTP/2 ([^[:space:]]*).*"
 
     if [[ $2 =~ $regexStatusCode ]]
     then
@@ -176,15 +176,15 @@ cs_SugarEnt103="f74d4ec245902a63d4bd91d3bc0d928d113a72d6"
 id_SugarPro103="02a7e3cc-e621-4729-88a8-0b355376df88"
 cs_SugarPro103="36dc42930f0928ff8b7d70e10c7724e0aac053db"
 
-# id_SugarEnt110="xxxxxxxx"
-# cs_SugarEnt110="yyyyyyyy"
-# id_SugarPro110="xxxxxxxx"
-# cs_SugarPro110="yyyyyyyy"
+id_SugarEnt110="9c1183ea-47aa-4d71-8ee4-9ba9ad579429"
+cs_SugarEnt110="10026556829c584e46360709950fd6122a46d0a3"
+id_SugarPro110="72533ca8-84e5-48bb-975a-ea546a5d7578"
+cs_SugarPro110="3f33481e2b6c61a34d8afbefd84d12127bd5bd19"
 
-# id_SugarEnt111="xxxxxxxx"
-# cs_SugarEnt111="yyyyyyyy"
-# id_SugarPro111="xxxxxxxx"
-# cs_SugarPro111="yyyyyyyy"
+id_SugarEnt111="71b55d4b-e0d0-4aba-98ff-9c41e98eb6ef"
+cs_SugarEnt111="27994ab9a390fa2fca92e5e4da84b309d4f9ca85"
+id_SugarPro111="ee7dccdf-7129-4387-bdbb-01bb261cadfd"
+cs_SugarPro111="d57999c6b7b3b5c9351c48f3e67aa1cc2bd4b2a4"
 
 # id_SugarEnt112="xxxxxxxx"
 # cs_SugarEnt112="yyyyyyyy"
@@ -219,7 +219,7 @@ checkStatusCode "200" "$response"
 echo "Download complete"
 
 #Verify the checksum is correct
-checksumOutput="$(sha1sum $sugarName.zip)"
+checksumOutput="$(shasum $sugarName.zip)"
 checksumOutput=($checksumOutput)
 checksumOfDownload=${checksumOutput[0]}
 

@@ -42,7 +42,7 @@ sudo chmod -R 777 . &> /dev/null
 currentDockerContainer="$(cat /etc/hostname)"
 if [[ -n $currentDockerContainer && $currentDockerContainer != *"travis-job"* ]]
 then
-    network="sugar9_default"
+    network="sugar11_default"
     echo "Updating the Docker network ($network)..."
     docker network connect $network $currentDockerContainer
 fi

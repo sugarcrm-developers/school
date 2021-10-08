@@ -7,15 +7,15 @@
 if [[ -z "$1" ]] || [[ -z "$2" ]] || [[ -z "$3" ]]
 then
     echo "Not all required command line arguments were set. Please run the script again with the required arguments:
-        1: Sugar name (For example: SugarEnt-7.11)
+        1: Sugar name (For example: SugarEnt-11.0)
         2: Sugar edition (Ent, Ult, or Pro)
         3: Path to where the Sugar files are stored
 
-        For example: ./SetupSugarPHPUnitTests.sh SugarEnt-7.11 Ent workspace/sugardocker/data/app/sugar"
+        For example: ./SetupSugarPHPUnitTests.sh SugarEnt-11.0 Ent workspace/sugardocker/data/app/sugar"
     exit 1
 fi
 
-# The Sugar name (For example: SugarEnt-7.11)
+# The Sugar name (For example: SugarEnt-11.0)
 sugarName=$1
 
 # The Sugar edition

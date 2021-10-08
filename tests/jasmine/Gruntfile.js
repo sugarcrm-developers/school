@@ -9,7 +9,10 @@ module.exports = function(grunt) {
                 ],
                 options: {
                     specs: 'specs/*Spec.js',
-                    keepRunner: false
+                    keepRunner: false,
+                    // workaround https://github.com/gruntjs/grunt-contrib-jasmine/issues/339
+                    noSandbox: true,
+                    version: '3.8.0',
                 }
             }
         }

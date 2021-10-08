@@ -39,7 +39,7 @@ then
     echo "Not all required command line arguments were set. Please run the script again with the required arguments:
         1: Email address associated with your SugarCRM account
         2: Password associated with the above account
-        3: Sugar version (Example: 7.11)
+        3: Sugar version (Example: 11.0)
         4: Sugar edition (Options: Ult, Ent, Pro)
         5: GitHub username that has access to sugarcrm/unit-tests
         6: Password associated with the above account
@@ -47,9 +47,9 @@ then
            data/app/sugar directory will be deleted and recreated.
         8. (Optional) Path to where Sugar source zip files are stored. If this param is not provided, the Sugar
            source zip files will be downloaded from the SugarCRM Developer Builds Community.  The Sugar source zip files
-           should be named with the following pattern: Sugar$sugarEdition-$sugarVersion.zip. For example: SugarEnt-7.11.zip
+           should be named with the following pattern: Sugar$sugarEdition-$sugarVersion.zip. For example: SugarEnt-11.0.zip
 
-        For example: ./SetupEnvAndRunTests.sh communityemail@example.com mycommunitypassword 7.11 Pro githubusername
+        For example: ./SetupEnvAndRunTests.sh communityemail@example.com mycommunitypassword 11.0 Pro githubusername
         githubpassword workspace/sugardocker ../sugar_source_zips"
     exit 1
 fi
@@ -114,7 +114,7 @@ echo "Calling UnzipSugarToDirectory.sh"
 echo "Calling SetupSugarPHPUnitTests.sh"
 ./SetupSugarPHPUnitTests.sh $sugarName $sugarEdition $sugarDirectory || exit 1
 
-echo "Calling InstallSugarANdProfM.sh"
+echo "Calling InstallSugarAndProfM.sh"
 ./InstallSugarAndProfM.sh $sugarDirectory || exit 1
 
 echo "Calling RunProfMPHPUnitTests.sh"

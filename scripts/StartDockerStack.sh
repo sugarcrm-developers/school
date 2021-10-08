@@ -10,11 +10,11 @@
 if [[ -z "$1" ]] || [[ -z "$2" ]]
 then
     echo "Not all required command line arguments were set. Please run the script again with the required arguments:
-        1: Sugar version (Example: 8.0)
+        1: Sugar version (Example: 11.0)
         2: Path to where the Sugar Docker files should be stored relative to the current directory. WARNING: The
            data/app/sugar directory will be deleted and recreated.
 
-        For example: ./StartDockerStack.sh 8.0 workspace/sugardocker"
+        For example: ./StartDockerStack.sh 11.0 workspace/sugardocker"
     exit 1
 fi
 
@@ -31,14 +31,10 @@ dockerGitRepo="https://github.com/esimonetti/SugarDockerized.git"
 ######################################################################
 # Setup
 ######################################################################
-version9="9.0"
-version8="8.0"
-if (( $(echo "$sugarVersion >= $version9" | bc -l) ))
+version11="11.0"
+if (( $(echo "$sugarVersion >= $version11" | bc -l) ))
 then
-    ymlPath=$dockerDirectory/stacks/sugar9/php73.yml
-# elif (( $(echo "$sugarVersion >= $version8" | bc -l) ))
-# then
-#     ymlPath=$dockerDirectory/stacks/sugar81/php71.yml
+    ymlPath=$dockerDirectory/stacks/sugar11/php74.yml
 else
     echo "Unable to identify Docker Stack yml for Sugar version $sugarVersion"
     exit 1
