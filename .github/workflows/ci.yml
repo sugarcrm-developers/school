@@ -87,6 +87,8 @@ jobs:
       with:
         name: professorM-artifact
         path: package/releases
+    - name: Display structure of downloaded files
+      run: ls -R
     - name: Run test suite
       env:
         SUGAR_EDITION: Ent
@@ -111,6 +113,8 @@ jobs:
       with:
         name: professorM-artifact
         path: package/releases
+    - name: Display structure of downloaded files
+      run: ls -R
     - name: Run test suite
       env:
         SUGAR_EDITION: Ent
