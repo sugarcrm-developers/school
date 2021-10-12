@@ -69,9 +69,12 @@ function perform_module_install($opts)
     if (!array_key_exists('name', $manifest) || $manifest['name'] == '') {
         output_error("Manifest doesn't specify a name.");
     }
-    $upload = array_key_exists('upload_dir', $sugar_config) ? $sugar_config['upload_dir'] : './';
+    $upload = array_key_exists('upload_dir', $sugar_config) ? $sugar_config['upload_dir'] : '.';
     $local_zip_file = rtrim($opts['instance_path'], '/') . '/' . rtrim($upload, '/') . '/upgrades/module/' . basename($opts['zip_file']);
     $current_user = get_admin_user();
+
+    output_msg("local_zip_file ${local_zip_file}.");
+
     // Initialize the module installer
     $modInstaller = new ModuleInstaller();
     $modInstaller->silent = true;  //shuts up the javscript progress bar
