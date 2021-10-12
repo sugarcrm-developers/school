@@ -35,9 +35,6 @@ cp cliModuleInstall.php $sugarDirectory/cliModuleInstall.php
 
 # Copy the Professor M module loadable package to the Sugar directory
 cp ../package/releases/sugarcrm-ProfessorM-*-standard.zip $sugarDirectory/sugarcrm-ProfessorM-standard.zip
-ls -l ../package/releases/sugarcrm-ProfessorM-*-standard.zip
-ls -l $sugarDirectory/sugarcrm-ProfessorM-standard.zip
-
 
 # Set permission for when sudo is required and is not required. Output of these commands will not be printed.
 chmod -R 777 $sugarDirectory &> /dev/null
@@ -85,4 +82,4 @@ docker exec sugar-web1 bash -c "php cliSilentInstall.php"
 ######################################################################
 
 echo "Installing the Professor M module loadable package..."
-docker exec sugar-web1 bash -c "php cliModuleInstall.php -i . -z $sugarDirectory/sugarcrm-ProfessorM-standard.zip"
+docker exec sugar-web1 bash -c "php cliModuleInstall.php -i . -z sugarcrm-ProfessorM-standard.zip"
