@@ -71,7 +71,7 @@ function perform_module_install($opts)
     }
     // $upload = array_key_exists('upload_dir', $sugar_config) ? $sugar_config['upload_dir'] : 'upload/';
     $upload = '.';
-    $local_zip_file = rtrim($opts['instance_path'], '/') . '/' . rtrim($upload, '/') . '/upgrades/module/' . basename($opts['zip_file']);
+    $local_zip_file = rtrim($opts['instance_path'], '/') . '/' . '/upgrades/module/' . basename($opts['zip_file']);
     $current_user = get_admin_user();
 
     output_msg("local_zip_file ${local_zip_file}.");
@@ -84,11 +84,9 @@ function perform_module_install($opts)
     // Squelch some warnings
     $GLOBALS['app_list_strings']['moduleList'] = array();
     // The REQUEST['install_file'] variable is used to create the -restore directory
-    $_REQUEST['install_file'] = urlencode($upload . '/upgrades/module/' . basename($local_zip_file));
+    $_REQUEST['install_file'] = urlencode('./upgrades/module/' . basename($opts['zip_file']));
 
-    output_msg("_REQUEST== ${$_REQUEST['install_file']}.");
-
-
+    output_msg("_REQUEST== " . $_REQUEST['install_file']);
 
     // Check for already installed
     $new_upgrade = new UpgradeHistory();

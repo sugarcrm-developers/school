@@ -105,7 +105,7 @@ echo "Calling StartDockerStack.sh"
 echo "Calling GetCopyOfSugar.sh"
 ./GetCopyOfSugar.sh $email $password $sugarName "$(dirname "$sugarDirectory")" $sugarSourceZipsDirectory || exit 1
 
-echo "Calling CloneSUgarUnitTestsFromGitRepo.sh"
+echo "Calling CloneSugarUnitTestsFromGitRepo.sh"
 ./CloneSugarUnitTestsFromGitRepo.sh $sugarVersion $gitHubUsername $gitHubPassword || exit 1
 
 echo "Calling UnzipSugarToDirectory.sh"
