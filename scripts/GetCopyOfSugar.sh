@@ -51,24 +51,15 @@ cookieFile="./mycookie"
 ######################################################################
 
 # Check that the status code in the response matches what is expected
-# $1: expected status code
-# $2: response from curl command
+# $1: response from curl command
 checkStatusCode(){
-    regexStatusCode=".*HTTP\/2 ([^[:space:]]*).*"
+    status=$(echo "$1" | grep -c 'HTTP/2 200')
 
-    if [[ $2 =~ $regexStatusCode ]]
+    if [ $status -eq 1 ]
     then
-        statusCode="${BASH_REMATCH[1]}"
-        if [[ "$statusCode" == $1 ]]
-        then
-            return
-        else
-            echo "Status code is not the expected $1: $statusCode"
-            #echo "$2"
-            exit 1
-        fi
+        return 
     else
-        echo "Unable to find status code in response: $2"
+        echo "Status code is not the expected $1: $status"
         exit 1
     fi
 }
@@ -76,7 +67,8 @@ checkStatusCode(){
 
 getFileUrlFromResponse() {
     # made 2 passes at the regex. first one grabs everything from after FileUrl":" then the second grabs everything before the next ","
-    myvar=$(sed 's/\(^.*FileUrl\"\:\"\)\(.*\)\(zip\".*\)/\2/' <<< $1)
+    fromGrep=$(echo "$1" | grep FileUrl)
+    myvar=$(sed 's/\(^.*FileUrl\"\:\"\)\(.*\)\(zip\".*\)/\2/' <<< $fromGrep)
     regexFileUrl=$(sed 's/\"\,\".*//' <<< $myvar)
      if [[ $1 =~ $regexFileUrl ]]
      then
@@ -92,8 +84,8 @@ getFileUrlFromResponse() {
 function getFileDetailsFromSugarClub() {
     token=$(echo -n "$password:$username" | base64);
     filecontentid=$1
-    response="$(curl -v -L -c $cookieFile -b $cookieFile -H "Rest-User-Token:$token" https://sugarclub.sugarcrm.com/api.ashx/v2/media/30/files/$filecontentid.json 2>&1)"
-    checkStatusCode "200" "$response"
+    response="$(curl -s -v -L -c $cookieFile -b $cookieFile -H "Rest-User-Token:$token" https://sugarclub.sugarcrm.com/api.ashx/v2/media/30/files/$filecontentid.json 2>&1)"
+    checkStatusCode "$response"
 }
 
 ######################################################################
@@ -215,7 +207,7 @@ expectedChecksum=${!csVar}
 
 echo "Beginning download of $sugarName from $downloadUrl"
 response="$(curl -v -L -c $cookieFile -b $cookieFile -H "Rest-User-Token:$token" -o $sugarName.zip $downloadUrl 2>&1)"
-checkStatusCode "200" "$response"
+checkStatusCode "$response"
 echo "Download complete"
 
 #Verify the checksum is correct
