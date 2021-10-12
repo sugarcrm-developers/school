@@ -34,7 +34,7 @@ cp cliSilentInstall.php $sugarDirectory/cliSilentInstall.php
 cp cliModuleInstall.php $sugarDirectory/cliModuleInstall.php
 
 # Copy the Professor M module loadable package to the Sugar directory
-cp ~/work/school/school/package/releases/sugarcrm-ProfessorM-*-standard.zip $sugarDirectory/sugarcrm-ProfessorM-standard.zip
+cp ../package/releases/sugarcrm-ProfessorM-*-standard.zip $sugarDirectory/sugarcrm-ProfessorM-standard.zip
 
 # Set permission for when sudo is required and is not required. Output of these commands will not be printed.
 chmod -R 777 $sugarDirectory &> /dev/null
