@@ -86,10 +86,10 @@ jobs:
     - uses: actions/download-artifact@master
       with:
         name: professorM-artifact
-        path: package/releases
+        path: ~/package/releases
     - name: Display structure of downloaded files
       run: ls -R
-      working-directory: package/releases
+      working-directory: ~/
     - name: Run test suite
       env:
         SUGAR_EDITION: Ent
@@ -113,10 +113,10 @@ jobs:
     - uses: actions/download-artifact@master
       with:
         name: professorM-artifact
-        path: package/releases
+        path: ~/package/releases
     - name: Display structure of downloaded files
       run: ls -R
-      working-directory: package/releases
+      working-directory: ~/
     - name: Run test suite
       env:
         SUGAR_EDITION: Ent
