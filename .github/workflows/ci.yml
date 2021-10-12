@@ -89,7 +89,7 @@ jobs:
         path: ~/package/releases
     - name: Display structure of downloaded files
       run: ls -R
-      working-directory: ~/
+      working-directory: ../
     - name: Run test suite
       env:
         SUGAR_EDITION: Ent
@@ -116,7 +116,7 @@ jobs:
         path: ~/package/releases
     - name: Display structure of downloaded files
       run: ls -R
-      working-directory: ~/
+      working-directory: ../
     - name: Run test suite
       env:
         SUGAR_EDITION: Ent
