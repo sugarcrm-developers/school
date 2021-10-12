@@ -82,4 +82,4 @@ docker exec sugar-web1 bash -c "php cliSilentInstall.php"
 ######################################################################
 
 echo "Installing the Professor M module loadable package..."
-docker exec sugar-web1 bash -c "php cliModuleInstall.php -i . -z sugarcrm-ProfessorM-standard.zip"
+docker exec sugar-web1 bash -c "php cliModuleInstall.php -i . -z $sugarDirectory/sugarcrm-ProfessorM-standard.zip"
