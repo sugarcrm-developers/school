@@ -86,10 +86,10 @@ jobs:
     - uses: actions/download-artifact@master
       with:
         name: professorM-artifact
-        path: ~/work/school/school/package/releases
+        path: package/releases
     - name: Display structure of downloaded files
       run: ls -R
-      working-directory: ../
+      working-directory: ~/.
     - name: Run test suite
       env:
         SUGAR_EDITION: Ent
@@ -113,10 +113,10 @@ jobs:
     - uses: actions/download-artifact@master
       with:
         name: professorM-artifact
-        path: ~/work/school/school/package/releases
+        path: package/releases
     - name: Display structure of downloaded files
       run: ls -R
-      working-directory: ../
+      working-directory: ~/.
     - name: Run test suite
       env:
         SUGAR_EDITION: Ent
@@ -127,4 +127,4 @@ jobs:
         GTB_PASSWORD: ${{ secrets.GTB_PASSWORD }}
         SUGAR_LICENSE_KEY: ${{ secrets.SUGAR_PROFESSIONAL_LICENSE_KEY }}
       run: |
-        ./SetupEnvAndRunTests.sh $SUGARCLUB_USERNAME $SUGARCLUB_PASSWORD $SUGAR_VERSION $SUGAR_EDITION $GTB_USERNAME $GTB_PASSWORD workspace/sugardocker
+        ./SetupEnvAndRunTests.sh $SUGARCLUB_USERNAME $SUGARCLUB_PASSWORD $SUGAR_VERSION $SUGAR_EDITION $GTB_USERNAME $GTB_PASSWORD ~/sugardocker/
