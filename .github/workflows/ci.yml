@@ -86,7 +86,7 @@ jobs:
     - uses: actions/download-artifact@master
       with:
         name: professorM-artifact
-        path: ~/package/releases
+        path: ~/school/package/releases
     - name: Display structure of downloaded files
       run: ls -R
       working-directory: ../
@@ -113,7 +113,7 @@ jobs:
     - uses: actions/download-artifact@master
       with:
         name: professorM-artifact
-        path: ~/package/releases
+        path: ~/school/package/releases
     - name: Display structure of downloaded files
       run: ls -R
       working-directory: ../
