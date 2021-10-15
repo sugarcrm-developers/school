@@ -90,7 +90,7 @@ jobs:
     - name: Run test suite
       env:
         SUGAR_EDITION: Ent
-        SUGAR_VERSION: 11.1
+        SUGAR_VERSION: 11.2
         SUGARCLUB_USERNAME: ${{ secrets.SUGARCLUB_USERNAME }}
         SUGARCLUB_PASSWORD: ${{ secrets.SUGARCLUB_PASSWORD }}
         GTB_USERNAME: ${{ secrets.GTB_USERNAME }}
@@ -114,7 +114,7 @@ jobs:
     - name: Run test suite
       env:
         SUGAR_EDITION: Ent
-        SUGAR_VERSION: 11.1
+        SUGAR_VERSION: 11.2
         SUGARCLUB_USERNAME: ${{ secrets.SUGARCLUB_USERNAME }}
         SUGARCLUB_PASSWORD: ${{ secrets.SUGARCLUB_PASSWORD }}
         GTB_USERNAME: ${{ secrets.GTB_USERNAME }}
