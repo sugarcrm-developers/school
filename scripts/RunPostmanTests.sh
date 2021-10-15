@@ -8,7 +8,7 @@
 # Variables
 ######################################################################
 
-if [[ -z "$1" ]] || [[ -z "$2" ]]
+if [[ -z "$1" ]]
 then
     echo "Not all required command line arguments were set. Please run the script again with the required arguments:
         1: Path to where the Sugar files are stored
