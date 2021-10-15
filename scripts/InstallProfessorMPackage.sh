@@ -3,26 +3,21 @@
 # This script runs the Postman tests stored in the data directory.
 # Prior to running these tests, you must have an installed copy of Sugar that has a valid license key.
 
-
 ######################################################################
 # Variables
 ######################################################################
 
-if [[ -z "$1" ]] || [[ -z "$2" ]]
+if [[ -z "$1" ]]
 then
     echo "Not all required command line arguments were set. Please run the script again with the required arguments:
-        1: Sugar version (Example: 8.0)
-        2: Sugar edition (Options: Ult, Ent, Pro)
+        1: Path to where the Sugar files are stored
 
-        For example: ./RunPostmanTests.sh 8.0 Ult"
+        For example: ./InstallProfessorMPackage.sh workspace/sugardocker/data/app/sugar"
     exit 1
 fi
 
-# The Sugar version
-sugarVersion=$1
-
-# The Sugar edition
-sugarEdition=$2
+# The path to where the unzipped Sugar files are stored
+sugarDirectory=$1
 
 
 ######################################################################
@@ -34,6 +29,9 @@ docker pull postman/newman_ubuntu1404
 
 dataDirectoryPath=$(pwd)/../data
 
+# Copy the Professor M module loadable package to the Sugar directory
+cp ../package/releases/sugarcrm-ProfessorM-*-standard.zip $dataDirectoryPath/sugarcrm-ProfessorM-standard.zip
+
 # Set permission for when sudo is required and is not required. Output of these commands will not be printed.
 chmod -R 777 . &> /dev/null
 sudo chmod -R 777 . &> /dev/null
@@ -44,9 +42,9 @@ sudo chmod -R 777 . &> /dev/null
 # currentDockerContainer="$(cat /etc/hostname)"
 # if [[ -n $currentDockerContainer && $currentDockerContainer != *"travis-job"* ]]
 # then
-#     network="sugar11_default"
-#     echo "Updating the Docker network ($network)..."
-#     docker network connect $network $currentDockerContainer
+    # network="sugar11_default"
+    # echo "Updating the Docker network ($network) [$currentDockerContainer]..."
+    # docker network connect $network $currentDockerContainer
 # fi
 
 # Store the path to the 'data' directory. If we are currently running inside of a Docker container (for example, if we
@@ -58,16 +56,18 @@ sudo chmod -R 777 . &> /dev/null
 # then
 #     dataDirectoryPath=$WORKSPACE_PATH/data
 # else
-#     dataDirectoryPath=$(pwd)/../data
+    # dataDirectoryPath=$(pwd)/../data
 # fi
 
 
 ######################################################################
-# Run the Postman tests
+# Install the Professor M Module Loadable Package
 ######################################################################
 
+echo "Installing the Professor M module loadable package..."
+
 # Run the tests that work with all editions of Sugar
-docker run -v $dataDirectoryPath:/etc/newman--network="sugar11_default" -t postman/newman_ubuntu1404 run "ProfessorM_PostmanCollection.json" --environment="ProfessorM_PostmanEnvironment.json" --color off
+docker run -v $dataDirectoryPath:/etc/newman --network="sugar11_default" -t postman/newman_ubuntu1404 run "ProfessorM_PostmanModuleInstall.json" --environment="ProfessorM_PostmanEnvironment.json" --color off
 
 # If the tests return 1, at least one of the tests failed, so we will exit the script with error code 1.
 if [[ $? -eq 1 ]]
@@ -75,22 +75,4 @@ then
     exit 1
 fi
 
-# Run the Advanced Workflow tests, which only work with Ent and Ult
-#if [[ "$sugarEdition" == "Ent" || "$sugarEdition" == "Ult" ]]
-#    then
-#        docker run -v $dataDirectoryPath:/etc/newman --net="host" -t postman/newman_ubuntu1404 run "ProfessorM_PostmanCollection_AdvancedWorkflow.json" --environment="ProfessorM_PostmanEnvironment.json" --color off
-#
-#        if [[ $? -eq 1 ]]
-#        then
-#            exit 1
-#        fi
-#fi
-
-######################################################################
-# Cleanup
-######################################################################
-
-if [[ -n $currentDockerContainer && $currentDockerContainer != *"travis-job"* ]]
-then
-    docker network disconnect $network $currentDockerContainer
-fi
+echo "Done Installing the Professor M module loadable package..."

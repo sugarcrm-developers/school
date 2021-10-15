@@ -111,17 +111,20 @@ echo "Calling CloneSugarUnitTestsFromGitRepo.sh"
 echo "Calling UnzipSugarToDirectory.sh"
 ./UnzipSugarToDirectory.sh $sugarName $sugarDirectory || exit 1
 
+echo "Calling InstallSugarEditions.sh"
+./InstallSugarEditions.sh $sugarDirectory || exit 1
+
+echo "Calling InstallProfessorMPackage.sh"
+./InstallProfessorMPackage.sh $sugarDirectory || exit 1
+
 echo "Calling SetupSugarPHPUnitTests.sh"
 ./SetupSugarPHPUnitTests.sh $sugarName $sugarEdition $sugarDirectory || exit 1
-
-echo "Calling InstallSugarAndProfM.sh"
-./InstallSugarAndProfM.sh $sugarDirectory || exit 1
 
 echo "Calling RunProfMPHPUnitTests.sh"
 ./RunProfMPHPUnitTests.sh $sugarDirectory || exit 1
 
 echo "Calling RunPostmanTests.sh"
-#./RunPostmanTests.sh $sugarVersion $sugarEdition || exit 1
+./RunPostmanTests.sh $sugarVersion $sugarEdition || exit 1
 
 echo "Calling StopDockerStack.sh"
 ./StopDockerStack.sh $sugarVersion $sugarDockerDirectory || exit 1

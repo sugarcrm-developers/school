@@ -1,0 +1,150 @@
+{
+	"info": {
+		"_postman_id": "3dd59957-fbd4-4414-9a29-b04eb645ccf4",
+		"name": "ProfessorM Module Install",
+		"description": "See https://github.com/sugarcrm/school for more information.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authenticate",
+			"item": [
+				{
+					"name": "Authenticate",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"var access_token = jsonData.access_token;",
+									"",
+									"tests[\"Successful POST request\"] = responseCode.code === 200;",
+									"tests[\"access_token exists\"] = access_token !== null || access_token !== \"\";",
+									"",
+									"postman.setEnvironmentVariable(\"access_token\", access_token);",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"grant_type\":\"password\",\n   \"client_id\":\"sugar\",\n   \"client_secret\":\"\",\n   \"username\":\"{{username}}\",\n   \"password\":\"{{password}}\",\n   \"platform\":\"base\"\n}"
+						},
+						"url": {
+							"raw": "{{url}}{{rest_endpoint}}/oauth2/token",
+							"host": [
+								"{{url}}{{rest_endpoint}}"
+							],
+							"path": [
+								"oauth2",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Module Install",
+			"item": [
+				{
+					"name": "PackageManager upload package",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"var fileId = jsonData.file_install;",
+									"",
+									"tests[\"Successful POST request\"] = responseCode.code === 200;",
+									"tests[\"id exists\"] = fileId !== null || fileId !== \"\";",
+									"",
+									"postman.setEnvironmentVariable(\"Module_ID\", fileId);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "OAuth-Token",
+								"value": "{{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "upgrade_zip",
+									"type": "file",
+									"src": "sugarcrm-ProfessorM-standard.zip"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}{{rest_endpoint}}/Administration/packages",
+							"host": [
+								"{{url}}{{rest_endpoint}}"
+							],
+							"path": [
+								"Administration",
+								"packages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Install the package",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"var fileId = jsonData.id;",
+									"",
+									"tests[\"Successful POST request\"] = responseCode.code === 200;",
+									"tests[\"id exists\"] = fileId !== null || fileId !== \"\";"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "OAuth-Token",
+								"value": "{{access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{url}}{{rest_endpoint}}/Administration/packages/{{Module_ID}}/install",
+							"host": [
+								"{{url}}{{rest_endpoint}}"
+							],
+							"path": [
+								"Administration",
+								"packages",
+								"{{Module_ID}}",
+								"install"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

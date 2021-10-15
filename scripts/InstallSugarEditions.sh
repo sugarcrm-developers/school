@@ -9,7 +9,7 @@ then
     echo "Not all required command line arguments were set. Please run the script again with the required arguments:
         1: Path to where the Sugar files are stored
 
-        For example: ./InstallSugarAndProfM.sh workspace/sugardocker/data/app/sugar"
+        For example: ./InstallSugarEditions.sh workspace/sugardocker/data/app/sugar"
     exit 1
 fi
 
@@ -29,17 +29,6 @@ cp config_override.php $sugarDirectory/config_override.php
 
 # Copy the silent install script to the Sugar directory
 cp cliSilentInstall.php $sugarDirectory/cliSilentInstall.php
-
-# Copy the module installer to the Sugar directory
-cp cliModuleInstall.php $sugarDirectory/cliModuleInstall.php
-
-# Copy the Professor M module loadable package to the Sugar directory
-cp ../package/releases/sugarcrm-ProfessorM-*-standard.zip $sugarDirectory/sugarcrm-ProfessorM-standard.zip
-
-# Set permission for when sudo is required and is not required. Output of these commands will not be printed.
-chmod -R 777 $sugarDirectory &> /dev/null
-sudo chmod -R 777 $sugarDirectory &> /dev/null
-
 
 ######################################################################
 # Add license key to config_si.php
@@ -76,10 +65,3 @@ echo "Installing Sugar..."
 # Install Sugar using the configs in config_si.php
 docker exec sugar-web1 bash -c "php cliSilentInstall.php"
 
-
-######################################################################
-# Install the Professor M Module Loadable Package
-######################################################################
-
-echo "Installing the Professor M module loadable package..."
-docker exec sugar-web1 bash -c "php cliModuleInstall.php -i . -z sugarcrm-ProfessorM-standard.zip"
