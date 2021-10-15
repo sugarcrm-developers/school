@@ -67,7 +67,7 @@ sudo chmod -R 777 . &> /dev/null
 ######################################################################
 
 # Run the tests that work with all editions of Sugar
-docker run -v $dataDirectoryPath:/etc/newman--network="sugar11_default" -t postman/newman_ubuntu1404 run "ProfessorM_PostmanCollection.json" --environment="ProfessorM_PostmanEnvironment.json" --color off
+docker run -v $dataDirectoryPath:/etc/newman--network="sugar11_default" -t postman/newman_ubuntu1404 run "ProfessorM_PostmanCollection.json" --environment="ProfessorM_PostmanEnvironment.json" --color off --reporters="cli"
 
 # If the tests return 1, at least one of the tests failed, so we will exit the script with error code 1.
 if [[ $? -eq 1 ]]
@@ -90,7 +90,7 @@ fi
 # Cleanup
 ######################################################################
 
-if [[ -n $currentDockerContainer && $currentDockerContainer != *"travis-job"* ]]
-then
-    docker network disconnect $network $currentDockerContainer
-fi
+# if [[ -n $currentDockerContainer && $currentDockerContainer != *"travis-job"* ]]
+# then
+#     docker network disconnect $network $currentDockerContainer
+# fi
