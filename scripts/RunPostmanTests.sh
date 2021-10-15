@@ -11,18 +11,11 @@
 if [[ -z "$1" ]] || [[ -z "$2" ]]
 then
     echo "Not all required command line arguments were set. Please run the script again with the required arguments:
-        1: Sugar version (Example: 8.0)
-        2: Sugar edition (Options: Ult, Ent, Pro)
+        1: Path to where the Sugar files are stored
 
-        For example: ./RunPostmanTests.sh 8.0 Ult"
+        For example: ./RunPostmanTests.sh workspace/sugardocker/data/app/sugar"
     exit 1
 fi
-
-# The Sugar version
-sugarVersion=$1
-
-# The Sugar edition
-sugarEdition=$2
 
 
 ######################################################################
@@ -65,6 +58,7 @@ sudo chmod -R 777 . &> /dev/null
 ######################################################################
 # Run the Postman tests
 ######################################################################
+echo "Installing the Professor M Postman tests..."
 
 # Run the tests that work with all editions of Sugar
 docker run -v $dataDirectoryPath:/etc/newman--network="sugar11_default" -t postman/newman_ubuntu1404 run "ProfessorM_PostmanCollection.json" --environment="ProfessorM_PostmanEnvironment.json" --color off --reporters="cli"
@@ -94,3 +88,4 @@ fi
 # then
 #     docker network disconnect $network $currentDockerContainer
 # fi
+echo "Done Installing the Professor M Postman tests..."
