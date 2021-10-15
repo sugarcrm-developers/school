@@ -122,3 +122,7 @@ jobs:
         SUGAR_LICENSE_KEY: ${{ secrets.SUGAR_PROFESSIONAL_LICENSE_KEY }}
       run: |
         ./SetupEnvAndRunTests.sh $SUGARCLUB_USERNAME $SUGARCLUB_PASSWORD $SUGAR_VERSION $SUGAR_EDITION $GTB_USERNAME $GTB_PASSWORD ~/sugardocker/
+    - uses: actions/upload-artifact@master
+      with:
+        name: sugarlogs
+        path: ~/sugardocker/data/app/sugar/sugarcrm.log
