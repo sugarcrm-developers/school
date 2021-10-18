@@ -99,8 +99,19 @@ mkdir workspace
 ######################################################################
 # Setup the environment for PHPUnit tests and run them
 ######################################################################
+echo "Determine Docker Stack"
+version11="11.0"
+if (( $(echo "$sugarVersion >= $version11" | bc -l) ))
+then
+    stackVersion=sugar11
+    phpYml=php74.yml
+else
+    echo "Unable to identify Docker Stack yml for Sugar version $sugarVersion"
+    exit 1
+fi
+
 echo "Calling StartDockerStack.sh"
-./StartDockerStack.sh $sugarVersion $sugarDockerDirectory || exit 1
+./StartDockerStack.sh $stackVersion $phpYml $sugarDockerDirectory || exit 1
 
 echo "Calling GetCopyOfSugar.sh"
 ./GetCopyOfSugar.sh $email $password $sugarName "$(dirname "$sugarDirectory")" $sugarSourceZipsDirectory || exit 1
@@ -115,7 +126,7 @@ echo "Calling InstallSugarEditions.sh"
 ./InstallSugarEditions.sh $sugarDirectory || exit 1
 
 echo "Calling InstallProfessorMPackage.sh"
-./InstallProfessorMPackage.sh $sugarDirectory || exit 1
+./InstallProfessorMPackage.sh $stackVersion || exit 1
 
 echo "Calling SetupSugarPHPUnitTests.sh"
 ./SetupSugarPHPUnitTests.sh $sugarName $sugarEdition $sugarDirectory || exit 1

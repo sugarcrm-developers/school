@@ -14,15 +14,18 @@ then
         2: Path to where the Sugar Docker files should be stored relative to the current directory. WARNING: The
            data/app/sugar directory will be deleted and recreated.
 
-        For example: ./StartDockerStack.sh 11.0 workspace/sugardocker"
+        For example: ./StartDockerStack.sh sugar11 php74.yml workspace/sugardocker"
     exit 1
 fi
 
-# The Sugar version to download
-sugarVersion=$1
+# The Docker stack version to be used
+stackVersion=$1
+
+# The Docker PHP yaml version/path to be used
+phpYml=$2
 
 # The local directory associated with the $dockerGitRepo
-dockerDirectory=$2
+dockerDirectory=$3
 
 # The Git Repo where the Sugar Docker stacks are stored
 dockerGitRepo="https://github.com/esimonetti/SugarDockerized.git"
@@ -31,15 +34,7 @@ dockerGitRepo="https://github.com/esimonetti/SugarDockerized.git"
 ######################################################################
 # Setup
 ######################################################################
-version11="11.0"
-if (( $(echo "$sugarVersion >= $version11" | bc -l) ))
-then
-    ymlPath=$dockerDirectory/stacks/sugar11/php74.yml
-else
-    echo "Unable to identify Docker Stack yml for Sugar version $sugarVersion"
-    exit 1
-fi
-
+ymlPath=$dockerDirectory/stacks/$stackVersion/$phpYml
 
 ######################################################################
 # Get latest stack from Sugar Docker repo
