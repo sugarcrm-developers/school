@@ -8,12 +8,16 @@ jobs:
     defaults:
       run:
         working-directory: package
+    strategy:
+      matrix:
+        php-versions: ['7.3', '7.4', '8.0']        
+    name: Testing PackageGenerator on PHP ${{ matrix.php-versions }}
     steps:
     - uses: actions/checkout@v2
     - name: Install PHP
       uses: shivammathur/setup-php@master
       with:
-        php-version: 7.4
+        php-version: ${{ matrix.php-versions }}
     - name: Cache Composer packages
       id: composer-cache
       uses: actions/cache@v2

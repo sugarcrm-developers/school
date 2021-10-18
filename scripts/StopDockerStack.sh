@@ -38,15 +38,4 @@ ymlPath=$dockerDirectory/stacks/$stackVersion/$phpYml
 
 docker-compose -f $ymlPath down
 
-######################################################################
-# CleanUp Docker Stack
-######################################################################
-
-docker rm -f sugar-cron
-docker rm -f sugar-web1
-docker rm -f sugar-elasticsearch
-docker rm -f sugar-redis
-docker rm -f sugar-mysql
-docker rm -f sugar-permissions
-
 echo "Network and/or containers removed."
