@@ -156,16 +156,6 @@ jobs:
           asset_name: sugarcrm-ProfessorM-${{ github.ref }}-windows-manual-install.zip
           asset_content_type: application/zip
 
-      - name: Upload Professor M Windows Package
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: package/releases/sugarcrm-ProfessorM-*-windows.zip
-          asset_name: sugarcrm-ProfessorM-${{ github.ref }}-windows.zip
-          asset_content_type: application/zip
-
       - name: Upload Professor M Production Package
         uses: actions/upload-release-asset@v1
         env:
