@@ -1,4 +1,4 @@
-name: Enterprise Edition - Professor M's School for Gifted Coders Github Actions
+name: Release Professor M's School for Gifted Coders
 
 # on: [push]
 on:
@@ -51,47 +51,57 @@ jobs:
       - name: List files in the repository
         run: |
           ls -lr package/releases
-      # - name: Changelog
-      #   uses: scottbrenner/generate-changelog-action@master
-      #   id: Changelog
-      # - name: Create Release
-      #   id: create_release
-      #   uses: actions/create-release@latest
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-      #   with:
-      #     tag_name: ${{ github.ref }}
-      #     release_name: Release ${{ github.ref }}
-      #     body: |
-      #       ${{ steps.Changelog.outputs.changelog }}
-      #     draft: true
-      #     prerelease: true
-      # - name: Upload Professor M Standard Package
-      #   uses: actions/upload-release-asset@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-      #     asset_path: package/releases/sugarcrm-ProfessorM-*-standard.zip
-      #     asset_name: sugarcrm-ProfessorM-${{ github.ref }}-standard.zip
-      #     asset_content_type: application/zip
+      - name: Changelog
+        uses: scottbrenner/generate-changelog-action@master
+        id: Changelog
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            ${{ steps.Changelog.outputs.changelog }}
+          draft: true
+          prerelease: true
+      - name: Upload Professor M Standard Package
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: package/releases/sugarcrm-ProfessorM-*-standard.zip
+          asset_name: sugarcrm-ProfessorM-${{ github.ref }}-standard.zip
+          asset_content_type: application/zip
 
-      # - name: Upload Professor M Windows Manual Install Package
-      #   uses: actions/upload-release-asset@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-      #     asset_path: package/releases/sugarcrm-ProfessorM-*-windows-manual-install.zip
-      #     asset_name: sugarcrm-ProfessorM-${{ github.ref }}-windows-manual-install.zip
-      #     asset_content_type: application/zip
+      - name: Upload Professor M Windows Package
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: package/releases/sugarcrm-ProfessorM-*-windows.zip
+          asset_name: sugarcrm-ProfessorM-${{ github.ref }}-windows.zip
+          asset_content_type: application/zip
 
-      # - name: Upload Professor M Production Package
-      #   uses: actions/upload-release-asset@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-      #     asset_path: package/releases/sugarcrm-ProfessorM-*-production.zip
-      #     asset_name: sugarcrm-ProfessorM-${{ github.ref }}-production.zip
-      #     asset_content_type: application/zip
+      - name: Upload Professor M Windows Manual Install Package
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: package/releases/sugarcrm-ProfessorM-*-windows-manual-install.zip
+          asset_name: sugarcrm-ProfessorM-${{ github.ref }}-windows-manual-install.zip
+          asset_content_type: application/zip
+
+      - name: Upload Professor M Production Package
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: package/releases/sugarcrm-ProfessorM-*-production.zip
+          asset_name: sugarcrm-ProfessorM-${{ github.ref }}-production.zip
+          asset_content_type: application/zip
