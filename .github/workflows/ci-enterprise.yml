@@ -134,8 +134,8 @@ jobs:
           release_name: Release ${{ github.ref }}
           body: |
             ${{ steps.Changelog.outputs.changelog }}
-          draft: false
-          prerelease: false
+          draft: true
+          prerelease: true
       - name: Upload Professor M Standard Package
         uses: actions/upload-release-asset@v1
         env:
