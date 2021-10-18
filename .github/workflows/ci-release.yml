@@ -66,14 +66,38 @@ jobs:
             ${{ steps.Changelog.outputs.changelog }}
           draft: true
           prerelease: true
+
+      # Release action has a bug with wildcard (https://github.com/actions/upload-release-asset/issues/47)
+      - name: Set Artifact Names as ENV
+        run: | 
+          ARTIFACT_STANDARD_PATH=$(ls package/releases/sugarcrm-ProfessorM-*-standard.zip | head -n 1)
+          ARTIFACT_STANDARD=$(basename $ARTIFACT_STANDARD_PATH)
+          echo ::set-env name=ARTIFACT_STANDARD::${ARTIFACT_STANDARD}
+          echo ::set-env name=ARTIFACT_STANDARD_PATH::${ARTIFACT_STANDARD_PATH}
+          
+          ARTIFACT_WINDOWS_PATH=$(ls package/releases/sugarcrm-ProfessorM-*-windows.zip | head -n 1)
+          ARTIFACT_WINDOWS=$(basename $ARTIFACT_WINDOWS_PATH)
+          echo ::set-env name=ARTIFACT_WINDOWS::${ARTIFACT_WINDOWS}
+          echo ::set-env name=ARTIFACT_WINDOWS_PATH::${ARTIFACT_WINDOWS_PATH}
+          
+          ARTIFACT_WINDOWS_MANUAL_INSTALL_PATH=$(ls package/releases/sugarcrm-ProfessorM-*-windows-manual-install.zip | head -n 1)
+          ARTIFACT_WINDOWS_MANUAL_INSTALL=$(basename $ARTIFACT_WINDOWS_MANUAL_INSTALL_PATH)
+          echo ::set-env name=ARTIFACT_WINDOWS_MANUAL_INSTALL::${ARTIFACT_WINDOWS_MANUAL_INSTALL}
+          echo ::set-env name=ARTIFACT_WINDOWS_MANUAL_INSTALL_PATH::${ARTIFACT_WINDOWS_MANUAL_INSTALL_PATH}
+
+          ARTIFACT_PRODUCTION_PATH=$(ls package/releases/sugarcrm-ProfessorM-*-production.zip | head -n 1)
+          ARTIFACT_PRODUCTION=$(basename $ARTIFACT_PRODUCTION_PATH)
+          echo ::set-env name=ARTIFACT_PRODUCTION::${ARTIFACT_PRODUCTION}
+          echo ::set-env name=ARTIFACT_PRODUCTION_PATH::${ARTIFACT_PRODUCTION_PATH}
+
       - name: Upload Professor M Standard Package
         uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: package/releases/sugarcrm-ProfessorM-*-standard.zip
-          asset_name: sugarcrm-ProfessorM-${{ github.ref }}-standard.zip
+          asset_path: ${{ env.ARTIFACT_STANDARD_PATH }}
+          asset_name: ${{ env.ARTIFACT_STANDARD }}
           asset_content_type: application/zip
 
       - name: Upload Professor M Windows Package
@@ -82,8 +106,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: package/releases/sugarcrm-ProfessorM-*-windows.zip
-          asset_name: sugarcrm-ProfessorM-${{ github.ref }}-windows.zip
+          asset_path: ${{ env.ARTIFACT_WINDOWS_PATH }}
+          asset_name: ${{ env.ARTIFACT_WINDOWS }}
           asset_content_type: application/zip
 
       - name: Upload Professor M Windows Manual Install Package
@@ -92,8 +116,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: package/releases/sugarcrm-ProfessorM-*-windows-manual-install.zip
-          asset_name: sugarcrm-ProfessorM-${{ github.ref }}-windows-manual-install.zip
+          asset_path: ${{ env.ARTIFACT_WINDOWS_MANUAL_INSTALL_PATH }}
+          asset_name: ${{ env.ARTIFACT_WINDOWS_MANUAL_INSTALL }}
           asset_content_type: application/zip
 
       - name: Upload Professor M Production Package
@@ -102,6 +126,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: package/releases/sugarcrm-ProfessorM-*-production.zip
-          asset_name: sugarcrm-ProfessorM-${{ github.ref }}-production.zip
+          asset_path: ${{ env.ARTIFACT_PRODUCTION_PATH }}
+          asset_name: ${{ env.ARTIFACT_PRODUCTION }}
           asset_content_type: application/zip
