@@ -1,6 +1,9 @@
 name: Professional Edition - Professor M's School for Gifted Coders Github Actions
 
-on: [push]
+on:
+  push:
+    branches:
+      - 11_2_0
 
 jobs:
   Test-PackageGenerator-PHP:

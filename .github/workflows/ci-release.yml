@@ -1,0 +1,97 @@
+name: Enterprise Edition - Professor M's School for Gifted Coders Github Actions
+
+# on: [push]
+on:
+  push:
+    branches:
+      - 11_1_0
+
+jobs:
+  Pack-Professor-M:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: package
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install PHP
+      uses: shivammathur/setup-php@master
+      with:
+        php-version: 7.4
+    - name: Cache Professor-M packages
+      id: packages-cache
+      uses: actions/cache@v2
+      with:
+        path: vendor
+        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-php-
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress
+    - name: Package Professor-M Standard
+      run: ./pack.php -v $(date +'%Y%m%d-%H.%M.%S')
+    - name: Package Professor-M Windows
+      run: ./pack.php -v $(date +'%Y%m%d-%H.%M.%S') -w 40
+    - name: Package Professor-M Production
+      run: ./pack.php -v $(date +'%Y%m%d-%H.%M.%S') -p
+    - uses: actions/upload-artifact@master
+      with:
+        name: professorM-artifact
+        path: package/releases/
+
+  Create-Release:
+    name: Create Release
+    needs: Pack-Professor-M
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@master
+        with:
+          name: professorM-artifact
+          path: package/releases
+      - name: List files in the repository
+        run: |
+          ls -lr
+      # - name: Changelog
+      #   uses: scottbrenner/generate-changelog-action@master
+      #   id: Changelog
+      # - name: Create Release
+      #   id: create_release
+      #   uses: actions/create-release@latest
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      #   with:
+      #     tag_name: ${{ github.ref }}
+      #     release_name: Release ${{ github.ref }}
+      #     body: |
+      #       ${{ steps.Changelog.outputs.changelog }}
+      #     draft: true
+      #     prerelease: true
+      # - name: Upload Professor M Standard Package
+      #   uses: actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+      #     asset_path: package/releases/sugarcrm-ProfessorM-*-standard.zip
+      #     asset_name: sugarcrm-ProfessorM-${{ github.ref }}-standard.zip
+      #     asset_content_type: application/zip
+
+      # - name: Upload Professor M Windows Manual Install Package
+      #   uses: actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+      #     asset_path: package/releases/sugarcrm-ProfessorM-*-windows-manual-install.zip
+      #     asset_name: sugarcrm-ProfessorM-${{ github.ref }}-windows-manual-install.zip
+      #     asset_content_type: application/zip
+
+      # - name: Upload Professor M Production Package
+      #   uses: actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+      #     asset_path: package/releases/sugarcrm-ProfessorM-*-production.zip
+      #     asset_name: sugarcrm-ProfessorM-${{ github.ref }}-production.zip
+      #     asset_content_type: application/zip

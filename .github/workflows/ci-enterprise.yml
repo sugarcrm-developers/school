@@ -4,7 +4,7 @@ name: Enterprise Edition - Professor M's School for Gifted Coders Github Actions
 on:
   push:
     branches:
-      - 11_1_0
+      - 11_2_0
 
 jobs:
   Test-PackageGenerator-PHP:
@@ -76,12 +76,8 @@ jobs:
           ${{ runner.os }}-php-
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
-    - name: Package Professor-M Standard
+    - name: Package Professor-M
       run: ./pack.php -v $(date +'%Y%m%d-%H.%M.%S')
-    - name: Package Professor-M Windows
-      run: ./pack.php -v $(date +'%Y%m%d-%H.%M.%S') -w 40
-    - name: Package Professor-M Production
-      run: ./pack.php -v $(date +'%Y%m%d-%H.%M.%S') -p
     - uses: actions/upload-artifact@master
       with:
         name: professorM-artifact
@@ -110,58 +106,3 @@ jobs:
         SUGAR_LICENSE_KEY: ${{ secrets.SUGAR_ENTERPRISE_LICENSE_KEY }}
       run: |
         ./SetupEnvAndRunTests.sh $SUGARCLUB_USERNAME $SUGARCLUB_PASSWORD $SUGAR_VERSION $SUGAR_EDITION $GTB_USERNAME $GTB_PASSWORD workspace/sugardocker
-
-  Create-Release:
-    name: Create Release
-    needs: Run-Tests-Enterprise
-    runs-on: ubuntu-latest
-    # if: github.ref == 'refs/heads/11_1_0'
-    steps:
-      - uses: actions/download-artifact@master
-        with:
-          name: professorM-artifact
-          path: package/releases
-      - name: Changelog
-        uses: scottbrenner/generate-changelog-action@master
-        id: Changelog
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@latest
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          body: |
-            ${{ steps.Changelog.outputs.changelog }}
-          draft: true
-          prerelease: true
-      - name: Upload Professor M Standard Package
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: package/releases/sugarcrm-ProfessorM-*-standard.zip
-          asset_name: sugarcrm-ProfessorM-${{ github.ref }}-standard.zip
-          asset_content_type: application/zip
-
-      - name: Upload Professor M Windows Manual Install Package
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: package/releases/sugarcrm-ProfessorM-*-windows-manual-install.zip
-          asset_name: sugarcrm-ProfessorM-${{ github.ref }}-windows-manual-install.zip
-          asset_content_type: application/zip
-
-      - name: Upload Professor M Production Package
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: package/releases/sugarcrm-ProfessorM-*-production.zip
-          asset_name: sugarcrm-ProfessorM-${{ github.ref }}-production.zip
-          asset_content_type: application/zip
