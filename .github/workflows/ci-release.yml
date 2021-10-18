@@ -50,7 +50,7 @@ jobs:
           path: package/releases
       - name: List files in the repository
         run: |
-          ls -lr
+          ls -lr package/releases
       # - name: Changelog
       #   uses: scottbrenner/generate-changelog-action@master
       #   id: Changelog
