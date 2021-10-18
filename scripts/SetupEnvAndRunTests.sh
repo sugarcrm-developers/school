@@ -135,7 +135,7 @@ echo "Calling RunProfMPHPUnitTests.sh"
 ./RunProfMPHPUnitTests.sh $sugarDirectory || exit 1
 
 echo "Calling RunPostmanTests.sh"
-./RunPostmanTests.sh $sugarDirectory || exit 1
+./RunPostmanTests.sh $stackVersion || exit 1
 
 echo "Calling StopDockerStack.sh"
-./StopDockerStack.sh $sugarVersion $sugarDockerDirectory || exit 1
+./StopDockerStack.sh $stackVersion $phpYml $sugarDockerDirectory || exit 1
