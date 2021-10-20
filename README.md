@@ -1,4 +1,10 @@
-# Professor M's School for Gifted Coders [![Build Status](https://travis-ci.org/sugarcrm/school.svg?branch=windows-build-pack-php)](https://travis-ci.org/sugarcrm/school)
+# Professor M's School for Gifted Coders
+
+[![Professional Edition - Professor M's School for Gifted Coders Github Actions](https://github.com/sugarcrm/school/actions/workflows/ci-professional.yml/badge.svg)](https://github.com/sugarcrm/school/actions/workflows/ci-professional.yml)
+
+[![Enterprise Edition - Professor M's School for Gifted Coders Github Actions](https://github.com/sugarcrm/school/actions/workflows/ci-enterprise.yml/badge.svg)](https://github.com/sugarcrm/school/actions/workflows/ci-enterprise.yml)
+
+[![Release Professor M's School for Gifted Coders](https://github.com/sugarcrm/school/actions/workflows/ci-release.yml/badge.svg)](https://github.com/sugarcrm/school/actions/workflows/ci-release.yml)
 
 Professor M's School for Gifted Coders is a module loadable package that can be installed in Sugar.  The following 
 sections explain more about the scenario and how to install the package and sample data.
@@ -14,9 +20,7 @@ sections explain more about the scenario and how to install the package and samp
 
 [Generating the Professor M module loadable packages locally](#generating-the-professor-m-module-loadable-packages-locally) 
 
-[Continuous integration with Travis CI](#continuous-integration-with-travis-ci) 
-
-[Continuous integration with Jenkins](#continuous-integration-with-jenkins) 
+[Continuous integration with Github Actions](#continuous-integration-with-github-actions) 
 
 [Automated tests](#automated-tests)
 
@@ -36,9 +40,10 @@ Watch the video below for instructions on how to install the scenario.  Text-bas
 [![The Professor M Scenario Part 2 - How do you install it?](images/profmvideo2.png)](https://youtu.be/SO-Rav35X5U "The Professor M Scenario Part 2 - How do you install it?")
 
 ### Prerequisites
-- Sugar 7.9.1.0 (or newer) installed with NO sample data.  See [Getting Started with Sugar Development](https://developer.sugarcrm.com/getting-started) for help.
+- Sugar 11.2 (or newer) installed with NO sample data. See [Getting Started with Sugar Development](https://developer.sugarcrm.com/getting-started) for help.
    * Note:  If you install Sugar using ***config_si.php***, ensure that the `disable_unknown_platforms` property is set to `false` or is not in the file.
    * Note for Windows users:  Make the path to your Sugar instance as short as possible to avoid errors of file paths being too long.
+   * Professor M's install leverages Administration [REST API](https://support.sugarcrm.com/Documentation/Sugar_Developer/Sugar_Developer_Guide_11.2/Integration/Web_Services/REST_API/Endpoints/Administrationpackages_POST/) to install Module Loadable Package available on Sugar 11.2 and up
 - [Postman](https://www.getpostman.com) installed 
 
 ### Install the modules and customizations
@@ -71,7 +76,7 @@ automated testing files while the **production** release does not.
    [Generating the Professor M module loadable packages locally](#generating-the-professor-m-module-loadable-packages-locally) 
    for instructions on how to do so.
    
-   
+
 ### Customize the modules that are displayed
 Sugar will display many modules by default that you will not be using while working on the tutorials.  To make things simpler, we'll hide the modules that won't be used and rearrange the modules that are displayed.
 1. Login to Sugar as an Administrator if you have not already done so
@@ -114,10 +119,10 @@ In order to create the Professor M sample data, you'll use Postman to run a coll
 1. Click **Add** 
 1. Input a name for your environment (for example, **Professor M**)
 1. Add the following keys and values:
-   * url: the url of your Sugar installation (for example, http://localhost:8888/profm)
-   * rest_endpoint:  /rest/v10
-   * username:  the username for an admin user in your Sugar installation
-   * password:  the password associated with the username above
+   * url: ```the url of your Sugar installation for example: http://sugar-web1/sugar```
+   * rest_endpoint: ```/rest/v11_14```
+   * username:  ```the username for an admin user in your Sugar installation```
+   * password:  ```the password associated with the username above```
 1. Click **Add**
 1. Close the **Manage Environments** dialog
 1. Click **Runner**
@@ -181,21 +186,30 @@ a long Sugar directory path or if you want to make changes to the package.
 execute ```./pack.php -v versionNameOrNumber -w lengthOfWindowsSugarDirectoryPath```
 
 
-## Continuous integration with Travis CI
-This repository is configured to work with [Travis CI](https://docs.travis-ci.com/user/for-beginners/).  Whenever a commit
-is pushed to the repository or a Pull Request is made, Travis CI will automatically kick off a build.
+## Continuous integration with GitHub Actions
+This repository is configured to work with [GitHub Actions](https://github.com/features/actions/).  Whenever a commit
+is pushed to the repository or a Pull Request is made, Github Actions will automatically kick off a build.
+When a merge is pushed to ```master``` branch a build will kick off to release and tag this version.
 
-### Viewing results in Travis CI
+### Viewing results in GitHub Actions
 
-You can view the Travis CI build results at [https://travis-ci.org/sugarcrm/school](https://travis-ci.org/sugarcrm/school).
+You can view the GitHub Actions build results at [https://github.com/sugarcrm/school/actions](https://github.com/sugarcrm/school/actions).
 
-### Viewing results in GitHub
+### Viewing results in GitHub 
 
-You can view the latest build status at the top of this README ([![Build Status](https://travis-ci.org/sugarcrm/school.svg?branch=windows-build-pack-php)](https://travis-ci.org/sugarcrm/school)).  
-Clicking on the build status will open the detailed results in Travis CI.
+
+You can view the latest build status at the top of this README or just below.
+Clicking on the build status will open the detailed results in GitHub Actions.
+
+[![Professional Edition - Professor M's School for Gifted Coders GitHub Actions](https://github.com/sugarcrm/school/actions/workflows/ci-professional.yml/badge.svg)](https://github.com/sugarcrm/school/actions/workflows/ci-professional.yml)
+
+[![Enterprise Edition - Professor M's School for Gifted Coders GitHub Actions](https://github.com/sugarcrm/school/actions/workflows/ci-enterprise.yml/badge.svg)](https://github.com/sugarcrm/school/actions/workflows/ci-enterprise.yml)
+
+[![Release Professor M's School for Gifted Coders](https://github.com/sugarcrm/school/actions/workflows/ci-release.yml/badge.svg)](https://github.com/sugarcrm/school/actions/workflows/ci-release.yml)
+
 
 You can also view build results in Pull Requests.  Toward the bottom of each Pull Request, you can click "Show all 
-checks" to see the Travis CI build results for that Pull Request.  
+checks" to see the GitHub Actions build results for that Pull Request.  
 
 ![Show all checks](images/pr1.png)
 
@@ -205,20 +219,32 @@ You can then click Details to open the build results in Travis CI.
 
 ### About the build
 
-The build has four Environment Variables that have been configured in the project settings in Travis CI:
-- SUGARCRM_USERNAME: The username for an account that has access to the 
+The build has six Environment Variables that have been configured in the secrets section Professor M's school project:
+- ```SUGARCRM_USERNAME```: The username for an account that has access to the 
 [SugarCRM Developer Builds Space](https://community.sugarcrm.com/community/developer/developer-builds) and the [Sugar
 Store](https://store.sugarcrm.com/download)
-- SUGARCRM_PASSWORD: The password associated with the above account
-- GITHUB_USERNAME: The username for a GitHub account that has access to https://github.com/sugarcrm/unit-tests
-- GITHUB_PASSWORD: The password associated with the above account
+- ```SUGARCRM_PASSWORD```: The password associated with the above account
+- ```GTB_USERNAME```: The username for a GitHub account that has access to https://github.com/sugarcrm/unit-tests
+- ```GTB_PASSWORD```: The ```token``` associated with the above account
+- ```SUGAR_ENTERPRISE_LICENSE_KEY```: Enterprise sugar license key used in our Ent install
+- ```SUGAR_PROFESSIONAL_LICENSE_KEY```: Professional sugar license key used in our Pro install
 
-![Travis CI Environment Variables](images/travisenvvars.png)
+![GitHub Action Environment Variables](images/github_actions_envvars.png)
 
-The build is configured in [.travis.yml](.travis.yml). Currently, the build has three stages:
-- Test PackageGenerator
-- Run Tests
-- Build & Post on GitHub
+This project provides 3 different workflows for CI build:
+- [Sugar Enterprise Edition](.github/workflows/.ci-enterprise.yml)
+- [Sugar Professional Edition](.github/workflows/.ci-professional.yml)
+- [Professor-M Release](.github/workflows/.ci-release.yml)
+
+For Sugar Edition's workflows, we have the following jobs:
+- Test-PackageGenerator-PHP - tests PackageGenerator in different PHP versions
+- Test-PackageGenerator-PHP - tests PackageGenerator in different NodeJS versions
+- Pack-Professor-M - packages professor-M in different formats
+- Run-Tests-Sugar-Edition - creates sugar environtment in GitHub Actions and executes all tests.
+
+For Professor-M Release, runs only when commit code to ```master ```branch:
+- Pack-Professor-M - packages professor-M in different formats
+- Create-Release - creates a new release and attach professor-m build files to that release
 
 All of the jobs in each stage must pass before the jobs in the following stage will begin.
 
@@ -236,208 +262,21 @@ specifically for our Professor M Module Loadable Package, and runs the Postman t
 against a different combination of Sugar versions and editions.  See 
 [PHPUnit tests for the Professor M Module Loadable Package](#phpunit-tests-for-the-professor-m-module-loadable-package) 
 for details.
- 
-The final stage to run is the Build & Post on GitHub stage.  Note that this stage is only run when the branch is Master. 
+
+If and when all previous GitHub Actions workflows for Sugar Editions passed, we can merge to ```master``` and kickoff the final stage to run to Build & Post on GitHub stage.  Note that this stage is only run when the branch is Master. 
 This stage executes the pack.php script to generate the Professor M Module Loadable Packages as zips. The 
 zips will be automatically posted to GitHub: https://github.com/sugarcrm/school/releases.
 
-If you want the Build & Post on GitHub stage to be kicked off for a branch other than master, you should do **both** of 
-the following in [.travis.yml](.travis.yml).
-- Remove the "if: branch = master" in the `stages` section
+If you want the Build & Post on GitHub stage to be kicked off for a branch other than ```master```, you should update the brach(s) name in [.ci-release.yml](..github/workflows/.ci-release.yml).
 - Add the branch as an option in the deploy section. For example:
 ```$xslt
-    deploy:
-      provider: releases
-      file: releases/sugarcrm-ProfessorM-latest.zip
-      api_key:
-          secure: mykey
-      skip_cleanup: true
-      on:
-        branch: mybranchname
+on:
+  push:
+    branches:
+      - mybranchname1
+      - mybranchname2
+
 ```
-
-
-
-## Continuous integration with Jenkins
-This repository can be configured for continuous integration with [Jenkins](https://jenkins-ci.org/).  Jenkins can be 
-configured so that whenever a commit is pushed to the repository or at certain time intervals, Jenkins will 
-automatically kick off a build.
-
-### Installing Jenkins
-
-Before beginning, you'll need to set up your own installation of Jenkins.  Check out the 
-[Jenkins Installation Guide](https://jenkins.io/doc/book/installing/) for more details.  
-
-To help you get started, we have provided [PrepareJenkinsDockerContainer.sh](scripts/PrepareJenkinsDockerContainer.sh) 
-that you can run to start Jenkins inside of a Docker container.  The machine or container where Jenkins is running will 
-need to have [Docker Compose](https://docs.docker.com/compose/install/) and [Perl](https://www.perl.org/get.html) 
-installed. [PrepareJenkinsDockerContainer.sh](scripts/PrepareJenkinsDockerContainer.sh) will take care of installing 
-both for you. If you use [PrepareJenkinsDockerContainer.sh](scripts/PrepareJenkinsDockerContainer.sh), you should be 
-able to access Jenkins at [http://localhost:8080](http://localhost:8080).
-
-We recommend installing the Jenkins suggested plugins.  You will also need to install the 
-[EnvInject Plugin](https://wiki.jenkins.io/display/JENKINS/EnvInject+Plugin).
-
-### Storing Credentials in Jenkins
-
-The build you will create in Jenkins needs access to credentials and configurations.  We will store these using
-Jenkins Credentials.
-
-The instructions below will walk you through how to create the necessary credentials and configurations.  For more 
-information on how to store credentials in Jenkins, see 
-[Credentials Binding Plugin](https://wiki.jenkins.io/display/JENKINS/Credentials+Binding+Plugin).
-
-1. On the Jenkins dashboard, click **Credentials**.  (If you do not see the Credentials option, you may need to install the
-Credentials Binding Plugin.)
-1. Create new global credentials for the GitHub account that has access to the 
-[SugarCRM Unit Tests repo](https://github.com/sugarcrm/unit-tests).  
-   1. Kind: **Username with password**
-   1. Scope: **Global** 
-   1. Username: your GitHub username
-   1. Password: your GitHub password
-   1. ID: GITHUB_SUGARCRM_UNIT_TESTS
-   1. Description: GitHub account that has access to https://github.com/sugarcrm/unit-tests
-1. Create new global credentials for the account that has access to the 
-   [SugarCRM Developer Builds Space](https://community.sugarcrm.com/community/developer/developer-builds) and the [Sugar
-   Store](https://store.sugarcrm.com/download).  
-   1. Kind: **Username with password**
-   1. Scope: **Global** 
-   1. Username: your SugarCRM username
-   1. Password: your SugarCRM password
-   1. ID: SUGARCRM_ACCOUNT
-   1. Description: SugarCRM Account
-1. Create a new global secret for the Sugar license key.
-   1. Kind: **Secret text**
-   1. Scope: **Global** 
-   1. Secret: Your Sugar license key. This secret is used by [InstallSugarAndProfM.sh](scripts/InstallSugarAndProfM.sh). 
-   1. ID: SUGAR_LICENSE_KEY
-   1. Description: The Sugar license key
-
-
-### Creating a Jenkins project
-
-Now you're ready to create a new project in Jenkins that will build the school project. 
-
-1. On the Jenkins dashboard, click **New Item**.
-1. Name your new item something like **ProfessorM**.  
-1. Select **Freestyle project** and click **OK**. The item configuration page will display.
-1. In the **Source Code Management** section, select **Git.**
-1. Input your Repository URL (for example, `https://github.com/sugarcrm/school`) and select the GitHub credentials you
-created in the previous section.
-1. Configure the Build Triggers section as you'd like. If you do not want to configure this now, you can skip this step
-and manually trigger the builds instead.
-1. In the **Build Environment** section, select the **Delete workspace before build starts** option and the **Use secret
-text(s) or file(s)** option.
-1. In the **Bindings** section, select **Add** > **Username and password (separated)**. Then input the following:
-    1. Username Variable: `GITHUB_USERNAME`
-    1. Password Variable: `GITHUB_PASSWORD`
-    1. Credentials: **Specific credentials**
-    1. Select the GITHUB_SUGARCRM_UNIT_TESTS credentials.
-1. In the **Bindings** section, select **Add** > **Username and password (separated)**. Then input the following:
-    1. Username Variable: `SUGARCRM_USERNAME`
-    1. Password Variable: `SUGARCRM_PASSWORD`
-    1. Credentials: **Specific credentials**
-    1. Select the SUGARCRM_ACCOUNT credentials.
-1. In the **Bindings** section, select **Add** > **Secret text**. Then input the following:
-    1. Variable: `SUGAR_LICENSE_KEY`
-    1. Credentials: **Specific credentials**
-    1. Select the SUGAR_LICENSE_KEY secret text.
-1. In the **Bindings** section, select the **Inject environment variables to the build process** checkbox. If you do not
-see this checkbox, you may need to install the 
-[EnvInject Plugin](https://wiki.jenkins.io/display/JENKINS/EnvInject+Plugin). Then...
-    1. In the **Properties Content** input box, add a line for the WORKSPACE_PATH variable. This path represents the path
-    to the workspace for your Jenkins job on the *host* machine.  For example, if your Jenkins home directory is 
-    `/Users/lschaefer/jenkins` and your Jenkins project is named ProfessorM, you would input the following:
-    `WORKSPACE_PATH=/Users/lschaefer/jenkins/workspace/ProfessorM`
-    1. In the **Properties Content** input box, add a line for the PATH_TO_SUGAR_DOCKER_ON_HOST variable.  This variable
-     represents the path to Sugar Docker on the *host* machine. If you want to use the default location, input the 
-     following:
-     `PATH_TO_SUGAR_DOCKER_ON_HOST=$WORKSPACE_PATH/scripts/workspace/sugardocker`
-     If you want to customize where Sugar Docker is stored, you can update this variable to reflect that.
-    
-
-1. In the **Build** section, click **Add build step** and select **Execute shell**. 
-1. In the **Command** box that appears, input the following: 
-    ```
-    # The Sugar version you want to test
-    SUGAR_VERSION="7.11"
-    
-    # The Sugar Edition you want to test. Options: Pro, Ent, and Ult
-    SUGAR_EDITION="Ent"
-    
-    # Path to where the Sugar Docker directory should be stored. If you do not have a preference, leave this as is.
-    SUGAR_DOCKER_DIRECTORY="workspace/sugardocker"
-    
-    # This variable is completely optional.  If you want to store the Sugar source zips on your local machine instead
-    # of downloading them from the SugarCRM Developer Builds space or Sugar Store, input the path to where the Sugar 
-    # source zips are stored. For example: /var/sugardocker/data/app/sugar_source_zips. Note that your Sugar source zips 
-    # MUST follow this naming convention: Sugar$sugarEdition-$sugarVersion.zip (for example: SugarEnt-7.11.zip).
-    # SUGAR_SOURCE_ZIPS_DIRECTORY=""
-     
-    cd scripts
-     
-    bash -ex RunPackUnitTestsAndBuildProfMPackage.sh $SUGAR_WORKSPACE_PATH
-     
-    bash SetupEnvAndRunTests.sh $SUGARCRM_USERNAME $SUGARCRM_PASSWORD $SUGAR_VERSION $SUGAR_EDITION $GITHUB_USERNAME $GITHUB_PASSWORD $SUGAR_DOCKER_DIRECTORY $SUGAR_SOURCE_ZIPS_DIRECTORY
-    ```
-    Be sure to update the variables appropriately.
-1. In the **Post-build Actions** section, click **Add post-build action** and select **Archive the artifacts**.
-1. In the **Files to archive** box that appears, input the following: `package/releases/*.zip`
-1. Click **Save**.
-
-### Running a build and viewing the results
-
-Once you have your Jenkins project created, it's time to see if it works!
-
-Navigate to your ProfessorM project in Jenkins. Trigger your build manually by clicking **Build Now**.
-
-View the Build History panel to quickly browse the build results.  If you see a blue dot, you know all of the tests passed!
-
-![Build passed](images/jenkins-buildpassed.png)
-
-Click on a build to view more details.  If the build passed, the Professor M module loadable packages will be stored as 
-build artifacts.
-
-![Build artifacts](images/jenkins-buildartifact.png)
-
-To see more details on a build, click **Console Output**.  If any step in the process fails (for example, a Jasmine test
-fails), the remaining steps will not be run.  If everything succeeds, you'll be able to find the Jasmine test results
-for PackageGenerator, the PHPUnit test results for PackageGenerator, the PHPUnit test results for Sugar, the PHPUnit 
-tests for the Professor M Module Loadable Package, and the results of the Professor M module loadable packages being 
-generated, copied, and archived. 
-
-Jasmine results for PackageGenerator:
-
-![Jasmine passed](images/jenkins-jasmine.png)
-
-PHPUnit results for PackageGenerator:
-
-![PHPUnit results](images/jenkins-phpunit.png)
-
-PHPUnit results for the Professor M Module Loadable Package:
-
-![PHPUnit results](images/phpunitprofm.png)
-
-Postman test results:
-
-![Postman results](images/jenkinspostmansuccess.png)
-
-Professor M package results:
-
-![ProfM zip](images/jenkins-profm.png)
-
-Tip:  If you see errors in the Console Output about git not being found, you may need to update your Jenkins configuration.
-On the Jenkins dashboard, click **Manage Jenkins**. Click **Conifgure System**. In the **Global Properties** section,
-enable the **Tool Locations** checkbox. In the Name box, select **(Git) Default**.  In the Home box, input the path
-to the Git installation (for example, `/usr/bin/git`).  Click **Save**.
-
-Tip for those running Jenkins in Docker:  If you see errors in the Console Output similar to 'Fatal error: Unable to 
-find local grunt', you may need to update your Jenkins job.  The likely cause is that your 
-`$SUGAR_WORKSPACE_PATH` is not pointing to the path of the workspace that is storing the school repo's files that are being pulled out of 
-GitHub.  You can diagnose if this is the issue by adding `docker exec my-yarn pwd` and `docker exec my-yarn ls` around 
-line 18 of [RunPackUnitTestsAndBuildProfMPackage.sh](scripts/RunPackUnitTestsAndBuildProfMPackage.sh) to see what is in 
-the `workspace` directory after the `docker run` command has mounted the volume.  If you do not see files from the 
-school repo in the `workspace`, you need to update `$SUGAR_WORKSPACE_PATH`. 
 
 ### About the build
 
@@ -470,11 +309,38 @@ Note:  if any step in the process fails (for example, a Jasmine test fails), the
 
 This repository contains various automated tests.  We'll discuss each category of tests below.
 
+### GitHub Actions workflows
+To see the results of the tests that are run as part of the GitHub Actions workflow build, open the build in Actions tab. You may see multiple workflows triggered by a commit, it really depends on the conditions and branch.
+
+#### Interpreting the results
+To see the results of the tests that are run as part of the GitHub Actions workflow build, open the build in Actions tab. You may see multiple workflows triggered by a commit, it really depends on the conditions and branch.
+
+You can see all workflows at once, click and filter by Workflow name and/or search by commit message:
+![All Workflows](images/workflowsummary.png)
+
+To see detailed workflow results, click on the commit message to expand to the Workflow Summary View.
+![Green build](images/workflowjobgreen.png)
+
+In the left panel (or in the Matrix card in the main flow), notice that PackageGenerator and Jamsmin tests are executed on multiple PHP/NodeJS versions for compatibility.
+![Workflow Job List](images/workflowjoblist.png)
+
+By clicking in one of the job names, a list of tasks along with their execution logs is provided (notice checkmark icons are not colored when everything is ok.):
+![Workflow Job Detail](images/workflowjobdetail.png)
+
+You can scroll through the job log to see the results of the PHPUnit tests.
+![Workflow Job Logs](images/workflowjoblogs.png)
+
+If the build failed, a variety of things could have caused the failure including a failing PHPUnit test. Just follow the red marks (or 'X' mark)
+![Red build](images/workflowjobfailed.png)
+
+You can follow workflow executions in realtime:
+![Workflow execution in Realtime](images/workflowjobfollow.png)
+
+
 ### Testing PackageGenerator.php
 
 This repository contains automated PHPUnit and Jasmine tests specifically for testing 
-[PackageGenerator](package/PackageGenerator.php).  Since PackageGenerator does not require the Sugar code base in order
-to run, these tests can be executed separate from the Sugar code base.
+[PackageGenerator](package/PackageGenerator.php). Since PackageGenerator does not require the Sugar code base in order to run, these tests can be executed separate from the Sugar code base.
 
 These tests can be executed manually or as part of a continuous integration build.
 
@@ -507,59 +373,24 @@ or on Windows:
 ..\..\package\vendor\bin\phpunit
 ```
 
-##### Automatic execution in Travis CI
-The PHPUnit tests are automatically run as part of the Test PackageGenerator stage of the Travis CI build.  Travis CI's 
-default build script for PHP is PHPUnit, so we don't have to include anything special in [.travis.yml](.travis.yml) in 
-order for the tests to run.  However, we have added `composer install` to [.travis.yml](.travis.yml) in order for the 
-dependencies to be installed on the build machine. Travis CI looks in [phpunit.xml](tests/phpunit/phpunit.xml) for the PHPUnit config. 
-Our config indicates that the PHPUnit tests are stored in [tests/phpunit](tests/phpunit).  
+##### Automatic execution in GitHub Actions
+The PHPUnit tests are automatically run as part of the Test PackageGenerator job of the GitHub Actions workflow.  For our Sugar Edition Jobs, we will execute in different PHP versions through GA's strategy matrix mechanism. For PackageGenerator's job steps we will:
+- Checkout the latest code for the commit that triggered it
+- Install PHP version specified in the strategy matrix
+- Cache and/or reuse cache for composer packages
+- Install dependencies on the build machine by using ```composer install```
+- Run the test suite through composer, which uses the following script on [composer.json](package/composer.json)
+   ```$xslt
+   "scripts": {
+        "test": "phpunit --configuration ../tests/phpunit/phpunit.xml"
+    }```
+- Our config indicates that the PHPUnit tests are stored in [tests/phpunit](tests/phpunit). 
 
-#### Interpreting the results
-To see the results of the tests that are run as part of the Travis CI build, open the build in Travis CI.  If the build 
-passed, you know all of the tests passed.
+###### Interpreting the results
+To see the results of the tests that are run as part of the GitHub Actions workflow build, open the build in Actions tab. You may see multiple workflows triggered by a commit, it really depends on the conditions and branch.
 
-![Green build](images/greenbuild.png)
-
-To see the detailed test results, click the PHP build job to expand it:
-![PHP build job](images/phpbuildjob.png)
-
-You can scroll through the job log to see the results of the PHPUnit tests.
-
-![PHPUnit passed](images/phpunitpassed.png)
-
-If the build failed, a variety of things could have caused the failure including a failing PHPUnit test.
-
-![Red build](images/redbuild.png)
-
-If a PHPUnit test fails, you'll see something like the following in the job log.
-
-![PHPUnit failed](images/phpunitfailed.png)
-
-
-##### Automatic execution in Jenkins
-
-The PHPUnit tests are automatically run as part of the Jenkins build when 
-[RunPackUnitTestsAndBuildProfMPackage.sh](scripts/RunPackUnitTestsAndBuildProfMPackage.sh) is executed.
-
-#### Interpreting the results
-To see the results of the tests that are run as part of the Jenkins build, open the build in Jenkins.  If the build 
-passed, you know all of the tests passed.
-
-![Passing build](images/jenkinsbuildpassed.png)
-
-To see the detailed test results, open the build and click **Console Output**. You can scroll through the job log to see 
-the results of the PHPUnit tests.  Note:  you may need to open the Full Log to find the results.
-
-![PHPUnit passed](images/jenkinsphpunitpassed.png)
-
-If the build failed, a variety of things could have caused the failure including a failing PHPUnit test.
-
-![Failing build](images/jenkinsfailingbuild.png)
-
-If a PHPUnit test fails, you'll see something like the following in the job log.
-
-![PHPUnit failed](images/jenkinsphpunitfailed.png)
-
+By following the workflow, you will find a Matrix/Card with the tests for PHP and its status:
+![Workflow execution for PHP](images/workflowjobphp.png)
 
 #### Jasmine tests for PackageGenerator
 [Jasmine](https://jasmine.github.io/) is a testing framework for JavaScript.  We have included a very simple Jasmine 
@@ -601,61 +432,29 @@ Inside of your `tests/jasmine` directory, execute the following command to run t
 grunt test-js
 ```
 
-##### Automatic execution in Travis CI
-The Jasmine tests are automatically run as part of the Travis CI build process.  In [.travis.yml](.travis.yml), the Test 
-PackageGenerator stage kicks off the "test-js" task.
+##### Automatic execution in GitHub Actions
+The Jasmine tests are automatically run as part of the Test PackageGenerator job of the GitHub Actions workflow. For our Sugar Edition Jobs, we will execute in different NodeJS versions through GA's strategy matrix mechanism. For PackageGenerator's job steps we will:
+- Checkout the latest code for the commit that triggered it
+- Setup NodeJS's version specified in the strategy matrix
+- Install packages on the build machine by using ```yarn install```
+- Run the test suite through yarn, which uses the following script on [package.json](tests/jasmine/package.json)
+   ```$xslt
+   "scripts": {
+      "test": "grunt test-js --verbose"
+   }```
 
 ###### Interpreting the results
-To see the results of the tests that are run as part of the Travis CI build, open the build in Travis CI.  If the build 
-passed, you know all of the tests passed.
+To see the results of the tests that are run as part of the GitHub Actions workflow build, open the build in Actions tab. You may see multiple workflows triggered by a commit, it really depends on the conditions and branch.
 
-![Green build](images/greenbuild.png)
+By following the workflow, you will find a Matrix/Card with the tests for NodeJS and its status:
+![Workflow execution for Node](images/workflowjobnode.png)
 
-To see the detailed test results, click the Node.js build job to expand it:
-![Node build job](images/nodebuildjob.png)
-
-You can scroll through the job log to see the results of the Jasmine tests.
-
-![Jasmine passed](images/jasminepassed.png)
-
-If the build failed, a variety of things could have caused the failure including a failing Jasmine test.
-
-![Red build](images/redbuild.png)
-
-If a Jasmine test fails, you'll see something like the following in the job log.
-
-![Jasmine failed](images/jasminefailed.png)
-
-##### Automatic execution in Jenkins
-The Jasmine tests are automatically run as part of the Jenkins build when 
-[RunPackUnitTestsAndBuildProfMPackage.sh](scripts/RunPackUnitTestsAndBuildProfMPackage.sh) is executed.
-
-###### Interpreting the results
-To see the results of the tests that are run as part of the Jenkins build, open the build in Jenkins.  If the build 
-passed, you know all of the tests passed.
-
-![Passing build](images/jenkinsbuildpassed.png)
-
-To see the detailed test results, open the build and click **Console Output**. You can scroll through the job log to see 
-the results of the Jasmine tests.  Note:  you may need to open the Full Log to find the results.
-
-![Jasmine passed](images/jenkinsjasminepassed.png)
-
-If the build failed, a variety of things could have caused the failure including a failing Jasmine test.
-
-![Failing build](images/jenkinsfailingbuild.png)
-
-If a Jasmine test fails, you'll see something like the following in the job log.
-
-![Jasmine failed](images/jenkinsjasminefailed.png)
 
 ### Testing Sugar and the Professor M Module Loadable Package
 
-Many customizations in the Professor M Module Loadable Package require a copy of the Sugar code in order to compile
-and/or run.  Therefore, we will only test the Professor M Module Loadable Package after it has been installed in Sugar.
+Many customizations in the Professor M Module Loadable Package require a copy of the Sugar code in order to compile and/or run.  Therefore, we will only test the Professor M Module Loadable Package after it has been installed in Sugar.
 
-In this section, we'll discuss how to run the automated tests for the Professor M Module Loadable Package.  Since the
-setup for running the Sugar provided automated tests is so similar, we will discuss how to do that here as well.
+In this section, we'll discuss how to run the automated tests for the Professor M Module Loadable Package.  Since the setup for running the Sugar provided automated tests is so similar, we will discuss how to do that here as well.
 
 Currently, we have PHPUnit tests and Postman tests.
 
@@ -711,10 +510,8 @@ Run the Sugar provided unit tests by executing the following command from the `t
 $ ../../vendor/bin/phpunit
 ```
 
-Install the **standard** version of the Professor M Module Loadable Package using 
-[Module Loader](https://support.sugarcrm.com/SmartLinks/Administration_Guide/Developer_Tools/Module_Loader/index.html) 
-if you have not already done so.  The code for 
-Professor M and the associated tests will be installed in to the Sugar source directory.
+Install the **standard** version of the Professor M Module Loadable Package using [Module Loader](https://support.sugarcrm.com/SmartLinks/Administration_Guide/Developer_Tools/Module_Loader/index.html) 
+if you have not already done so.  The code for Professor M and the associated tests will be installed in to the Sugar source directory.
 
 Run the Professor M PHPUnit tests by executing the following command from the `tests/unit-php` directory:
 
@@ -722,12 +519,10 @@ Run the Professor M PHPUnit tests by executing the following command from the `t
 $ ../../vendor/bin/phpunit --testsuite custom
 ```
 
-##### Automatic execution in Travis CI
-The PHPUnit tests that test the Professor M Module Loadable Package are automatically run as part of the Run Tests 
-stage of the Travis CI build.  
+##### Automatic execution in GitHub Actions
+The PHPUnit tests that test the Professor M Module Loadable Package are automatically run as part of the ```Run-Tests-Sugar-Edition``` job of the GitHub Actions workflow.
 
-Each job in this stage is basically the same with the exception of the environment variables.  Each job calls 
-[SetupEnvAndRunTests.sh](scripts/SetupEnvAndRunTests.sh), which executes the Professor M PHPUnit tests.
+Each job in this stage is basically the same with the exception of the environment variables.  Each job calls [SetupEnvAndRunTests.sh](scripts/SetupEnvAndRunTests.sh), which executes the Professor M PHPUnit tests.
 
 Note that the Sugar provided unit tests are NOT run as part of 
 [SetupEnvAndRunTests.sh](scripts/SetupEnvAndRunTests.sh).  If you want to add
@@ -737,70 +532,21 @@ them, add the following line after the call to `SetupSugarPHPUnitTests.sh`:
 ./RunSugarPHPUnitTests.sh $sugarDirectory || exit 1
 ```
 
-#### Interpreting the results
-To see the results of the tests that are run as part of the Travis CI build, open the build in Travis CI.  If the build 
-passed, you know all of the tests passed.
-
-![Green build](images/greenbuild.png)
-
-To see the detailed test results, click a job in the Run Tests stage:
-![PHPUnit job](images/travisphpunitjob.png)
-
-You can scroll through the job log to see the results of the PHPUnit tests.
-
-![PHPUnit passed](images/travisphpunitresults.png)
-
-If the build failed, a variety of things could have caused the failure including a failing PHPUnit test.
-
-![Red build](images/redbuild.png)
-
-If a PHPUnit test fails, you'll see something like the following in the job log.
-
-![PHPUnit failed](images/travisphpunitfail.png)
-
-
-##### Automatic execution in Jenkins
-
-The PHPUnit tests that test the Professor M Module Loadable Package are automatically run as part of the Jenkins build 
-when [SetupEnvAndRunTests.sh](scripts/SetupEnvAndRunTests.sh) is run.
-     
-Note that the Sugar provided unit tests are NOT run as part of 
-[SetupEnvAndRunTests.sh](scripts/SetupEnvAndRunTests.sh).  If you want to add them, add the following line 
-after the call to `SetupSugarPHPUnitTests.sh`:
-     
-     ```
-     ./RunSugarPHPUnitTests.sh $sugarDirectory || exit 1
-     ```
-
-#### Interpreting the results
-To see the results of the tests that are run as part of the Jenkins build, open the build in Jenkins.  If the build 
-passed, you know all of the tests passed.
-
-![Passing build](images/jenkinsbuildpassed.png)
-
-To see the detailed test results, open the build and click **Console Output**. You can scroll through the job log to see 
-the results of the PHPUnit tests.
-
-![PHPUnit passed](images/jenkinsphpunit.png)
-
-If the build failed, a variety of things could have caused the failure including a failing PHPUnit test.
-
-![Failing build](images/jenkinsfailingbuild.png)
-
-If a PHPUnit test fails, you'll see something like the following in the job log.
-
-![PHPUnit failed](images/jenkinsphpunitfailed2.png)
-
-
 #### Postman tests for the Professor M Module Loadable Package
 
-[Postman](https://www.getpostman.com/) is an API development environment.  We use Postman Collections to insert our 
-sample data into Sugar via the REST API.  Each API call in the collections has one or more associated tests to ensure
-the calls were successful.  
+[Postman](https://www.getpostman.com/) is an API development environment.  We use Postman Collections to insert our sample data into Sugar via the REST API.  Each API call in the collections has one or more associated tests to ensure the calls were successful.  
 
 The Postman Collections can be run via the Postman application as described 
 [above](#use-the-sugar-rest-api-to-create-the-professor-m-sample-data) or the command line using 
 [Newman](https://www.getpostman.com/docs/v6/postman/collection_runs/command_line_integration_with_newman).
+
+As an alternative, and as for this project, on version 11.2, Sugar has introduced a [Rest API](https://support.sugarcrm.com/Documentation/Sugar_Developer/Sugar_Developer_Guide_11.2/Integration/Web_Services/REST_API/Endpoints/Administrationpackages_POST/) for uploading and installing Module Loadable Packages.
+
+To upload and install the Professor M Module Loadable Package by executing the following command from the `scripts` directory (as an assumption, it runs on a docker as part of the build):
+
+```
+$ ./InstallProfessorMPackage.sh $stackVersion || exit 1
+```
 
 ##### Manual execution using the command line interface
 
@@ -853,59 +599,11 @@ Hint:  If your instance of Sugar is running inside a Docker container, you may n
 
 `docker run -v pathToTheDataDirectoryInYourSchoolRepo:/etc/newman --net="host" -t postman/newman_ubuntu1404 run "ProfessorM_PostmanCollection.json" --environment="ProfessorM_PostmanEnvironment.json"`
 
-##### Automatic Execution in Travis CI
+##### Automatic Execution in GitHub Actions
 
-The Postman tests are automatically run as part of the Run Tests stage of the Travis CI build.
+The Postman tests are automatically run as part of the Run Tests stage of the GitHub Actions workflow.
 
-Each job in this stage is basically the same with the exception of the environment variables.  Each job calls 
-[SetupEnvAndRunTests.sh](scripts/SetupEnvAndRunTests.sh), which executes the Postman tests.
-
-##### Interpreting the results
-
-To see the results of the tests that are run as part of the Travis CI build, open the build in Travis CI.  If the build 
-passed, you know all of the tests passed.
-
-![Green build](images/greenbuild.png)
-
-To see the detailed test results, click a job in the Run Tests stage:
-
-![PHPUnit job](images/travisphpunitjob.png)
-
-You can scroll through the job log to see the results of the Postman tests.
-
-![PHPUnit passed](images/travispostmansuccess.png)
-
-If the build failed, a variety of things could have caused the failure including a failing Postman test.
-
-![Red build](images/redbuild.png)
-
-If a Postman test fails, you'll see something like the following in the job log.
-
-![PHPUnit failed](images/travispostmanfailure.png)
-
-##### Automatic execution in Jenkins
-
-The Postman tests are automatically run as part of the Jenkins build when 
-[SetupEnvAndRunTests.sh](scripts/SetupEnvAndRunTests.sh) is run.
-
-#### Interpreting the results
-To see the results of the tests that are run as part of the Jenkins build, open the build in Jenkins.  If the build 
-passed, you know all of the tests passed.
-
-![Passing build](images/jenkinsbuildpassed.png)
-
-To see the detailed test results, open the build and click **Console Output**. You can scroll through the job log to see 
-the results of the Postman tests.
-
-![PHPUnit passed](images/jenkinspostmansuccess.png)
-
-If the build failed, a variety of things could have caused the failure including a failing Postman test.
-
-![Failing build](images/jenkinsfailingbuild.png)
-
-If a Postman test fails, you'll see something like the following in the job log.
-
-![PHPUnit failed](images/jenkinspostmanfailed.png)
+Each job is basically the same with the exception of the environment variables. Each job calls [SetupEnvAndRunTests.sh](scripts/SetupEnvAndRunTests.sh), which executes the Postman tests.
 
 
 ## How to fix your Sugar instance without starting completely over

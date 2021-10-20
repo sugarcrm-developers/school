@@ -4,7 +4,7 @@ name: Release Professor M's School for Gifted Coders
 on:
   push:
     branches:
-      - 11_1_0
+      - master
 
 jobs:
   Pack-Professor-M:
@@ -48,9 +48,6 @@ jobs:
         with:
           name: professorM-artifact
           path: package/releases
-      - name: List files in the repository
-        run: |
-          ls -lr package/releases
       - name: Changelog
         uses: scottbrenner/generate-changelog-action@master
         id: Changelog
@@ -60,8 +57,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          tag_name: Tag ${{ github.sha }}
+          release_name: Release ${{ github.sha }}
           body: |
             ${{ steps.Changelog.outputs.changelog }}
           draft: true
