@@ -1,13 +1,9 @@
-name: Enterprise Edition - Professor M's School for Gifted Coders Github Actions
+name: Enterprise Edition - Professor M's School for Gifted Coders GitHub Actions
 
-# on: [push]
-on:
-  push:
-    branches:
-      - 11_2_0
+on: [push]
 
 jobs:
-  Test-PackageGenerator-PHP:
+  PHP-PackageGenerator-Test:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -15,7 +11,7 @@ jobs:
     strategy:
       matrix:
         php-versions: ['7.3', '7.4']        
-    name: Testing PackageGenerator on PHP ${{ matrix.php-versions }}
+    name: PHP ${{ matrix.php-versions }} PackageGenerator test
     steps:
     - uses: actions/checkout@v2
     - name: Install PHP
@@ -35,7 +31,7 @@ jobs:
     - name: Run test suite
       run: composer run-script test
 
-  Test-PackageGenerator-NodeJS:
+  NodeJS-PackageGenerator-Test:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -43,7 +39,7 @@ jobs:
     strategy:
       matrix:
         node: [ '14', '16' ]
-    name: Testing Jasmin on Node ${{ matrix.node }}
+    name: Node ${{ matrix.node }} Jasmin test
     steps:
       - uses: actions/checkout@v2
       - name: Setup node
@@ -83,7 +79,7 @@ jobs:
         name: professorM-artifact
         path: package/releases/
 
-  Run-Tests-Enterprise:
+  Run-Tests-Sugar-Edition:
     runs-on: ubuntu-latest
     needs: Pack-Professor-M
     defaults:
