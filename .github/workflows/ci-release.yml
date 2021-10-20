@@ -61,8 +61,8 @@ jobs:
           release_name: Release ${{ github.sha }}
           body: |
             ${{ steps.Changelog.outputs.changelog }}
-          draft: true
-          prerelease: true
+          draft: false
+          prerelease: false
 
       # Release action has a bug with wildcard (https://github.com/actions/upload-release-asset/issues/47)
       - name: Set Artifact Names as ENV
