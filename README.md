@@ -397,6 +397,7 @@ The PHPUnit tests are automatically run as part of the Test PackageGenerator job
 To see the results of the tests that are run as part of the GitHub Actions workflow build, open the build in Actions tab. You may see multiple workflows triggered by a commit, it really depends on the conditions and branch.
 
 By following the workflow, you will find a Matrix/Card with the tests for PHP and its status:
+
 ![Workflow execution for PHP](images/workflowjobphp.png)
 
 #### Jasmine tests for PackageGenerator
@@ -454,6 +455,7 @@ The Jasmine tests are automatically run as part of the Test PackageGenerator job
 To see the results of the tests that are run as part of the GitHub Actions workflow build, open the build in Actions tab. You may see multiple workflows triggered by a commit, it really depends on the conditions and branch.
 
 By following the workflow, you will find a Matrix/Card with the tests for NodeJS and its status:
+
 ![Workflow execution for Node](images/workflowjobnode.png)
 
 
