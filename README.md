@@ -232,9 +232,9 @@ Store](https://store.sugarcrm.com/download)
 ![GitHub Action Environment Variables](images/github_actions_envvars.png)
 
 This project provides 3 different workflows for CI build:
-- [Sugar Enterprise Edition](.github/workflows/.ci-enterprise.yml)
-- [Sugar Professional Edition](.github/workflows/.ci-professional.yml)
-- [Professor-M Release](.github/workflows/.ci-release.yml)
+- [Sugar Enterprise Edition](.github/workflows/ci-enterprise.yml)
+- [Sugar Professional Edition](.github/workflows/ci-professional.yml)
+- [Professor-M Release](.github/workflows/ci-release.yml)
 
 For Sugar Edition's workflows, we have the following jobs:
 - Test-PackageGenerator-PHP - tests PackageGenerator in different PHP versions
@@ -267,7 +267,7 @@ If and when all previous GitHub Actions workflows for Sugar Editions passed, we 
 This stage executes the pack.php script to generate the Professor M Module Loadable Packages as zips. The 
 zips will be automatically posted to GitHub: https://github.com/sugarcrm/school/releases.
 
-If you want the Build & Post on GitHub stage to be kicked off for a branch other than ```master```, you should update the brach(s) name in [.ci-release.yml](..github/workflows/.ci-release.yml).
+If you want the Build & Post on GitHub stage to be kicked off for a branch other than ```master```, you should update the brach(s) name in [ci-release.yml](.github/workflows/ci-release.yml).
 - Add the branch as an option in the deploy section. For example:
 ```$xslt
 on:
@@ -316,24 +316,31 @@ To see the results of the tests that are run as part of the GitHub Actions workf
 To see the results of the tests that are run as part of the GitHub Actions workflow build, open the build in Actions tab. You may see multiple workflows triggered by a commit, it really depends on the conditions and branch.
 
 You can see all workflows at once, click and filter by Workflow name and/or search by commit message:
+
 ![All Workflows](images/workflowsummary.png)
 
 To see detailed workflow results, click on the commit message to expand to the Workflow Summary View.
+
 ![Green build](images/workflowjobgreen.png)
 
 In the left panel (or in the Matrix card in the main flow), notice that PackageGenerator and Jamsmin tests are executed on multiple PHP/NodeJS versions for compatibility.
+
 ![Workflow Job List](images/workflowjoblist.png)
 
 By clicking in one of the job names, a list of tasks along with their execution logs is provided (notice checkmark icons are not colored when everything is ok.):
+
 ![Workflow Job Detail](images/workflowjobdetail.png)
 
 You can scroll through the job log to see the results of the PHPUnit tests.
+
 ![Workflow Job Logs](images/workflowjoblogs.png)
 
 If the build failed, a variety of things could have caused the failure including a failing PHPUnit test. Just follow the red marks (or 'X' mark)
+
 ![Red build](images/workflowjobfailed.png)
 
 You can follow workflow executions in realtime:
+
 ![Workflow execution in Realtime](images/workflowjobfollow.png)
 
 
