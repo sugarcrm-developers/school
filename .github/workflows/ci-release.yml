@@ -56,7 +56,7 @@ jobs:
         with:
           tag_name: Tag ${{ github.event.head_commit.message }}
           release_name: Release ${{ github.event.head_commit.message }}
-          draft: true
+          draft: false
           prerelease: false
 
       # Release action has a bug with wildcard (https://github.com/actions/upload-release-asset/issues/47)
