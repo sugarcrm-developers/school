@@ -4,7 +4,7 @@
   "values": [
     {
       "key": "url",
-      "value": "http://localhost/sugar",
+      "value": "http://sugar-web1/sugar",
       "enabled": true,
       "type": "text"
     },
@@ -22,7 +22,7 @@
     },
     {
       "key": "rest_endpoint",
-      "value": "/rest/v11_3",
+      "value": "/rest/v11_14",
       "enabled": true,
       "type": "text"
     }

@@ -1,0 +1,129 @@
+name: Release Professor M's School for Gifted Coders
+
+# on: [push]
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  Pack-Professor-M:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: package
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install PHP
+      uses: shivammathur/setup-php@master
+      with:
+        php-version: 7.4
+    - name: Cache Professor-M packages
+      id: packages-cache
+      uses: actions/cache@v2
+      with:
+        path: vendor
+        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-php-
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress
+    - name: Package Professor-M Standard
+      run: ./pack.php -v $(date +'%Y%m%d-%H.%M.%S')
+    - name: Package Professor-M Windows
+      run: ./pack.php -v $(date +'%Y%m%d-%H.%M.%S') -w 40
+    - name: Package Professor-M Production
+      run: ./pack.php -v $(date +'%Y%m%d-%H.%M.%S') -p
+    - uses: actions/upload-artifact@master
+      with:
+        name: professorM-artifact
+        path: package/releases/
+
+  Create-Release:
+    name: Create Release
+    needs: Pack-Professor-M
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@master
+        with:
+          name: professorM-artifact
+          path: package/releases
+      - name: Changelog
+        uses: scottbrenner/generate-changelog-action@master
+        id: Changelog
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: Tag ${{ github.sha }}
+          release_name: Release ${{ github.sha }}
+          body: |
+            ${{ steps.Changelog.outputs.changelog }}
+          draft: false
+          prerelease: false
+
+      # Release action has a bug with wildcard (https://github.com/actions/upload-release-asset/issues/47)
+      - name: Set Artifact Names as ENV
+        id: set_artifact_names
+        run: | 
+          ARTIFACT_STANDARD_PATH=$(ls package/releases/sugarcrm-ProfessorM-*-standard.zip | head -n 1)
+          ARTIFACT_STANDARD=$(basename $ARTIFACT_STANDARD_PATH)
+          echo ::set-output name=ARTIFACT_STANDARD::${ARTIFACT_STANDARD}
+          echo ::set-output name=ARTIFACT_STANDARD_PATH::${ARTIFACT_STANDARD_PATH}
+          
+          ARTIFACT_WINDOWS_PATH=$(ls package/releases/sugarcrm-ProfessorM-*-windows.zip | head -n 1)
+          ARTIFACT_WINDOWS=$(basename $ARTIFACT_WINDOWS_PATH)
+          echo ::set-output name=ARTIFACT_WINDOWS::${ARTIFACT_WINDOWS}
+          echo ::set-output name=ARTIFACT_WINDOWS_PATH::${ARTIFACT_WINDOWS_PATH}
+          
+          ARTIFACT_WINDOWS_MANUAL_INSTALL_PATH=$(ls package/releases/sugarcrm-ProfessorM-*-windows-manual-install.zip | head -n 1)
+          ARTIFACT_WINDOWS_MANUAL_INSTALL=$(basename $ARTIFACT_WINDOWS_MANUAL_INSTALL_PATH)
+          echo ::set-output name=ARTIFACT_WINDOWS_MANUAL_INSTALL::${ARTIFACT_WINDOWS_MANUAL_INSTALL}
+          echo ::set-output name=ARTIFACT_WINDOWS_MANUAL_INSTALL_PATH::${ARTIFACT_WINDOWS_MANUAL_INSTALL_PATH}
+
+          ARTIFACT_PRODUCTION_PATH=$(ls package/releases/sugarcrm-ProfessorM-*-production.zip | head -n 1)
+          ARTIFACT_PRODUCTION=$(basename $ARTIFACT_PRODUCTION_PATH)
+          echo ::set-output name=ARTIFACT_PRODUCTION::${ARTIFACT_PRODUCTION}
+          echo ::set-output name=ARTIFACT_PRODUCTION_PATH::${ARTIFACT_PRODUCTION_PATH}
+
+      - name: Upload Professor M Standard Package
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: ${{ steps.set_artifact_names.outputs.ARTIFACT_STANDARD_PATH }}
+          asset_name: ${{ steps.set_artifact_names.outputs.ARTIFACT_STANDARD }}
+          asset_content_type: application/zip
+
+      - name: Upload Professor M Windows Package
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: ${{ steps.set_artifact_names.outputs.ARTIFACT_WINDOWS_PATH }}
+          asset_name: ${{ steps.set_artifact_names.outputs.ARTIFACT_WINDOWS }}
+          asset_content_type: application/zip
+
+      - name: Upload Professor M Windows Manual Install Package
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: ${{ steps.set_artifact_names.outputs.ARTIFACT_WINDOWS_MANUAL_INSTALL_PATH }}
+          asset_name: ${{ steps.set_artifact_names.outputs.ARTIFACT_WINDOWS_MANUAL_INSTALL }}
+          asset_content_type: application/zip
+
+      - name: Upload Professor M Production Package
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: ${{ steps.set_artifact_names.outputs.ARTIFACT_PRODUCTION_PATH }}
+          asset_name: ${{ steps.set_artifact_names.outputs.ARTIFACT_PRODUCTION }}
+          asset_content_type: application/zip

@@ -6,11 +6,13 @@
     "test": "grunt test-js --verbose"
   },
   "devDependencies": {
-    "grunt": "^1.0.4",
-    "grunt-contrib-jasmine": "^2.0.3"
+    "grunt": "^1.0.4"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/sugarcrm/school.git"
+  },
+  "dependencies": {
+    "grunt-contrib-jasmine": "^3.0.0"
   }
 }

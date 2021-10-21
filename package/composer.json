@@ -6,6 +6,9 @@
         "phpunit/phpunit": "^6.5",
         "mikey179/vfsstream": "^1.6"
     },
+    "scripts": {
+        "test": "phpunit --configuration ../tests/phpunit/phpunit.xml"
+    },
     "license": "Apache-2.0",
     "authors": [
         {
