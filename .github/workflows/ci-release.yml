@@ -4,7 +4,7 @@ name: Release Professor M's School for Gifted Coders
 on:
   push:
     branches:
-      - master
+      - fix/release
 
 jobs:
   Pack-Professor-M:
@@ -48,20 +48,23 @@ jobs:
         with:
           name: professorM-artifact
           path: package/releases
+      - uses: actions/checkout@v2
       - name: Changelog
         uses: scottbrenner/generate-changelog-action@master
         id: Changelog
+        env:
+          REPO: ${{ github.repository }}
       - name: Create Release
         id: create_release
         uses: actions/create-release@latest
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
-          tag_name: Tag ${{ github.sha }}
-          release_name: Release ${{ github.sha }}
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
           body: |
             ${{ steps.Changelog.outputs.changelog }}
-          draft: false
+          draft: true
           prerelease: false
 
       # Release action has a bug with wildcard (https://github.com/actions/upload-release-asset/issues/47)
