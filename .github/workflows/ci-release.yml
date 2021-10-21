@@ -4,7 +4,7 @@ name: Release Professor M's School for Gifted Coders
 on:
   push:
     branches:
-      - fix/release
+      - master
 
 jobs:
   Pack-Professor-M:
