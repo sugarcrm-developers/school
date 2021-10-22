@@ -2188,9 +2188,7 @@
 									"var jsonData = JSON.parse(responseBody);",
 									"var idOfDonation = jsonData.id;",
 									"",
-									"tests[\"Successful POST request\"] = responseCode.code === 200;",
 									"tests[\"id exists\"] = idOfDonation !== null || idOfDonation !== \"\";",
-									"tests[\"name is correct\"] = \"Deviants annual memberships\" === jsonData.name;",
 									"",
 									"postman.setEnvironmentVariable(\"Donation_DeviantsAnnual\", idOfDonation);"
 								]
@@ -2226,9 +2224,7 @@
 									"var jsonData = JSON.parse(responseBody);",
 									"var idOfDonation = jsonData.id;",
 									"",
-									"tests[\"Successful POST request\"] = responseCode.code === 200;",
 									"tests[\"id exists\"] = idOfDonation !== null || idOfDonation !== \"\";",
-									"tests[\"name is correct\"] = \"Revengers Thanksgiving donation\" === jsonData.name;",
 									"",
 									"postman.setEnvironmentVariable(\"Donation_RevengersThanksgiving\", idOfDonation);"
 								]
