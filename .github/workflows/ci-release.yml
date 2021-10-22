@@ -1,10 +1,10 @@
 name: Release Professor M's School for Gifted Coders
 
-on: [push]
-# on:
-#   push:
-#     branches:
-#       - master
+# on: [push]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   Pack-Professor-M:
