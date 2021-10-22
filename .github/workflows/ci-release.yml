@@ -1,10 +1,10 @@
 name: Release Professor M's School for Gifted Coders
 
-# on: [push]
-on:
-  push:
-    branches:
-      - master
+on: [push]
+# on:
+#   push:
+#     branches:
+#       - master
 
 jobs:
   Pack-Professor-M:
@@ -48,13 +48,17 @@ jobs:
         with:
           name: professorM-artifact
           path: package/releases
+      - name: set TAG_NAME
+        id: set_tag_name
+        run: |
+          echo ::set-output name=TAG_NAME::v$(date +'%Y%m%d.%H%M%S')
       - name: Create Release
         id: create_release
         uses: actions/create-release@latest
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
-          tag_name: Tag ${{ github.event.head_commit.message }}
+          tag_name: ${{ steps.set_tag_name.outputs.TAG_NAME }}
           release_name: Release ${{ github.event.head_commit.message }}
           draft: false
           prerelease: false
