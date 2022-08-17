@@ -18,7 +18,7 @@ sections explain more about the scenario and how to install the package and samp
 
 [Contribute to this project](#contribute-to-this-project)
 
-[Generating the Professor M module loadable packages locally](#generating-the-professor-m-module-loadable-packages-locally) 
+[Generating the Professor M module loadable packages locally](#postman-tests-for-the-professor-m-module-loadable-package) 
 
 [Continuous integration with Github Actions](#continuous-integration-with-github-actions) 
 
